@@ -3,7 +3,7 @@ import { userStore } from './modules/user'
 import { InjectionKey } from 'vue'
 import { State } from './modules/user/state'
 
-interface RootState {
+export interface RootState {
   user: State
 }
 
