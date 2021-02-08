@@ -12,7 +12,7 @@ export const routes = [
     component: Login,
     children: [
       {
-        path: "login",
+        path: "dologin",
         component: DoLogin
       }, {
         path: "register",

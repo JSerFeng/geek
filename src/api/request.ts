@@ -15,8 +15,9 @@ export enum ErrorCode {
   No_Token = 425,
   Abort = 16625,
   Connect_Fail = 16626,
-  Succes = 200,
-  UserIdOrPasswordWrong = 435
+  Success = 200,
+  UserIdOrPasswordWrong = 435,
+  HasBeenUsed = 410
 }
 let now = window.performance
   ? () => performance.now()
@@ -155,16 +156,18 @@ request.interceptors.response.use(
 
 request.interceptors.response.use(
   res => {
-    if (res.data.error_code && res.data.error_code !== ErrorCode.Succes) {
-      ElNotification({
-        message: res.data.message
-      })
-      throw {
-        message: res.data.message,
-        data: res.data
-      }
+    switch (res.data.error_code) {
+      case ErrorCode.Success:
+        return res.data
+      default:
+        ElNotification({
+          message: res.data.message
+        })
+        throw {
+          message: res.data.message,
+          data: res.data
+        }
     }
-    return res.data
   }
 )
 
