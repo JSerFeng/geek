@@ -5,7 +5,7 @@
       <h4>前端</h4>
       <div class="sign-person-count">
         <span class="title">报名人数&nbsp;</span
-        ><span> 12 </span>
+        ><span> {{res.data.data.font}} </span>
       </div>
     </li>
     <li class="end">
@@ -13,7 +13,7 @@
       <h4>后端</h4>
       <div class="sign-person-count">
         <span class="title">报名人数&nbsp;</span
-        ><span> 23 </span>
+        ><span> {{res.data.data.end}} </span>
       </div>
     </li>
     <li class="python">
@@ -21,25 +21,21 @@
       <h4>Python</h4>
       <div class="sign-person-count">
         <span class="title">报名人数&nbsp;</span
-        ><span> 42 </span>
+        ><span> {{res.data.data.py}} </span>
       </div>
     </li>
   </ul>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, toRaw } from "vue";
+import { defineComponent } from "vue";
 import { useRequestCount } from "./hooks/useRequestCount";
 
 export default defineComponent({
   name: "admin",
   setup() {
-    let courseList = reactive({request:{}})
-    onMounted(async() =>{
-      const { res } = await useRequestCount();
-      courseList.request = res
-    })
-    return { courseList };
+    const { res } = useRequestCount()
+    return { res };
   },
 });
 </script>
