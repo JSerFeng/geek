@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { reactive, onMounted, toRaw } from 'vue'
+import { reactive, onMounted, toRaw, computed } from 'vue'
 import { getPersonCount } from '../../../api/index'
 import '../../../mock/admin/index'
 
@@ -7,8 +7,6 @@ interface personObj {
     font: number,
     end: number,
     py: number,
-    design: number,
-    mobile: number
 }
 
 type resType = {
@@ -21,15 +19,12 @@ export const useRequestCount = () => {
             font: 0,
             end: 0,
             py: 0,
-            design: 0,
-            mobile: 0
         }
     })
     onMounted(async () => {
         res.data = await getPersonCount() 
         console.log(toRaw(res))
     })
-
     return {
         res
     }
