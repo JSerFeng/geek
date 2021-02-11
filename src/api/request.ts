@@ -157,13 +157,16 @@ request.interceptors.response.use(
 request.interceptors.response.use(
   res => {
     switch (res.data.error_code) {
-      case ErrorCode.Success:
+      case ErrorCode.HasBeenUsed:
+      case ErrorCode.Success: {
         return res.data
+      }
       default:
         ElNotification({
           message: res.data.message
         })
-        throw {
+        return {
+          error_code: res.data.error_code,
           message: res.data.message,
           data: res.data
         }

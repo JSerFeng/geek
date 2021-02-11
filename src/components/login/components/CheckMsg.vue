@@ -6,8 +6,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { defineProps, computed } from 'vue'
-import { Flags } from '../../utils/shared'
+import { defineProps, computed, ref } from 'vue'
+import { Flags } from '../../../utils/shared'
 
 const props = defineProps<{ msg: string, flag: number }>()
 const isSuccess = computed(() => props.flag === Flags.Success)
