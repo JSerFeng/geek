@@ -1,11 +1,11 @@
+import { BehaviorSubject } from "rxjs"
 import { Ref, ref, watchEffect } from "vue"
-import { ErrorCode } from "../api/request"
 
 export enum Flags {
   Fail = 0,
   Success = 1,
   Pending = 2,
-  Waiting = 3
+  Normal = 3
 }
 
 export const storage = {
@@ -24,27 +24,24 @@ export const storage = {
     return localStorage.clear()
   }
 }
-export const useLocalCheck = (regex: RegExp, title = "格式错误") => (content: Ref) => {
-  const flag = ref(Flags.Waiting)
-  const msg = ref("")
-  watchEffect(() => {
-    if (!content.value) {
-      flag.value = Flags.Waiting
-    } else if (regex.test(content.value)) {
-      flag.value = Flags.Success
-    } else {
-      flag.value = Flags.Fail
-      msg.value = title
-    }
-  })
-  return { flag, msg }
+
+export const debounce = (cb: Function, ms: number = 500) => {
+  let timer: number | null = null
+  return (...args: any) => {
+    if (timer) clearTimeout(timer)
+    timer = setTimeout(cb.bind(null, ...args), ms)
+  }
+}
+
+export const useLocalCheck = (regex: RegExp | null = null) => (val: string) => {
+  return !regex || regex.test(val)
 }
 
 export const useNetCheck = (
   checkFn: (data: string) => any
 ) => (content: Ref<string>, flag = ref(Flags.Pending), msg = ref("")) => {
+  flag.value = Flags.Pending
   watchEffect(async () => {
-    flag.value = Flags.Pending
     try {
       const res = await checkFn(content.value)
       flag.value = Flags.Success
@@ -64,4 +61,12 @@ export const repeatMap = <T>(times: number, fn: (i: number) => T): T[] => {
     res.push(fn(i))
   }
   return res
+}
+
+export const fromVInput = (val: Ref<string>) => {
+  const subject = new BehaviorSubject(val.value)
+  watchEffect(() => {
+    subject.next(val.value)
+  })
+  return subject
 }

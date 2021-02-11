@@ -1,17 +1,17 @@
 <template>
   <div class="main">
-    <video class="bg-video" src="./assets/bg.mp4" loop autoplay/>
-
-    <router-view v-slot="{ Component }">
-      <transition mode="out-in">
+    <video class="bg-video" src="./assets/bg.mp4" loop autoplay />
+    <router-view v-slot="{  Component, route  }">
+      <WithTransition :path="route.path">
         <component :is="Component" />
-      </transition>
+      </WithTransition>
     </router-view>
   </div>
 </template>
 
 <script lang="ts" setup="">
 import { RouterView, RouterLink } from 'vue-router'
+import WithTransition from './components/withTransition/WithTransition.vue'
 </script>
 
 <style lang="scss">
@@ -33,9 +33,9 @@ body {
 .main {
   perspective: 1000;
   position: relative;
-  width: 100%;
+  overflow-x: hidden;
+  width: 100vw;
   height: 100vh;
-  overflow: hidden;
 }
 
 .v-enter-active {
