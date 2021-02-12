@@ -38,3 +38,5 @@ export const register = (
   major: string,
   activeCode: string
 ) => request.post("/user/register", { userId, userName, password, mail, major, activeCode })
+
+export const getPersonCount = (courseId?: string) => axios.post('/admin', { courseId }) as any as Response

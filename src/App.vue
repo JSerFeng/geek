@@ -36,10 +36,7 @@ body {
   overflow-x: hidden;
   width: 100vw;
   height: 100vh;
-<<<<<<< HEAD
   overflow-x: hidden;
-=======
->>>>>>> 7b646438fa873734dacf811856ef26c9995cb150
 }
 
 .v-enter-active {
