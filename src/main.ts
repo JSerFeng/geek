@@ -8,6 +8,7 @@ import App from './App.vue'
 import { ElButton,ElDialog  } from 'element-plus'
 import store, { key } from './store'
 import 'element-plus/lib/theme-chalk/index.css';
+import './config/theme.scss'
 
 const app = createApp(App)
 

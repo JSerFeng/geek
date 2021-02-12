@@ -7,9 +7,9 @@
     <el-button @click="login">click</el-button>
   </div>
 </template>
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import { ref } from 'vue';
-import { useStore } from '../../store'
+import { useStore } from '../../../store'
 import { ElInput, ElButton } from 'element-plus'
 
 const { dispatch } = useStore()
@@ -21,6 +21,7 @@ const login = () => {
     password: password.value
   })
 }
+
 </script>
 <style lang="">
   
