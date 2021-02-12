@@ -5,7 +5,7 @@
       <h4>前端</h4>
       <div class="sign-person-count">
         <span class="title">报名人数&nbsp;</span
-        ><span> {{res.data.data.font}} </span>
+        ><span> {{ courseList.font }} </span>
       </div>
     </li>
     <li class="end">
@@ -13,7 +13,7 @@
       <h4>后端</h4>
       <div class="sign-person-count">
         <span class="title">报名人数&nbsp;</span
-        ><span> {{res.data.data.end}} </span>
+        ><span> {{ courseList.end }} </span>
       </div>
     </li>
     <li class="python">
@@ -21,22 +21,45 @@
       <h4>Python</h4>
       <div class="sign-person-count">
         <span class="title">报名人数&nbsp;</span
-        ><span> {{res.data.data.py}} </span>
+        ><span> {{ courseList.py }} </span>
       </div>
     </li>
   </ul>
+  <div @click="handleClose" class="send-email">发送邮件 <i class="el-icon-s-promotion"></i></div>
+  <el-dialog
+  title="提示"
+  v-model="dialogVisible"
+  width="30%"
+  :before-close="handleClose">
+  <send-email/>
+  <template #footer>
+    <span class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+    </span>
+  </template>
+</el-dialog>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed, ref, Ref } from "vue";
 import { useRequestCount } from "./hooks/useRequestCount";
-
+import SendEmail from "./components/SendEmail.vue";
 export default defineComponent({
   name: "admin",
   setup() {
-    const { res } = useRequestCount()
-    return { res };
+    const { res } = useRequestCount();
+    let dialogVisible = ref(false) as Ref<boolean>
+    const courseList = computed(() => res.data.data);
+    function handleClose(done:() => void) {
+        dialogVisible.value = !dialogVisible.value
+        done()
+      }
+    return { courseList, dialogVisible, handleClose};
   },
+  components:{
+    SendEmail
+  }
 });
 </script>
 
@@ -48,17 +71,20 @@ export default defineComponent({
 }
 .person-count {
   display: flex;
+  background-color: rgba($color: #fff, $alpha: 0.7);
+  width: 95%;
+  border-radius: 50px;
+  margin: 10vh auto;
+  box-shadow: -1px -1px 3px #ffffff, 1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
   .font,
   .end,
   .python {
     background-color: #eef1ef;
-    width: 150px;
-    height: 400px;
+    box-shadow: -1px -1px 3px #ffffff, 1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
+    width: 150vh;
+    height: 55vh;
     overflow: hidden;
     margin: 10vh 23vh;
-    @media screen and (max-width: 500px) {
-      margin: 30px;
-    }
     transition: all 0.5s;
     border-radius: 75px;
     &:hover {
@@ -91,6 +117,23 @@ export default defineComponent({
         margin: 0 auto;
       }
     }
+  }
+}
+.send-email {
+  width: 50vh;
+  height: 50px;
+  background-color: white;
+  margin: -60px auto 10px auto;
+  text-align: center;
+  font-size: 20px;
+  font-family: Helvetica, "PingFang SC", "Microsoft Yahei", sans-serif;
+  line-height: 50px;
+  box-shadow: -10px -10px 30px #ffffff, 10px 10px 30px rgba(174, 174, 192, 0.4);
+  border-radius: 40vh;
+  transition: all 0.5s;
+  &:hover {
+    transform: scale(1.1);
+    cursor: pointer;
   }
 }
 @each $i in font, end, python {

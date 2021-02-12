@@ -5,7 +5,7 @@ import vuex from 'vuex'
 // TypeScript error? Run VSCode command
 // TypeScript: Select TypeScript version - > Use Workspace Version
 import App from './App.vue'
-import { ElButton } from 'element-plus'
+import { ElButton,ElDialog  } from 'element-plus'
 import store, { key } from './store'
 import 'element-plus/lib/theme-chalk/index.css';
 
@@ -20,5 +20,6 @@ app
   .use(store, key)
   .use(router)
   .use(ElButton)
+  .use(ElDialog)
 
 app.mount('#app')
