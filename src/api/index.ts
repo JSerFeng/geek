@@ -1,8 +1,6 @@
 import request, { ErrorCode } from "./request"
 import axios from "axios";
-<<<<<<< HEAD
 import '../mock/admin/index'
-=======
 import { ElNotification } from "element-plus";
 
 interface Response<T = any> {
@@ -11,7 +9,6 @@ interface Response<T = any> {
   data: T
 }
 
->>>>>>> login
 export const getWeather = async (cityName = "重庆") => {
   try {
     const res = await axios.get("http://wthrcdn.etouch.cn/weather_mini?city=" + cityName)
@@ -23,16 +20,6 @@ export const getWeather = async (cityName = "重庆") => {
 
 export const login = async (userId: string, password: string) => request.post("/user/login", { userId, password }) as any as Response
 
-<<<<<<< HEAD
-export const getPersonCount = async (courseId?: string) => {
-
-  const personCount = await axios.post('/admin', { courseId })
-  return personCount
-}
-export const checkEmail = async (mail: string) => {
-  return await request.post("/user/checkEmail", { mail })
-}
-=======
 export const checkEmail = async (mail: string) => request.post("/user/checkEmail", { mail }) as any as Response
 
 export const checkUserId = async (userId: string) => request.post("/user/checkUserId", { userId }) as any as Response
@@ -42,7 +29,6 @@ export const sendActiveMail = (type: number) => (userId: string, mail: string) =
   mail,
   codeType: type
 }) as any as Response
->>>>>>> login
 
 export const register = (
   userId: string,
