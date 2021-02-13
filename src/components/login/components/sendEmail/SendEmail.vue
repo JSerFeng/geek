@@ -2,37 +2,17 @@
   <StackWindows ref="stackWindows" :stack="stack"></StackWindows>
 </template>
 <script setup lang="ts">
-import { defineProps, onMounted, provide, ref, useContext } from 'vue'
-import { ElButton } from 'element-plus'
+import { defineProps, provide, ref, useContext } from 'vue'
 import StackWindows from '../../../stackWindows/StackWindows.vue'
 import SendEmailImpl from './components/SendEmailImpl.vue'
 import Success from './components/Success.vue'
+import type { Ref } from 'vue'
 
-const { expose } = useContext()
 const stack = [SendEmailImpl, Success]
-
-const props = defineProps<{
-  address: string,
-}>()
-
-const authInput = ref("")
-
-const stackWindows: Ref<any> = ref(null)
-
-provide("next", () => {
-  if (stackWindows.value && stackWindows.value.push) {
-    stackWindows.value.push()
-  }
-})
-
-provide("back", () => {
-  if (stackWindows.value && stackWindows.value.pop) {
-    stackWindows.value.pop()
-  }
-})
-
+const stackWindows = ref<any>(null)
+const { expose } = useContext()
 expose({
-  reset() {
+  reset: () => {
     stackWindows.value.reset()
   }
 })

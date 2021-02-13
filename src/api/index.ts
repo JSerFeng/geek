@@ -2,8 +2,9 @@ import request, { ErrorCode } from "./request"
 import axios from "axios";
 import '../mock/admin/index'
 import { ElNotification } from "element-plus";
+import { State } from '../store/modules/user/state'
 
-interface Response<T = any> {
+export interface Response<T = any> {
   error_code: ErrorCode,
   message: string,
   data: T
@@ -18,7 +19,7 @@ export const getWeather = async (cityName = "重庆") => {
   }
 }
 
-export const login = async (userId: string, password: string) => request.post("/user/login", { userId, password }) as any as Response
+export const login = async (userId: string, password: string) => request.post("/user/login", { userId, password }) as any as Response<{ user: State['userInfo'] }>
 
 export const checkEmail = async (mail: string) => request.post("/user/checkEmail", { mail }) as any as Response
 
@@ -39,6 +40,7 @@ export const register = (
   activeCode: string
 ) => request.post("/user/register", { userId, userName, password, mail, major, activeCode })
 
+<<<<<<< HEAD
 export const getPersonCount = (courseId?: string) => axios.post('/admin', { courseId }) as any as Response
 
 export const adminSendEmail = (
@@ -54,3 +56,6 @@ export const getUserInfoList = (
   rows?: number,
   courseId?: number
 ) => axios.get('/admin/queryUsersInfo', { params: { page, rows, courseId } }) as any as Response
+=======
+export const getPersonCount = () => request.post("")
+>>>>>>> 02d3a35bd69cecd60ff4c42dba4f914a26b31de2

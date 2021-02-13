@@ -1,6 +1,6 @@
 import { from, merge } from "rxjs";
 import { filter, switchMap, tap, map, skip, debounceTime } from 'rxjs/operators'
-import { Ref, ref, onUnmounted, watch } from "vue";
+import { Ref, ref, onUnmounted, watch, onMounted } from "vue";
 import { checkEmail, checkUserId } from "../../api";
 import { ErrorCode } from "../../api/request";
 import { EmailRegex, NotNullRegex } from "../../config/config";
@@ -38,10 +38,10 @@ export const useUserIdCheck = (val: Ref<string>) => {
   onUnmounted(() => {
     sub.unsubscribe()
   })
-  return { flag, msg }
+  return [flag, msg]
 }
 
-export const useEmailCheck = (val: Ref<string>) => {
+export const useEmailCheck = (val: Ref<string>): [Ref<Flags>, Ref<string>] => {
   const flag = ref(Flags.Normal)
   const msg = ref("")
   const input$ = fromVInput(val)
@@ -82,10 +82,10 @@ export const useEmailCheck = (val: Ref<string>) => {
   onUnmounted(() => {
     sub.unsubscribe()
   })
-  return { flag, msg }
+  return [flag, msg]
 }
 
-export const useNullCheck = (val: Ref<string>) => {
+export const useNullCheck = (val: Ref<string>): [Ref<Flags>, Ref<string>] => {
   const flag = ref(Flags.Normal)
   const msg = ref("")
   watch(val, (value) => {
@@ -99,10 +99,10 @@ export const useNullCheck = (val: Ref<string>) => {
       msg.value = ""
     }
   })
-  return { flag, msg }
+  return [flag, msg]
 }
 
-export const useSameCheck = (sameTo: Ref<string>, val: Ref<string>) => {
+export const useSameCheck = (sameTo: Ref<string>, val: Ref<string>): [Ref<Flags>, Ref<string>] => {
   const flag = ref(Flags.Normal)
   const msg = ref("")
   watch([sameTo, val], debounce(([pwd, confirm]: [string, string]) => {
@@ -116,5 +116,6 @@ export const useSameCheck = (sameTo: Ref<string>, val: Ref<string>) => {
       }
     }
   }, 500))
-  return { flag, msg }
+  return [flag, msg]
 }
+
