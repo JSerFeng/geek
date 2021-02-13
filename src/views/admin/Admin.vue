@@ -25,41 +25,44 @@
       </div>
     </li>
   </ul>
-  <div @click="handleClose" class="send-email">发送邮件 <i class="el-icon-s-promotion"></i></div>
-  <el-dialog
-  title="提示"
-  v-model="dialogVisible"
-  width="30%"
-  :before-close="handleClose">
-  <send-email/>
-  <template #footer>
-    <span class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-    </span>
-  </template>
-</el-dialog>
+  <div @click="handleClose" class="send-email">
+    发送邮件 <i class="el-icon-s-promotion"></i>
+  </div>
+  <div ref="root">
+    <el-dialog
+      v-model="dialogVisible"
+      width="70%"
+      :before-close="handleClose"
+      custom-class="send-email-dialog"
+    >
+      <send-email />
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogVisible = false"
+            >确 定</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, Ref } from "vue";
+import { defineComponent, computed } from "vue";
 import { useRequestCount } from "./hooks/useRequestCount";
+import useDialog from './hooks/useDialog'
 import SendEmail from "./components/SendEmail.vue";
 export default defineComponent({
-  name: "admin",
   setup() {
     const { res } = useRequestCount();
-    let dialogVisible = ref(false) as Ref<boolean>
+    const { dialogVisible,handleClose,root } = useDialog()
     const courseList = computed(() => res.data.data);
-    function handleClose(done:() => void) {
-        dialogVisible.value = !dialogVisible.value
-        done()
-      }
-    return { courseList, dialogVisible, handleClose};
+    return { courseList, dialogVisible, handleClose, root };
   },
-  components:{
-    SendEmail
-  }
+  components: {
+    SendEmail,
+  },
 });
 </script>
 
@@ -135,6 +138,9 @@ export default defineComponent({
     transform: scale(1.1);
     cursor: pointer;
   }
+}
+.send-email-dialog {
+  border-radius: 20px;
 }
 @each $i in font, end, python {
   @if $i == font {

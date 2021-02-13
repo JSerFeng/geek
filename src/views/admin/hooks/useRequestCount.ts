@@ -10,7 +10,7 @@ interface personObj {
 }
 
 type resType = {
-    data: AxiosResponse<personObj> | {data:personObj}
+    data: AxiosResponse<personObj> | { data: personObj }
 }
 
 export const useRequestCount = () => {
@@ -25,7 +25,6 @@ export const useRequestCount = () => {
     })
     onMounted(async () => {
         res.data = await getPersonCount()
-        console.log(toRaw(res))
     })
     return {
         res
