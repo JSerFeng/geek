@@ -9,7 +9,7 @@
       <CodeInput v-model="authCode" />
     </div>
 
-    <g-button class="confirm-btn" type="broke">
+    <g-button class="confirm-btn" type="broke" @click="confirm" :loading="loading">
       <slot name="confirmBtn">注册</slot>
     </g-button>
   </div>
@@ -36,10 +36,12 @@ const send = (e: Event) => {
 }
 
 const authCode = ref("")
-
-const confirm = () => {
+const loading = ref(false)
+const confirm = async () => {
   if (authCode.value.trim().length === 6) {
-    const res = props.confirm(authCode.value)
+    loading.value = true
+    await props.confirm(authCode.value)
+    loading.value = false
   } else {
     ElNotification({
       message: "请输入6位验证码"

@@ -13,14 +13,13 @@ import { ErrorCode } from '../../../../../api/request';
 
 const sendEmail = sendActiveMail(1).bind(null, "123", "1114550440@qq.com")
 
-const next = inject("next")
-const back = inject("back")
-const register = inject("register")
+const next = inject<() => any>("push")
+const register = inject<(auth: string) => any>("register")
 
 const confirm = async (auth: string) => {
-  const res = await register(auth)
+  const res = await register!(auth)
   if (res && res.error_code === ErrorCode.Success) {
-    next()
+    next!()
   }
 }
 </script>
