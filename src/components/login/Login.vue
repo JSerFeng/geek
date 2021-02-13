@@ -1,8 +1,10 @@
 <template lang="">
   <div class="main">
     <div class="login-modal">
-      <RouterLink to="/login">登陆</RouterLink>
-      <RouterLink to="/login/register">注册</RouterLink>
+      <div class="router-link">
+        <RouterLink to="/login/" exact-active-class="active">登陆</RouterLink>
+        <RouterLink to="/login/register" exact-active-class="active">注册</RouterLink>
+      </div>
       <div class="model">
         <router-view v-slot="{ Component }">
           <transition mode="out-in">
@@ -31,6 +33,25 @@ import { RouterLink, RouterView } from 'vue-router'
   .login-modal {
     width: 50%;
     margin: 0 auto;
+  }
+  .router-link {
+    position: relative;
+    padding: 40px;
+    a {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transition: 0.2s;
+      display: inline-block;
+      text-decoration: none;
+      color: rgb(151, 151, 151);
+      transform: translate(200%, -50%);
+    }
+    .active {
+      color: rgba(17, 17, 17, 0.644);
+      font-size: 34px;
+      transform: translate(0, -50%);
+    }
   }
 }
 .model {

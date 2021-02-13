@@ -1,5 +1,5 @@
 import { BehaviorSubject } from "rxjs"
-import { Ref, ref, watchEffect } from "vue"
+import { onMounted, onUnmounted, Ref, ref, watchEffect } from "vue"
 
 export enum Flags {
   Fail = 0,
@@ -69,4 +69,18 @@ export const fromVInput = (val: Ref<string>) => {
     subject.next(val.value)
   })
   return subject
+}
+
+export const useRefreshCheck = () => {
+  function onBeforeLoad(e: BeforeUnloadEvent) {
+    const dialogText = '确定刷新吗，如果刷新需要重新填写注册';
+    e.returnValue = dialogText;
+    return dialogText;
+  };
+  onMounted(() => {
+    window.addEventListener("beforeunload", onBeforeLoad)
+  })
+  onUnmounted(() => {
+    window.removeEventListener("beforeunload", onBeforeLoad)
+  })
 }

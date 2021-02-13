@@ -13,9 +13,9 @@
 </template>
 <script lang="ts" setup>
 import { inject } from 'vue';
-import {RouterLink} from 'vue-router'
+import { RouterLink } from 'vue-router'
 
-const close = inject("close")
+const close = inject<() => any>("close")
 </script>
 <style lang="scss" scopde>
 .wrapper {

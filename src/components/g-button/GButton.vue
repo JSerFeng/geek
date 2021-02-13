@@ -2,8 +2,9 @@
   <button
     @click.native="handler"
     class="g-button"
-    :class="[props.type, props.class, { disabled: props.disabled }]"
+    :class="[props.type, props.class, { disabled: props.disabled }, { loading: props.loading }]"
   >
+    <i v-show="props.loading" class="loading el-icon-loading"></i>
     <slot></slot>
   </button>
 </template>
@@ -13,6 +14,7 @@ const props = defineProps<{
   class?: string,
   type?: "broke" | "normal" | "warn" | "reverse"
   disabled?: boolean,
+  loading?: boolean
 }>()
 const emits = defineEmit(["click"])
 const handler = (e: Event) => {
@@ -93,40 +95,43 @@ const handler = (e: Event) => {
     animation-timing-function: steps(2, end);
   }
 }
+.g-button.loading {
+  filter: brightness(0.9) !important;
+}
 
 @keyframes glitch {
   0% {
     opacity: 1;
     clip-path: var(--slice-1);
-    transform: translate(-15%, 0);
+    transform: translate(-15px, 0);
   }
   5% {
     clip-path: var(--slice-1);
-    transform: translate(15%, -10%);
+    transform: translate(15px, -10%);
   }
   10% {
     clip-path: var(--slice-1);
-    transform: translate(-20%, -25%);
+    transform: translate(-20px, -25%);
   }
   15% {
     clip-path: var(--slice-2);
-    transform: translate(30%, 0);
+    transform: translate(30px, 0);
   }
   20% {
     clip-path: var(--slice-3);
-    transform: translate(-15%, -5%);
+    transform: translate(-15px, -5%);
   }
   25% {
     clip-path: var(--slice-4);
-    transform: translate(5%, -5%);
+    transform: translate(5px, -5%);
   }
   30% {
     clip-path: var(--slice-5);
-    transform: translate(-35%, 15%);
+    transform: translate(-35px, 15%);
   }
   35% {
     clip-path: var(--slice-5);
-    transform: translate(15%, -15%);
+    transform: translate(15px, -15%);
   }
   36% {
     clip-path: var(--slice-0);

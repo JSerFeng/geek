@@ -20,7 +20,8 @@ interface User{
   "introduce": string,
   "grade": string,
   "registerTime": string,
-  "receiveMail": boolean
+  "receiveMail": boolean,
+  "type": null
 }
 interface SuperAdmin {
   "id": 2,
@@ -33,7 +34,8 @@ interface SuperAdmin {
   "type": "super"
 }
 export type State = {
-  userInfo?: Admin | SuperAdmin | User | {}
+  userInfo?: Admin | SuperAdmin | User,
+  dec?: number
 }
 
 export const state: State = {}

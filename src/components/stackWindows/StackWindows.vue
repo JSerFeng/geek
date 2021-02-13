@@ -6,7 +6,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { defineProps, ref, useContext } from 'vue'
+import { defineProps, provide, ref, useContext } from 'vue'
 import type { Component, Ref } from 'vue'
 import WithTransition from '../withTransition/WithTransition.vue'
 
@@ -45,6 +45,9 @@ expose({
   pop,
   reset
 })
+provide("push", push)
+provide("pop", pop)
+provide("reset", reset)
 </script>
 <script lang="ts">
 export interface Expose {
