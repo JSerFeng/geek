@@ -40,22 +40,18 @@ export const register = (
   activeCode: string
 ) => request.post("/user/register", { userId, userName, password, mail, major, activeCode })
 
-<<<<<<< HEAD
 export const getPersonCount = (courseId?: string) => axios.post('/admin', { courseId }) as any as Response
 
-export const adminSendEmail = (
+export const reqAdminSendEmail = (
   title: string,
   text: string,
   adminId?: string,
   courseId?: string,
-  userIdList?: string,
+  userIdList?: Set<string>,
 ) => axios.post('/admin/sendDailyMail', { adminId, courseId, userIdList, title, text }) as any as Response
 
 export const getUserInfoList = (
-  page?: number,
-  rows?: number,
-  courseId?: number
-) => axios.get('/admin/queryUsersInfo', { params: { page, rows, courseId } }) as any as Response
-=======
-export const getPersonCount = () => request.post("")
->>>>>>> 02d3a35bd69cecd60ff4c42dba4f914a26b31de2
+  params?:{page?: number,
+    rows?: number,
+    courseId?: number}
+) => axios.get('/admin/queryUsersInfo', { params }) as any as Response

@@ -1,13 +1,12 @@
 import { MutationTree } from "vuex";
-import { State } from "./state";
+import { userListState } from "./state";
 
 export const enum MutationTypes {
-  Login = "login",
-  Exit = "exit"
+  SetUserList = "SET_USER_LIST",
 }
 
-export const mutations: MutationTree<State> = {
-  [MutationTypes.Login](state, payload: State) {
+export const mutations: MutationTree<userListState> = {
+  [MutationTypes.SetUserList](state, payload: userListState) {
     state.userInfo = payload
-  }
+  },
 }

@@ -3,6 +3,10 @@ import { reactive, onMounted, toRaw } from 'vue'
 import { getPersonCount } from '../../../api/index'
 import '../../../mock/admin/index'
 
+interface Date<T> {
+    data:T
+}
+
 interface personObj {
     font: number,
     end: number,
@@ -10,7 +14,7 @@ interface personObj {
 }
 
 type resType = {
-    data: AxiosResponse<personObj> | { data: personObj }
+    data: AxiosResponse<personObj> | Date<personObj>
 }
 
 export const useRequestCount = () => {

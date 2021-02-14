@@ -30,16 +30,25 @@
   </div>
   <div ref="root">
     <el-dialog
+      top="7vh"
       v-model="dialogVisible"
       width="70%"
+      title="发送邮件"
       :before-close="handleClose"
       custom-class="send-email-dialog"
     >
-      <send-email />
+      <send-email ref="sendEmailRef" />
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false"
+          <el-button
+            type="primary"
+            @click="
+              () => {
+                sendEmailRef.handleSendEmailClick();
+                dialogVisible = false;
+              }
+            "
             >确 定</el-button
           >
         </span>
@@ -49,16 +58,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import { useRequestCount } from "./hooks/useRequestCount";
-import useDialog from './hooks/useDialog'
+import useDialog from "./hooks/useDialog";
 import SendEmail from "./components/SendEmail.vue";
 export default defineComponent({
   setup() {
     const { res } = useRequestCount();
-    const { dialogVisible,handleClose,root } = useDialog()
+    let sendEmailRef = ref<null | HTMLDivElement | any>(null);
+    const { dialogVisible, handleClose, root } = useDialog();
     const courseList = computed(() => res.data.data);
-    return { courseList, dialogVisible, handleClose, root };
+    return { courseList, dialogVisible, handleClose, root, sendEmailRef };
   },
   components: {
     SendEmail,

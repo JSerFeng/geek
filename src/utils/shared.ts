@@ -1,6 +1,6 @@
 import { BehaviorSubject } from "rxjs"
 import { onMounted, onUnmounted, Ref, ref, watchEffect } from "vue"
-
+import { ElMessage } from 'element-plus'
 export enum Flags {
   Fail = 0,
   Success = 1,
@@ -83,4 +83,21 @@ export const useRefreshCheck = () => {
   onUnmounted(() => {
     window.removeEventListener("beforeunload", onBeforeLoad)
   })
+}
+
+// 判断此管理员是否具有发送邮件的条件
+export const adminSendEmail = (selValue:string, userIdArr:Set<string>):boolean => {
+  if(selValue) {
+    if(userIdArr.size !== 0) {
+      ElMessage('只能选择一个具体报名的方向或者具体的学员发送邮件！')
+      return false
+    }
+    return true
+  }else{
+    if(userIdArr.size === 0) {
+      ElMessage('只能选择一个具体报名的方向或者具体的学员发送邮件！')
+      return false
+    }
+    return true
+  }
 }

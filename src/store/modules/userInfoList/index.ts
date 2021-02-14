@@ -1,9 +1,7 @@
-import { actions } from './actions'
 import { mutations } from './mutations'
 import {state} from './state'
 
-export const userStore = {
+export const userListStore = {
   state,
-  actions,
   mutations
 }
