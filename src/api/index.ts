@@ -19,25 +19,4 @@ export const getWeather = async (cityName = "重庆") => {
   }
 }
 
-export const login = async (userId: string, password: string) => request.post("/user/login", { userId, password }) as any as Response<{ user: State['userInfo'] }>
-
-export const checkEmail = async (mail: string) => request.post("/user/checkEmail", { mail }) as any as Response
-
-export const checkUserId = async (userId: string) => request.post("/user/checkUserId", { userId }) as any as Response
-
-export const sendActiveMail = (type: number) => (userId: string, mail: string) => request.post("/user/sendActiveMail", {
-  userId,
-  mail,
-  codeType: type
-}) as any as Response
-
-export const register = (
-  userId: string,
-  userName: string,
-  password: string,
-  mail: string,
-  major: string,
-  activeCode: string
-) => request.post("/user/register", { userId, userName, password, mail, major, activeCode })
-
 export const getPersonCount = () => request.post("")

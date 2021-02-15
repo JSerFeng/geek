@@ -1,5 +1,8 @@
 import { getWeather } from "../../../api"
 import { onMounted, ref } from 'vue'
+import { chooseCourse, queryCourse } from "../../../api/user"
+import { ErrorCode } from "../../../api/request"
+import { Flags, useRequest } from "../../../utils/shared"
 
 interface Weather {
   data: {
@@ -21,3 +24,5 @@ export const useWeather = () => {
     msg
   }
 }
+
+export const useFetchAllCourses = useRequest(queryCourse)

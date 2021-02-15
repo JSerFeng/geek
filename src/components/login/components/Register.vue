@@ -44,17 +44,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ElInput, ElNotification } from 'element-plus'
-import GButton from '../../g-button/GButton.vue'
-import GInput from '../../g-input/GInput.vue'
+import { ElNotification } from 'element-plus'
+import { GButton, GInput } from '../../geek'
 import { reactive, toRef, computed, ref, provide } from 'vue'
 import { useEmailCheck, useNullCheck, useUserIdCheck, useSameCheck } from '../hooks'
-import {useRefreshCheck} from '../../../utils/shared'
+import { useRefreshCheck } from '../../../utils/shared'
 import CheckMsg from './CheckMsg.vue'
 import { Flags } from '../../../utils/shared';
 import type { Ref } from 'vue'
 import Modal from '../../modal/Modal.vue'
-import { register } from '../../../api';
+import { register } from '../../../api/user';
 import SendEmail from './sendEmail/SendEmail.vue'
 
 const regOpt = reactive({
