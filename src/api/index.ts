@@ -19,17 +19,17 @@ export const getWeather = async (cityName = "重庆") => {
   }
 }
 
-export const login = async (userId: string, password: string) => request.post("/user/login", { userId, password }) as any as Response<{ user: State['userInfo'] }>
+export const login = (userId: string, password: string) => request.post("/user/login", { userId, password }) as Promise<Response<{ user: State['userInfo'] }>>
 
-export const checkEmail = async (mail: string) => request.post("/user/checkEmail", { mail }) as any as Response
+export const checkEmail = async (mail: string) => request.post("/user/checkEmail", { mail }) as Promise<Response>
 
-export const checkUserId = async (userId: string) => request.post("/user/checkUserId", { userId }) as any as Response
+export const checkUserId = async (userId: string) => request.post("/user/checkUserId", { userId }) as Promise<Response>
 
 export const sendActiveMail = (type: number) => (userId: string, mail: string) => request.post("/user/sendActiveMail", {
   userId,
   mail,
   codeType: type
-}) as any as Response
+}) as Promise<Response>
 
 export const register = (
   userId: string,
@@ -40,7 +40,7 @@ export const register = (
   activeCode: string
 ) => request.post("/user/register", { userId, userName, password, mail, major, activeCode })
 
-export const getPersonCount = (courseId?: string) => axios.post('/admin', { courseId }) as any as Response
+export const getPersonCount = (courseId?: string) => axios.post('/admin', { courseId }) as Promise<Response>
 
 export const reqAdminSendEmail = (
   title: string,
@@ -48,10 +48,10 @@ export const reqAdminSendEmail = (
   adminId?: string,
   courseId?: string,
   userIdList?: Set<string>,
-) => axios.post('/admin/sendDailyMail', { adminId, courseId, userIdList, title, text }) as any as Response
+) => axios.post('/admin/sendDailyMail', { adminId, courseId, userIdList, title, text }) as Promise<Response>
 
 export const getUserInfoList = (
   params?:{page?: number,
     rows?: number,
     courseId?: number}
-) => axios.get('/admin/queryUsersInfo', { params }) as any as Response
+) => axios.get('/admin/queryUsersInfo', { params }) as Promise<Response>

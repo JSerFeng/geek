@@ -10,7 +10,18 @@
 </template>
 
 <script lang="ts" setup>
-
+/**
+ * 你好学弟|学妹，愿：                                   
+ * 看到此代码的人找到一份好工作，愿你开心打code，金钱多多多
+ * 代码看不懂的地方 联系：
+ *    1114550440 冯学长 | 2149857139 曾学长 | you
+ *    PS: obviously写的更好的用户端部分是冯学长写的，垃圾的管理端是曾学长写的
+ * !!!完全阅读此代码前置技术栈包含: 
+ *  vue3全家桶
+ *  script setup语法糖
+ *  rxjs基础
+ *  ts
+ */
 import { RouterView } from 'vue-router'
 import { useStore } from './store'
 import { ActionTypes } from './store/modules/user/actions'
@@ -30,10 +41,10 @@ body {
   margin: 0;
   // transform: translateZ(0);
 }
-.flex{
+.flex {
   display: flex;
 }
-.jc{
+.jc {
   justify-content: center;
 }
 .jb {
@@ -42,13 +53,13 @@ body {
 .je {
   justify-content: space-evenly;
 }
-.ja{
+.ja {
   justify-content: space-around;
 }
 .ac {
   align-items: center;
 }
-ul{
+ul {
   list-style: none;
 }
 .bg-video {
