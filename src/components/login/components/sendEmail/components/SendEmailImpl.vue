@@ -8,7 +8,7 @@
 <script lang="ts" setup>
 import SendAuthCode from '../../../../sendAuthCode/SendAuthCode.vue'
 import { inject } from 'vue'
-import { sendActiveMail } from '../../../../../api';
+import { sendActiveMail } from '../../../../../api/user';
 import { ErrorCode } from '../../../../../api/request';
 
 const sendEmail = sendActiveMail(1).bind(null, "123", "1114550440@qq.com")

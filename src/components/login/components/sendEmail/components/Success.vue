@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="icon">
+    <div class="_icon">
       <i class="el-icon-success"></i>
     </div>
     <h3>
@@ -23,7 +23,7 @@ const close = inject<() => any>("close")
   height: 100%;
   overflow: hidden;
 
-  .icon {
+  ._icon {
     color: rgb(107, 216, 92);
     font-size: 50px;
     margin: 10% auto;

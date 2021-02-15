@@ -8,7 +8,9 @@
           <p class="msg">{{ msg }}</p>
         </div>
       </div>
-      <div class="item midTop" @click="toLogin">用户</div>
+      <div class="item midTop">
+        <Login />
+      </div>
       <div class="item rightTop">消息</div>
 
       <div class="item leftBottomTop leftBottom">
@@ -35,17 +37,14 @@
   </div>
 </template>
 <script lang="ts" setup="">
-import { useRouter } from 'vue-router'
 import { useWeather } from './hooks';
 import { ElButton } from 'element-plus'
-
-const router = useRouter()
-const toLogin = () => router.push("/login")
+import Login from './components/Login.vue'
 
 const { temp, msg } = useWeather()
 </script>
 
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
 .home_menu {
   overflow: hidden;
   width: 100%;
@@ -140,12 +139,11 @@ const { temp, msg } = useWeather()
       background-color: rgb(231, 231, 231);
       width: 100%;
       height: 100%;
-      cursor: pointer;
 
-      &:hover {
-        z-index: 10;
-        transform: scale(1.05);
-      }
+      // &:hover {
+      //   z-index: 10;
+      //   transform: scale(1.05);
+      // }
     }
     .leftBottom {
       @media screen and (max-width: 768px) {

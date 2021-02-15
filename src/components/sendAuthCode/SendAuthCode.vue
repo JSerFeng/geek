@@ -19,7 +19,7 @@ import { ref, defineProps } from 'vue';
 import { ElNotification } from 'element-plus'
 import { useCountingSend } from './hooks';
 import CodeInput from '../code-input/CodeInput.vue'
-import GButton from "../g-button/GButton.vue"
+import {GButton} from "../geek"
 
 const props = defineProps<{
   address: string,

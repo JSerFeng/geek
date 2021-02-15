@@ -10,8 +10,7 @@ import { ref } from 'vue';
 import { useStore } from '../../../store'
 import { useRouter } from 'vue-router'
 import type { Actions } from '../../../store/modules/user/actions'
-import GInput from '../../g-input/GInput.vue'
-import GButton from '../../g-button/GButton.vue'
+import { GInput, GButton } from '../../geek'
 import { ElNotification } from 'element-plus';
 import { ActionTypes } from '../../../store/modules/user/actions';
 import { ErrorCode } from '../../../api/request';
@@ -34,6 +33,10 @@ const login = async () => {
       switch (res.data?.user?.type) {
         case "admin":
           router.push("/admin")
+        case "super":
+          router.push("/super")
+        default:
+          router.push("/")
       }
     }
   } else {

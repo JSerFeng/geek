@@ -9,6 +9,8 @@ import { ElButton,ElAlert, ElDialog, ElInput, ElSelect, ElOption, ElPopover, ElC
 import store, { key } from './store'
 import 'element-plus/lib/theme-chalk/index.css';
 import './config/theme.scss'
+import './assets/iconfont/iconfont.css'
+import './assets/iconfont/iconfont'
 
 const app = createApp(App)
 
