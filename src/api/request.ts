@@ -41,6 +41,7 @@ const whiteList = new Set([
   '/user/findBackPassword',
   '/user/checkUserLegality',
   '/token',
+  '/course/queryCourse'
 ])
 
 const request = axios.create({

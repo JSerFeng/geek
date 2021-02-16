@@ -1,6 +1,10 @@
 import { BehaviorSubject } from "rxjs"
 import { onMounted, onUnmounted, Ref, ref, watchEffect } from "vue"
 import { ElMessage } from 'element-plus'
+import request, { ErrorCode } from "../api/request"
+import { Response } from "../api"
+import { Data } from "../store/modules/user/mutations"
+
 export enum Flags {
   Fail = 0,
   Success = 1,
@@ -10,7 +14,12 @@ export enum Flags {
 
 export const storage = {
   get(key: string) {
-    return localStorage.getItem(key)
+    try {
+      const item = localStorage.getItem(key)
+      return item && JSON.parse(item)
+    } catch(e) {
+      return localStorage.getItem(key)
+    }
   },
   set(key: string, val: string | number | Record<any, any>) {
     if (typeof val === 'object') {
@@ -20,8 +29,31 @@ export const storage = {
     }
     return localStorage.setItem(key, val)
   },
+  store(target: Record<any, any>) {
+    forEach(target, (k, v) => {
+      if (v) {
+        if (typeof v === 'object') {
+          v = JSON.stringify(v)
+        }
+        localStorage.setItem(k, v + "")
+      }
+    })
+  },
   clear() {
     return localStorage.clear()
+  }
+}
+
+export const forEach = <T extends Record<string, any> | Array<any>>(
+  objOrArr: T,
+  fn: T extends Array<any>
+    ? (val: T[keyof T], i: number) => void
+    : (k: string, v: any) => void
+) => {
+  if (objOrArr instanceof Array) {
+    return objOrArr.forEach(fn)
+  } else {
+    Reflect.ownKeys(objOrArr).forEach(key => fn(key, objOrArr[key as string]))
   }
 }
 
@@ -108,4 +140,30 @@ export const getRegistTime = (time:any):string => {
     return '无'
   }
   return time
+}
+export const useRequest = <DataType extends any = any, T extends Array<any> = Array<any>>(
+  fn: (...args: T) => Promise<Response<DataType>>
+) => (...args: T): [Ref<Response<DataType> | null>, Ref<Flags>, () => void] => {
+  const data: Ref<Response<DataType> | null> = ref(null)
+  const flag = ref<Flags>(Flags.Pending)
+
+  const dispatchRequest = () => {
+    fn(...args).then(
+      res => {
+        if (res.error_code === ErrorCode.Success) {
+          flag.value = Flags.Success
+        } else {
+          flag.value = Flags.Fail
+        }
+        data.value = res
+      }
+    )
+  }
+  dispatchRequest()
+
+  const retry = () => {
+    dispatchRequest()
+  }
+
+  return [data, flag, retry]
 }

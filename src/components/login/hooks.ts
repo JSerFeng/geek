@@ -1,7 +1,7 @@
 import { from, merge } from "rxjs";
 import { filter, switchMap, tap, map, skip, debounceTime } from 'rxjs/operators'
-import { Ref, ref, onUnmounted, watch, onMounted } from "vue";
-import { checkEmail, checkUserId } from "../../api";
+import { Ref, ref, onUnmounted, watch } from "vue";
+import { checkEmail, checkUserId } from "../../api/user";
 import { ErrorCode } from "../../api/request";
 import { EmailRegex, NotNullRegex } from "../../config/config";
 import { debounce, Flags, fromVInput, useLocalCheck } from "../../utils/shared";
@@ -10,9 +10,9 @@ import { debounce, Flags, fromVInput, useLocalCheck } from "../../utils/shared";
 const validEmail = useLocalCheck(EmailRegex)
 const notNull = useLocalCheck(NotNullRegex)
 
-export const useUserIdCheck = (val: Ref<string>) => {
-  const flag = ref(Flags.Normal)
-  const msg = ref("")
+export const useUserIdCheck = (val: Ref<string>): [Ref<Flags>, Ref<string>] => {
+  const flag = ref<Flags>(Flags.Normal)
+  const msg = ref<string>("")
   const input$ = fromVInput(val)
   const sub = input$.pipe(
     skip(1),
@@ -32,13 +32,17 @@ export const useUserIdCheck = (val: Ref<string>) => {
       }
     })
   ).subscribe(res => {
-    flag.value = res.flag
-    msg.value = res.msg
+    flag.value = res.flag as Flags
+    msg.value = res.msg as string
   })
   onUnmounted(() => {
     sub.unsubscribe()
   })
-  return [flag, msg]
+
+  return [
+    flag,
+    msg
+  ]
 }
 
 export const useEmailCheck = (val: Ref<string>): [Ref<Flags>, Ref<string>] => {

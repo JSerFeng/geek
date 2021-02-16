@@ -13,9 +13,9 @@ const props = defineProps<{
 
 const className: Ref<"pop" | "push"> = ref("push")
 
-const historyStack: Ref<string[]> = ref([props.path])
+const historyStack: Ref<(string | undefined)[]> = ref([props.path])
 
-watch(() => props.path, (newPath) => {
+watch(() => props.path, (newPath: string | undefined) => {
   if (!props.method) {
     if (newPath === historyStack.value[historyStack.value.length - 2]) {
       historyStack.value.pop()
