@@ -101,3 +101,11 @@ export const adminSendEmail = (selValue:string, userIdArr:Set<string>):boolean =
     return true
   }
 }
+
+
+export const getRegistTime = (time:any):string => {
+  if(!time){
+    return '无'
+  }
+  return time
+}

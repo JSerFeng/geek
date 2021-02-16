@@ -5,7 +5,7 @@ import vuex from 'vuex'
 // TypeScript error? Run VSCode command
 // TypeScript: Select TypeScript version - > Use Workspace Version
 import App from './App.vue'
-import { ElButton,ElAlert, ElDialog, ElInput, ElSelect, ElOption, ElPopover, ElCheckbox, ElTabs, ElTabPane, ElPagination } from 'element-plus'
+import {ElTooltip, ElTableColumn, ElTable,ElButton,ElAlert, ElDialog, ElInput, ElSelect, ElOption, ElPopover, ElCheckbox, ElTabs, ElTabPane, ElPagination, ElCalendar } from 'element-plus'
 import store, { key } from './store'
 import 'element-plus/lib/theme-chalk/index.css';
 import './config/theme.scss'
@@ -31,4 +31,7 @@ app
   .use(ElTabPane)
   .use(ElPagination)
   .use(ElAlert)
+  .use(ElTable)
+  .use(ElTableColumn)
+  .use(ElTooltip)
 app.mount('#app')

@@ -55,3 +55,11 @@ export const getUserInfoList = (
     rows?: number,
     courseId?: number}
 ) => axios.get('/admin/queryUsersInfo', { params }) as any as Response
+
+export const getAdminInfoList = (
+  page?:number,
+  rows?:number,
+  courseName?:string,
+  adminName?:string,
+  adminId?:string
+) => axios.post('/superAdmin/queryAdmins',{page,rows,courseName,adminName,adminId}) as any as Response
