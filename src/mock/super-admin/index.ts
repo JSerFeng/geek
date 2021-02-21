@@ -114,3 +114,12 @@ Mock.mock('/superAdmin/queryAdmins','post',function (params:any) {
         }
     })
 })
+
+Mock.mock('/superAdmin/addAdmin','post', function (params:any) {
+    console.log(params)
+    return Mock.mock({
+        "error_code": 200,
+        "message": "管理员添加成功！",
+        "data": null
+    })
+})

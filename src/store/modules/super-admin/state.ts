@@ -1,3 +1,5 @@
+import type { InfoObj } from '../../../components/ad-form/hooks/useBlueCheck'
+
 interface Admin {
   "id": string,
   "adminId": string,
@@ -14,20 +16,24 @@ interface Data<T = Admin> {
   "currentPage": number,
   "totalPage": number,
   "rows": number,
-  items: T[]
+  "items": T[]
 }
 
 export type Response<T = Data> = {
   "error_code": number,
   "message": string,
-  data:T
+  "data":T
 }
 
+export type AddAdminPayload<T = InfoObj> = {
+  type:string, 
+  payload:T
+}
 
 export type AdminState<T> = {
-  adminList: Response | {data:{}}
+  adminList: Response | {data:{data:{}}}
 }
 
 export const state: AdminState<Response | {data:{}}> = {
-  adminList: {data:{}}
+  adminList: {data:{data:{}}}
 }

@@ -31,14 +31,14 @@
     width="45%"
     :before-close="handleClose"
   >
-    <ad-form />
+    <ad-form ref="adForm" />
     <template #footer>
       <span class="dialog-footer">
         <el-button round @click="dialogVisible = false">取 消</el-button>
         <el-button
           round
           type="primary"
-          @click="dialogVisible = false"
+          @click="handleConfirm"
           :disabled="isConfirm"
           >确 定</el-button
         >
@@ -48,33 +48,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRaw, ref, watch, Ref, watchEffect } from "vue";
+import { defineComponent, ref, Ref } from "vue";
 import { useSearchAdmin } from "../hooks/useSearchAdmin";
 import AdForm from "../../../components/ad-form/AdForm.vue";
 import { useBlueCkeck } from "../../../components/ad-form/hooks/useBlueCheck";
 import { Props } from "../../../components/ad-form/hooks/useBlueCheck";
+import { useConfirmHook } from '../hooks/useConfirm'
 export default defineComponent({
-  setup() {
-    let dialogVisible = ref<boolean>(false) as Ref<boolean>
+  setup(props,context) {
     const { handleSearchAdmin, searchInput } = useSearchAdmin();
     // 元素的ref
     let idRef = ref<null | HTMLInputElement>(null);
     let nameRef = ref<null | HTMLInputElement>(null);
     let pasRef = ref<null | HTMLInputElement>(null);
     let dirRef = ref<null | HTMLInputElement>(null);
-    let { isConfirm } = useBlueCkeck<Props>({ idRef, nameRef, pasRef, dirRef });
-    function handleClose(done: () => void) {
-      done();
-    }
-    watchEffect(() => {
-      console.log(toRaw(isConfirm.value));
+    let { isConfirm } = useBlueCkeck<Props>({
+      idRef,
+      nameRef,
+      pasRef,
+      dirRef,
     });
+    const { handleClose, handleConfirm, adForm, dialogVisible } = useConfirmHook()
+
     return {
       handleSearchAdmin,
       searchInput,
       isConfirm,
       dialogVisible,
-      handleClose
+      handleClose,
+      handleConfirm,
+      adForm,
     };
   },
   components: {

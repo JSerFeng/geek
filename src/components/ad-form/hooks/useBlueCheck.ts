@@ -11,10 +11,10 @@ export type Props = {
 }
 
 export type InfoObj = {
-  id: Ref<null | HTMLInputElement>,
-  name: Ref<null | HTMLInputElement>,
-  password: Ref<null | HTMLInputElement>,
-  direction: Ref<null | HTMLInputElement>
+  adminId: string,
+  adminName: string,
+  password: string,
+  courseName: string
 }
 
 export function useBlueCkeck<T extends Props = Props>(props?: T) {
@@ -25,32 +25,25 @@ export function useBlueCkeck<T extends Props = Props>(props?: T) {
   let isPasShow = ref<boolean>(false);
   let isDirShow = ref<boolean>(false);
 
-  const InfoObj = {
-    id: idRef,
-    name: nameRef,
-    password: pasRef,
-    direction: dirRef
-  }
+  const infoObj:InfoObj = reactive({
+    adminId: '',
+    adminName: '',
+    password: '',
+    courseName: ''
+  })
 
   //  判断是否符合提交标准
-  let isConfirm: Ref<boolean> = ref<boolean>(true)
+  let isConfirm: Ref<boolean> = ref<boolean>(false)
 
   onMounted(() => {
-
-    // setTimeout(() => {
-    //   isConfirm.value = false
-    // }, 3000);
     idRef.value?.addEventListener("blur", () => {
       if (useIdCheck(idRef.value?.value as string)) {
         isIdShow.value = false;
       } else {
         isIdShow.value = true;
       }
-
-      // isConfirm.value = useConfirm(InfoObj)
-      isConfirm.value = false
-      // console.log(useConfirm(InfoObj))
-
+      isConfirm.value = useConfirm(infoObj)
+      infoObj.adminId = idRef.value?.value as string
     });
     nameRef.value?.addEventListener("blur", () => {
       if (useNameCheck(nameRef.value?.value as string)) {
@@ -58,8 +51,8 @@ export function useBlueCkeck<T extends Props = Props>(props?: T) {
       } else {
         isNameShow.value = true;
       }
-      isConfirm.value = useConfirm(InfoObj)
-      console.log(useConfirm(InfoObj))
+      isConfirm.value = useConfirm(infoObj)
+      infoObj.adminName = nameRef.value?.value as string
 
     });
     pasRef.value?.addEventListener('blur', () => {
@@ -68,8 +61,8 @@ export function useBlueCkeck<T extends Props = Props>(props?: T) {
       } else {
         isPasShow.value = true
       }
-      isConfirm.value = useConfirm(InfoObj)
-      console.log(useConfirm(InfoObj))
+      isConfirm.value = useConfirm(infoObj)
+      infoObj.password = pasRef.value?.value as string
 
     })
     dirRef.value?.addEventListener('blur', () => {
@@ -78,8 +71,8 @@ export function useBlueCkeck<T extends Props = Props>(props?: T) {
       } else {
         isDirShow.value = true
       }
-      isConfirm.value = useConfirm(InfoObj)
-      console.log(useConfirm(InfoObj))
+      isConfirm.value = useConfirm(infoObj)
+      infoObj.courseName = dirRef.value?.value as string
 
     })
   });
@@ -93,6 +86,7 @@ export function useBlueCkeck<T extends Props = Props>(props?: T) {
     isPasShow,
     isDirShow,
     isNameShow,
-    isConfirm
+    isConfirm,
+    infoObj
   }
 }

@@ -51,15 +51,31 @@ export const reqAdminSendEmail = (
 ) => axios.post('/admin/sendDailyMail', { adminId, courseId, userIdList, title, text }) as Promise<Response>
 
 export const getUserInfoList = (
-  params?:{page?: number,
+  params?: {
+    page?: number,
     rows?: number,
-    courseId?: number}
+    courseId?: number
+  }
 ) => axios.get('/admin/queryUsersInfo', { params }) as any as Response
 
 export const getAdminInfoList = (
-  page?:number,
-  rows?:number,
-  courseName?:string,
-  adminName?:string,
-  adminId?:string
-) => axios.post('/superAdmin/queryAdmins',{page,rows,courseName,adminName,adminId}) as any as Response
+  page?: number,
+  rows?: number,
+  courseName?: string,
+  adminName?: string,
+  adminId?: string
+) => axios.post('/superAdmin/queryAdmins', { page, rows, courseName, adminName, adminId }) as any as Response
+
+interface AddAdmin {
+  adminId: string,
+  password: string,
+  adminName: string,
+  courseName: string
+}
+
+export const addAdmin = (
+  { adminId,
+    password,
+    adminName,
+    courseName }: AddAdmin
+) => axios.post('/superAdmin/addAdmin', { adminId, password, adminName, courseName }) as Promise<Response>

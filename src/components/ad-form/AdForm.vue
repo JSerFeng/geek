@@ -33,9 +33,13 @@ import { useAddEvent } from "./hooks/useAddEvent";
 import { useBlueCkeck } from "./hooks/useBlueCheck";
 import type { Props } from './hooks/useBlueCheck'
 export default defineComponent({
-  setup() {
+  setup(props, context) {
+   
     const { idRef, nameRef, pasRef, dirRef } = useAddEvent();
-    const { isIdShow, isPasShow, isDirShow, isNameShow } = useBlueCkeck<Props>({idRef,nameRef,pasRef,dirRef});
+    const { isIdShow, isPasShow, isDirShow, isNameShow, infoObj } = useBlueCkeck<Props>({idRef,nameRef,pasRef,dirRef});
+     context.expose({
+      infoObj
+    })
     return {
       idRef,
       nameRef,
