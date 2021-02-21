@@ -22,6 +22,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+
 .super-admin {
   background-color: rgba($color: #fff, $alpha: 1);
   width: 95%;

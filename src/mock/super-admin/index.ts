@@ -1,7 +1,6 @@
 import Mock from 'mockjs'
 
 Mock.mock('/superAdmin/queryAdmins','post',function (params:any) {
-    console.log(params)
     return Mock.mock({
         "error_code": 200,
         "message": "success",

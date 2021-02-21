@@ -54,7 +54,6 @@ export const getUserInfoList = (
   params?:{page?: number,
     rows?: number,
     courseId?: number}
-<<<<<<< HEAD
 ) => axios.get('/admin/queryUsersInfo', { params }) as any as Response
 
 export const getAdminInfoList = (
@@ -64,6 +63,3 @@ export const getAdminInfoList = (
   adminName?:string,
   adminId?:string
 ) => axios.post('/superAdmin/queryAdmins',{page,rows,courseName,adminName,adminId}) as any as Response
-=======
-) => axios.get('/admin/queryUsersInfo', { params }) as Promise<Response>
->>>>>>> c6d7008c7ec94833859326e343f7c7c392617b8d
