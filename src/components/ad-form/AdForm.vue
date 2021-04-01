@@ -18,28 +18,64 @@
         <span v-show="isPasShow">密码为3~30为字符</span>
       </transition>
     </div>
-    <input ref="dirRef" type="text" placeholder="方向" />
+    <input ref="dirRef" type="text" placeholder="意愿(编程语言)" />
     <div class="msg">
       <transition name="dir">
-        <span v-show="isDirShow">方向不能为空</span>
+        <span v-show="isDirShow">意愿不能为空</span>
       </transition>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {
+  computed,
+  watch,
+  defineComponent,
+  onMounted,
+  toRefs,
+} from "vue";
 import { useAddEvent } from "./hooks/useAddEvent";
-import { useBlueCkeck } from "./hooks/useBlueCheck";
-import type { Props } from './hooks/useBlueCheck'
+import { useBlueCkeck } from "./hooks/useBlurCheck";
+import type { Props } from "./hooks/useBlurCheck";
 export default defineComponent({
-  setup(props, context) {
-   
+  props: {
+    rowInfo: Object,
+  },
+  setup(props: any, context) {
+    const { rowInfo } = toRefs(props);
     const { idRef, nameRef, pasRef, dirRef } = useAddEvent();
-    const { isIdShow, isPasShow, isDirShow, isNameShow, infoObj } = useBlueCkeck<Props>({idRef,nameRef,pasRef,dirRef});
-     context.expose({
-      infoObj
-    })
+    const {
+      isIdShow,
+      isPasShow,
+      isDirShow,
+      isNameShow,
+      infoObj,
+    } = useBlueCkeck<Props>({ idRef, nameRef, pasRef, dirRef });
+    context.expose({
+      infoObj,
+    });
+    const adminId = computed(() => rowInfo.value.adminId);
+    const adminName = computed(() => rowInfo.value.adminName);
+    const password = computed(() => rowInfo.value.password);
+    const courseName = computed(() => rowInfo.value.courseName);
+    onMounted(() => {
+      if (rowInfo) {
+        idRef.value!.value = adminId.value;
+        nameRef.value!.value = adminName.value;
+        pasRef.value!.value = password.value;
+        dirRef.value!.value = courseName.value;
+      }
+    });
+    watch(
+      () => rowInfo?.value.adminId,
+      () => {
+        idRef.value!.value = adminId.value;
+        nameRef.value!.value = adminName.value;
+        pasRef.value!.value = password.value;
+        dirRef.value!.value = courseName.value;
+      }
+    );
     return {
       idRef,
       nameRef,
@@ -76,14 +112,14 @@ export default defineComponent({
   transform: scale(1.1);
 }
 
-@each $i in id, name, pas, dir{
+@each $i in id, name, pas, dir {
   .#{$i}-enter-active,
-  .#{$i}-leave-active{
+  .#{$i}-leave-active {
     transition: opacity 0.5s ease;
   }
 
   .#{$i}-enter-from,
-  .#{$i}-leave-to{
+  .#{$i}-leave-to {
     opacity: 0;
   }
 }

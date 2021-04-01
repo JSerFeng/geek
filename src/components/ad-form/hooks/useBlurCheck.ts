@@ -13,8 +13,9 @@ export type Props = {
 export type InfoObj = {
   adminId: string,
   adminName: string,
-  password: string,
-  courseName: string
+  password: string | null,
+  courseName: string,
+  id?:number
 }
 
 export function useBlueCkeck<T extends Props = Props>(props?: T) {

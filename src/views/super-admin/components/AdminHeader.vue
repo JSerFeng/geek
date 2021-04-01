@@ -8,7 +8,12 @@
       @click="dialogVisible = true"
       >添加</el-button
     >
-    <el-button size="mini" icon="el-icon-delete" type="danger" round
+    <el-button
+      size="mini"
+      icon="el-icon-delete"
+      type="danger"
+      round
+      @click="handleDeleteAdmins"
       >批量删除</el-button
     >
     <el-input
@@ -48,14 +53,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref } from "vue";
+import {  defineComponent, ref } from "vue";
 import { useSearchAdmin } from "../hooks/useSearchAdmin";
 import AdForm from "../../../components/ad-form/AdForm.vue";
-import { useBlueCkeck } from "../../../components/ad-form/hooks/useBlueCheck";
-import { Props } from "../../../components/ad-form/hooks/useBlueCheck";
-import { useConfirmHook } from '../hooks/useConfirm'
+import { useBlueCkeck } from "../../../components/ad-form/hooks/useBlurCheck";
+import { Props } from "../../../components/ad-form/hooks/useBlurCheck";
+import { useConfirmHook } from "../hooks/useConfirm";
+import { useDeleteAdmins } from '../hooks/useDeleteAdmins'
 export default defineComponent({
-  setup(props,context) {
+  setup() {
     const { handleSearchAdmin, searchInput } = useSearchAdmin();
     // 元素的ref
     let idRef = ref<null | HTMLInputElement>(null);
@@ -68,8 +74,13 @@ export default defineComponent({
       pasRef,
       dirRef,
     });
-    const { handleClose, handleConfirm, adForm, dialogVisible } = useConfirmHook()
-
+    const {
+      handleClose,
+      handleConfirm,
+      adForm,
+      dialogVisible,
+    } = useConfirmHook();
+    const { handleDeleteAdmins } = useDeleteAdmins()
     return {
       handleSearchAdmin,
       searchInput,
@@ -78,6 +89,7 @@ export default defineComponent({
       handleClose,
       handleConfirm,
       adForm,
+      handleDeleteAdmins,
     };
   },
   components: {

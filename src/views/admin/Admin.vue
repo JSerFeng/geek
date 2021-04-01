@@ -87,6 +87,7 @@ export default defineComponent({
   background-color: rgba($color: #fff, $alpha: 0.7);
   width: 95%;
   border-radius: 50px;
+  min-height: 550px;
   margin: 10vh auto;
   box-shadow: -1px -1px 3px #ffffff, 1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
   .font,
@@ -94,11 +95,12 @@ export default defineComponent({
   .python {
     background-color: #eef1ef;
     box-shadow: -1px -1px 3px #ffffff, 1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
-    width: 150vh;
     height: 55vh;
     overflow: hidden;
-    margin: 10vh 23vh;
     transition: all 0.5s;
+    width: 20vh;
+    margin-top: 10vh;
+    margin-left: 4vh;
     border-radius: 75px;
     &:hover {
       transform: scale(1.2);
