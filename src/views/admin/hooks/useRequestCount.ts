@@ -1,10 +1,19 @@
 import { AxiosResponse } from 'axios'
-import { reactive, onMounted, toRaw } from 'vue'
-import { getPersonCount } from '../../../api/index'
+import { reactive, onMounted, ref, toRaw, computed } from 'vue'
+import { getPersonCount, getSignListList } from '../../../api/index'
 import '../../../mock/admin/index'
 
 interface Date<T> {
     data:T
+}
+
+interface Person {
+    "userId": string,
+    "userName": string,
+    "mail": string,
+    "major": string,
+    "image": null | string,
+    "grade": null | string
 }
 
 interface personObj {
@@ -18,6 +27,7 @@ type resType = {
 }
 
 export const useRequestCount = () => {
+    const signPersonList = ref<Person[]>([])
     let res = reactive<resType>({
         data: {
             data: {
@@ -29,8 +39,11 @@ export const useRequestCount = () => {
     })
     onMounted(async () => {
         res.data = await getPersonCount()
+        const sPersonList = await getSignListList()
+        signPersonList.value = sPersonList.data.data.items
     })
     return {
-        res
+        res,
+        signPersonList
     }
 }

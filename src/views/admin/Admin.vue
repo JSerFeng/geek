@@ -25,6 +25,10 @@
       </div>
     </li>
   </ul>
+  <div class="detail-info">
+    <DetailTitle/>
+    <SignPersonItem :key="index" :info={item} v-for="(item, index) in signPersonList"/>
+  </div>
   <div @click="handleClose" class="send-email">
     发送邮件 <i class="el-icon-s-promotion"></i>
   </div>
@@ -54,6 +58,7 @@
         </span>
       </template>
     </el-dialog>
+    <router-link to='/check/homework' ><AdBeacon boxStyle='right'/></router-link>
   </div>
 </template>
 
@@ -62,16 +67,29 @@ import { defineComponent, computed, ref } from "vue";
 import { useRequestCount } from "./hooks/useRequestCount";
 import useDialog from "./hooks/useDialog";
 import SendEmail from "./components/SendEmail.vue";
+import SignPersonItem from './components/SignPerson.vue'
+import DetailTitle from './components/DetailTitle.vue'
+import AdBeacon from '../../components/ad-beacon/AdBeacon.vue'
 export default defineComponent({
   setup() {
-    const { res } = useRequestCount();
+    const { res, signPersonList } = useRequestCount();
     let sendEmailRef = ref<null | HTMLDivElement | any>(null);
     const { dialogVisible, handleClose, root } = useDialog();
     const courseList = computed(() => res.data.data);
-    return { courseList, dialogVisible, handleClose, root, sendEmailRef };
+    return {
+      courseList,
+      dialogVisible,
+      handleClose,
+      root,
+      sendEmailRef,
+      signPersonList,
+    };
   },
   components: {
     SendEmail,
+    SignPersonItem,
+    DetailTitle,
+    AdBeacon
   },
 });
 </script>
@@ -82,23 +100,50 @@ export default defineComponent({
   padding: 0;
   margin: 0;
 }
+@media screen and (max-width: 799px) and (min-width: 200px) {
+  .detail-info {
+    width: 40rem;
+    transform: scale(.8);
+    margin: -10vh 0 0 -2vh;
+     box-shadow: 0px 0px 10px #CECECE ;
+     height: 40rem;
+     overflow: auto;
+    border-radius: 2rem;
+  }
+}
+@media screen and(min-width: 800px) {
+  .detail-info {
+    width: 37rem;
+    margin-left: 7rem;
+    position: absolute;
+    left: 35rem;
+    top: 5rem;
+    border-radius: 20px;
+    height: 500px;
+    overflow: auto;
+     box-shadow: 0px 0px 10px #CECECE ;
+  }
+}
 .person-count {
   display: flex;
   background-color: rgba($color: #fff, $alpha: 0.7);
   width: 95%;
   border-radius: 50px;
+  min-height: 550px;
   margin: 10vh auto;
   box-shadow: -1px -1px 3px #ffffff, 1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
+
   .font,
   .end,
   .python {
     background-color: #eef1ef;
     box-shadow: -1px -1px 3px #ffffff, 1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
-    width: 150vh;
     height: 55vh;
     overflow: hidden;
-    margin: 10vh 23vh;
     transition: all 0.5s;
+    width: 20vh;
+    margin-top: 10vh;
+    margin-left: 4vh;
     border-radius: 75px;
     &:hover {
       transform: scale(1.2);

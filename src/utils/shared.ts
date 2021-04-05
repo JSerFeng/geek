@@ -1,9 +1,10 @@
 import { BehaviorSubject } from "rxjs"
-import { onMounted, onUnmounted, Ref, ref, watchEffect } from "vue"
+import { onMounted, onUnmounted, Ref, ref, watchEffect, toRaw } from "vue"
 import { ElMessage } from 'element-plus'
 import request, { ErrorCode } from "../api/request"
 import { Response } from "../api"
 import { Data } from "../store/modules/user/mutations"
+import { useLink } from "vue-router"
 
 export enum Flags {
   Fail = 0,
@@ -53,6 +54,7 @@ export const forEach = <T extends Record<string, any> | Array<any>>(
   if (objOrArr instanceof Array) {
     return objOrArr.forEach(fn)
   } else {
+    // @ts-ignore
     Reflect.ownKeys(objOrArr).forEach(key => fn(key, objOrArr[key as string]))
   }
 }
@@ -166,4 +168,63 @@ export const useRequest = <DataType extends any = any, T extends Array<any> = Ar
   }
 
   return [data, flag, retry]
+}
+
+interface Admin {
+  "id": string,
+  "adminId": string,
+  "adminName": string,
+  "password": string,
+  "courseName": string,
+  "image": null | string,
+  "registerTime": string,
+  "type": "admin"
+}
+
+type AdminList<T> = T[]
+
+export function updateUser<T extends K[], K extends Admin>(arr: T, item: K): AdminList<Admin> {
+  for (let i = 0; i < arr.length; i++) {
+      if (arr[i].id === item.id) {
+          arr[i] = item
+      }
+  }
+  return arr
+}
+
+export  function getValue<T extends {[key: string]: any}> (obj:T) {
+  const res = {} as Record<keyof T,T[keyof T]>
+  for(let i in obj){
+      if(obj[i]){
+          res[i] = obj[i]
+      }
+  }
+  return res
+}
+
+export function deleteUser<T extends K[], K extends { adminId: string }>(userList: T, adminId: string): T {
+  for (let i:number = 0; i < userList.length; i++) {
+      if (userList[i].adminId === adminId) {
+          userList.splice(i, 1)
+      }
+  }
+  return userList
+}
+
+export function getIdList (userList:Admin[]):string[] {
+  const res = userList.map((i:Admin)=>{
+    return i.adminId
+  })
+  return res
+}
+
+export function filterAdminId(adminIdList: Admin[], deleteArr: string[]) {
+  for (let i = 0; i < adminIdList.length; i++) {
+      for (let j = 0; j < deleteArr.length; j++) {
+          if (adminIdList[i].adminId === deleteArr[j]) {
+              adminIdList.splice(i, 1)
+          }
+      }
+  }
+  return adminIdList
 }

@@ -26,7 +26,7 @@ export default defineComponent({
 .super-admin {
   background-color: rgba($color: #fff, $alpha: 1);
   width: 95%;
-  height: 80%;
+  min-width: 80%;
   border-radius: 50px;
   margin: 7vh auto;
   text-align: center;

@@ -1,4 +1,4 @@
-import { onMounted, reactive, toRaw } from 'vue'
+import { onMounted, reactive, toRaw, watch } from 'vue'
 import  { useStore } from '../../../store/index'
 import { ActionTypes } from '../../../store/modules/super-admin/actions'
 
@@ -40,6 +40,9 @@ export function useRequestAdminList () {
         tableData.data = Store.state.superAdmin.adminList.data.data.items;
         tableData.total = Store.state.superAdmin.adminList.data.data.total
       });
+      watch(()=>Store.state.superAdmin.adminList.data.data.items,(val)=>{
+        tableData.data = val
+      })
     return {
         tableData
     }

@@ -123,3 +123,31 @@ Mock.mock('/superAdmin/addAdmin','post', function (params:any) {
         "data": null
     })
 })
+
+Mock.mock('/superAdmin/updateAdmin','post',function (params:any) {
+    console.log(params)
+    return Mock.mock({
+        "error_code": 200,
+        "message": "修改管理员信息成功！",
+        "data": null
+    })
+})
+
+
+Mock.mock('/superAdmin/delAdmin','post',function (params:any) {
+    console.log(params)
+    return Mock.mock({
+        "error_code": 200,
+        "message": "管理员删除成功！",
+        "data": null
+    })
+})
+
+Mock.mock('/superAdmin/delAdmins','post',function(arr:any){
+    console.log(arr)
+    return Mock.mock({
+        "error_code": 200,
+        "message": "一共删除2个管理员,成功删除2个",
+        "data": []
+    })
+})
