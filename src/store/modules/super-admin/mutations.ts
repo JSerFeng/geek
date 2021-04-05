@@ -1,7 +1,6 @@
 import { MutationTree } from "vuex";
 import { AdminState, Response, AddAdminPayload } from "./state";
 import { updateUser, deleteUser, filterAdminId } from "../../../utils/shared";
-import { computed } from "_vue@3.0.5@vue";
 export const enum MutationTypes {
   addAdminList = 'ADD_ADMIN_LIST',
   addAdmin = 'ADD_ADMIN',

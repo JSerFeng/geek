@@ -10,7 +10,7 @@ import { AdminState } from './modules/super-admin/state'
 export interface RootState {
   user: State,
   userList:userListState,
-  superAdmin:AdminState
+  superAdmin:AdminState<any>
 }
 
 export const key: InjectionKey<Store<RootState>> = Symbol()

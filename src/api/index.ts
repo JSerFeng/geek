@@ -43,6 +43,8 @@ export const register = (
 
 export const getPersonCount = (courseId?: string) => axios.post('/admin', { courseId }) as Promise<Response>
 
+export const getSignListList = () => axios.get('/admin/queryUsersInfo') as Promise<Response>
+
 export const reqAdminSendEmail = (
   title: string,
   text: string,
