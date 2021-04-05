@@ -1,6 +1,7 @@
 import request, { ErrorCode } from "./request"
 import axios from "axios";
 import '../mock/admin/index'
+import '../mock/super-admin/index'
 import { ElNotification } from "element-plus";
 import { State } from '../store/modules/user/state'
 
@@ -42,6 +43,8 @@ export const register = (
 
 export const getPersonCount = (courseId?: string) => axios.post('/admin', { courseId }) as Promise<Response>
 
+export const getSignListList = () => axios.get('/admin/queryUsersInfo') as Promise<Response>
+
 export const reqAdminSendEmail = (
   title: string,
   text: string,
@@ -68,9 +71,10 @@ export const getAdminInfoList = (
 
 interface AddAdmin {
   adminId: string,
-  password: string,
+  password: string | null,
   adminName: string,
-  courseName: string
+  courseName: string,
+  id?: string | number
 }
 
 export const addAdmin = (
@@ -79,3 +83,16 @@ export const addAdmin = (
     adminName,
     courseName }: AddAdmin
 ) => axios.post('/superAdmin/addAdmin', { adminId, password, adminName, courseName }) as Promise<Response>
+
+export const editAdmin = ({
+  adminId,
+  password,
+  adminName,
+  courseName,
+  id
+}: AddAdmin
+) => axios.post('/superAdmin/updateAdmin', { adminId, password, adminName, courseName, id }) as Promise<Response>
+
+export const deleteAdmin = (adminId:string) => axios.post('/superAdmin/delAdmin',{adminId}) as Promise<Response>
+
+export const deleleAdmins = (adminList:string[]) => axios.post('/superAdmin/delAdmins',{adminList}) as Promise<Response>
