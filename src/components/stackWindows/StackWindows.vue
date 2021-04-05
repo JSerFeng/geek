@@ -4,8 +4,25 @@
       <component :is="props.stack[currentPointer]" />
     </WithTransition>
   </div>
+
 </template>
 <script lang="ts" setup>
+/**
+ * 使用方法:
+ * 传入一个数组。数组每一项是vue组件，例：
+ * import HelloWorld from "./HelloWorld.vue"
+ * import Home from "./Home.vue"
+ * 
+ * stackRef = ref(null)
+ * 模板内传入
+ * <stack-window :stack="[HelloWorld, Home]" ref="stackRef" />
+ * 
+ * onMounted(() => {
+ *  stackRef.value.push()   下一页
+ *  stackRef.value.pop()    上一页
+ *  stackRef.value.reset()  回到第一页
+ * })
+ */
 import { defineProps, provide, ref, useContext } from 'vue'
 import type { Component, Ref } from 'vue'
 import WithTransition from '../withTransition/WithTransition.vue'

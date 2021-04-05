@@ -1,6 +1,6 @@
 export type Course = {
   "id": number,
-  "courseId": string,
+  "courseId": number,
   "addTime": string,
   "courseName": string
 }

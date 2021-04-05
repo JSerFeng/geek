@@ -1,11 +1,10 @@
 <template>
   <div class="main">
-    <!-- <video class="bg-video" src="./assets/bg.mp4" loop autoplay /> -->
-    <router-view v-slot="{ Component, route }">
+    <RouterView v-slot="{ Component, route }">
       <WithTransition :path="route.path">
         <component :is="Component" />
       </WithTransition>
-    </router-view>
+    </RouterView>
   </div>
 </template>
 
@@ -17,10 +16,10 @@
  *    1114550440 冯学长 | 2149857139 曾学长 | you
  *    PS: obviously写的更好的用户端部分是冯学长写的，垃圾的管理端是曾学长写的
  * !!!完全阅读此代码前置技术栈包含: 
+ *  ts
  *  vue3全家桶
  *  script setup语法糖
  *  rxjs基础
- *  ts
  */
 import { RouterView } from 'vue-router'
 import { useStore } from './store'
@@ -39,7 +38,9 @@ html,
 body {
   padding: 0;
   margin: 0;
-  // transform: translateZ(0);
+}
+.p {
+  cursor: pointer;
 }
 .flex {
   display: flex;
@@ -79,27 +80,4 @@ ul {
   height: 100vh;
   overflow-x: hidden;
 }
-
-// .v-enter-active {
-//   transition: 0.2s;
-//   transform: scaleY(1);
-//   transform-origin: center;
-// }
-
-// .v-enter-from {
-//   opacity: 0;
-//   transform: scaleY(0);
-// }
-
-// .v-leave-active {
-//   transition: 0.2s;
-//   opacity: 0;
-//   transform: scaleY(0);
-//   transform-origin: center;
-// }
-
-// .v-leave-from {
-//   opacity: 1;
-//   transform: scaleY(1);
-// }
 </style>

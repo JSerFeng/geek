@@ -19,7 +19,7 @@
       </div>
       <div class="item leftBottomMid leftBottom">
         <div class="github">
-          <el-button type="success">知乎</el-button>
+          <ElButton type="success">知乎</ElButton>
         </div>
       </div>
       <div class="item leftBottomBottom leftBottom">

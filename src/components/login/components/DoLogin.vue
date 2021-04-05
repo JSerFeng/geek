@@ -1,8 +1,9 @@
 <template lang="">
   <div>
-    <g-input v-model="userId" placeholder="用户名"/>
-    <g-input v-model="password" placeholder="密码"/>
-    <g-button @click="login" type="broke" class="login-btn">登陆</g-button>
+    <GInput v-model="userId" placeholder="用户名"/>
+    <GInput v-model="password" placeholder="密码"/>
+    <a class="a-tip p">忘记密码?</a>
+    <GQueryBtn :request="login" type="broke" class="login-btn">登陆</GQueryBtn>
   </div>
 </template>
 <script lang="ts" setup>
@@ -10,7 +11,7 @@ import { ref } from 'vue';
 import { useStore } from '../../../store'
 import { useRouter } from 'vue-router'
 import type { Actions } from '../../../store/modules/user/actions'
-import { GInput, GButton } from '../../geek'
+import { GInput, GQueryBtn } from '../../geek'
 import { ElNotification } from 'element-plus';
 import { ActionTypes } from '../../../store/modules/user/actions';
 import { ErrorCode } from '../../../api/request';
@@ -49,5 +50,10 @@ const login = async () => {
 .login-btn {
   width: 100%;
   font-size: 20px;
+}
+
+.a-tip {
+  color: rgb(90, 90, 90);
+  font-size: 14px;
 }
 </style>

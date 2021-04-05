@@ -4,11 +4,10 @@
     <ul style="padding: 0;margin: 0;" class="courses">
       <div class="flex jb">
         <div style="width: 50%;">
-          <p>技术方向</p>
+          <p>可选技术方向</p>
           <li
-            v-for="(item, i) in allCourses?.data"
+            v-for="(item, i) in unselectedList"
             :key="i"
-            v-show="status === Flags.Success && !selectedCourse.has(item.courseName)"
             @click="store.dispatch(ActionTypes.ChooseCourse, item.courseId)"
           >
             <svg class="icon" aria-hidden="true">
@@ -20,15 +19,15 @@
         <div style="width: 50%;">
           <p>已选择方向</p>
           <li
-            v-for="(my,i) in userInfo.directionVOList"
+            v-for="(item,i) in userInfo.directionVOList"
             :key="i"
-            @click="store.dispatch(ActionTypes.DelCourse, my.courseId)"
+            @click="store.dispatch(ActionTypes.DelCourse, item.courseId)"
           >
             <!--选择方向logo-->
             <svg class="icon" aria-hidden="true">
-              <use :xlink:href="logoMap[my.courseName]" />
+              <use :xlink:href="item && item.courseName && logoMap[item.courseName]" />
             </svg>
-            {{ my.courseName }}
+            {{ item.courseName }}
           </li>
         </div>
       </div>
@@ -81,9 +80,9 @@
           </div>
           <template #reference>
             <div>
-              <el-tooltip content="退出登陆">
+              <ElTooltip content="退出登陆">
                 <i class="logout el-icon-close" @click="logoutVisible = true"></i>
-              </el-tooltip>
+              </ElTooltip>
             </div>
           </template>
         </el-popover>
@@ -94,17 +93,17 @@
         Geek
         <br />极客网工作室
       </h3>
-      <router-link to="/login">
-        <g-button type="broke">登陆 / 注册</g-button>
-      </router-link>
+      <RouterLink to="/login">
+        <GButton type="broke">登陆 / 注册</GButton>
+      </RouterLink>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { RouterLink } from 'vue-router'
 import { useStore } from '../../../store'
-import type { User } from '../../../store/modules/user/state'
+import type { Course, User } from '../../../store/modules/user/state'
 import { ActionTypes } from '../../../store/modules/user/actions'
 import { Flags } from '../../../utils/shared';
 import { ElTooltip, ElPopover } from 'element-plus'
@@ -115,22 +114,36 @@ import { useFetchAllCourses } from '../hooks'
 
 const store = useStore()
 
+/**打开或者关闭modal */
 const modalCourse = ref<{ close(): void, open(): void }>()
+
+/**退出登陆是否可见 */
 const logoutVisible = ref(false)
 
+/**退出登陆 */
 const logout = () => {
   store.dispatch(ActionTypes.Logout)
   logoutVisible.value = false
 }
+
 const userInfo = store.state.user.userInfo as User
 
 const [allCourses, status, retry] = useFetchAllCourses()
 
-const selectedCourse = ref(new Set()) /**已选的课程 */
-watch(() => userInfo.directionVOList, (val) => {
-  val.forEach(item => {
-    selectedCourse.value.add(item.courseName)
-  })
+const unselectedList = ref<Course[]>([])
+
+const memo = new Set()
+
+watchEffect(() => {
+  if (status.value === Flags.Success) {
+    memo.clear()
+    for (const course of userInfo.directionVOList) {
+      memo.add(course.id)
+    }
+    unselectedList.value = allCourses.value!.data.filter(course => {
+      return !memo.has(course.id)
+    })
+  }
 })
 </script>
 <style lang="scss" scoped>

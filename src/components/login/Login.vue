@@ -63,11 +63,11 @@ import { RouterLink, RouterView } from 'vue-router'
   transform: translateX(0);
 }
 .v-enter-from {
-  transform: translateX(100%);
+  transform: translateX(150%);
 }
 .v-leave-active {
   transition: 0.2s;
-  transform: translateX(100%);
+  transform: translateX(150%);
 }
 .v-leave-from {
   transform: translateX(0);

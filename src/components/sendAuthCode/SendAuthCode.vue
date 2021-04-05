@@ -8,10 +8,9 @@
     <div class="code-input">
       <CodeInput v-model="authCode" />
     </div>
-
-    <g-button class="confirm-btn" type="broke" @click="confirm" :loading="loading">
+    <GButton class="confirm-btn" type="broke" @click="confirm" :loading="loading">
       <slot name="confirmBtn">注册</slot>
-    </g-button>
+    </GButton>
   </div>
 </template>
 <script lang="ts" setup>

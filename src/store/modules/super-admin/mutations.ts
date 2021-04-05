@@ -11,6 +11,8 @@ export const mutations: MutationTree<AdminState<Response | { data: {} }>> = {
     state.adminList = payload
   },
   [MutationTypes.addAdmin](state: any, payload:AddAdminPayload) {
+    console.log(payload);
+    
     state.adminList.data.data.items.push(payload.payload)
     console.log(toRaw(state.adminList.data.data.items))
   }

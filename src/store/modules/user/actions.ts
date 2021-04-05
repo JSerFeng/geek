@@ -1,5 +1,5 @@
 import { ActionTree } from "vuex";
-import { State } from "./state";
+import { State, User } from "./state";
 import { RootState } from '../../index'
 import { Response } from "../../../api";
 import {
@@ -19,7 +19,7 @@ type Data<Act extends { payload: any }> = {
 }
 
 
-export const enum ActionTypes {
+export enum ActionTypes {
   Login = "login-user",
   Logout = "logout",
   Reset = "reset",
@@ -54,7 +54,7 @@ export const actions: ActionTree<State, RootState> = {
       commit(MutationTypes.Logout)
     }
   },
-  async [ActionTypes.Reset]({ commit }) {
+  async [ActionTypes.Reset]({ commit, state }) {
     /**每次登陆都请求一下某些可能会变的数据，重新存储下来 */
     const myCourses = await queryMyCourse()
     if (myCourses.error_code !== ErrorCode.Success) {
@@ -72,21 +72,24 @@ export const actions: ActionTree<State, RootState> = {
       }
     })
   },
-  async [ActionTypes.ChooseCourse]({ commit }, courseId: number) {
+  async [ActionTypes.ChooseCourse]({ commit, state }, courseId: number) {
     const res = await chooseCourse(courseId)
     if (res.error_code !== ErrorCode.Success) {
       return res
     }
-    const queryRes = await queryMyCourse()
-    if (queryRes.error_code !== ErrorCode.Success) {
-      return queryRes
+    const myCourse = (state.userInfo as User).directionVOList
+    const addCourse = state.allCourses.get(courseId)
+    if (addCourse) {
+      myCourse.push(addCourse)
     }
-    commit({ type: MutationTypes.ChooseCourse, payload: queryRes.data })
+
+    commit({ type: MutationTypes.ChooseCourse, payload: myCourse })
   },
   async [ActionTypes.DelCourse]({ commit }, courseId: number) {
     const res = await delCourse(courseId)
-    if (res.error_code === ErrorCode.Success) {
-      commit({ type: MutationTypes.DelCourse, payload: courseId })
+    if (res.error_code !== ErrorCode.Success) {
+      return res
     }
+    commit({ type: MutationTypes.DelCourse, payload: courseId })
   }
 }

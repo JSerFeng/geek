@@ -13,6 +13,7 @@ const props = defineProps<{
 
 const className: Ref<"pop" | "push"> = ref("push")
 
+/**路由跳转的栈，用来保存每次路由地址 */
 const historyStack: Ref<(string | undefined)[]> = ref([props.path])
 
 watch(() => props.path, (newPath: string | undefined) => {

@@ -18,7 +18,7 @@ const props = defineProps<{
 }>()
 const emits = defineEmit(["click"])
 const handler = (e: Event) => {
-  if (!props.disabled) {
+  if (!props.disabled && !props.loading) {
     emits("click", e)
   }
 }

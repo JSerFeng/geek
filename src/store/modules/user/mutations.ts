@@ -69,9 +69,6 @@ export const mutations: MutationTree<State> = {
     state.isLogin = false
     storage.clear()
   },
-  [MutationTypes.AddCount](state) {
-    state.test.count++
-  },
   [MutationTypes.ChooseCourse](state, { payload }: Data<ChooseCourse>) {
     const userInfo = state.userInfo as User
     userInfo.directionVOList = payload
