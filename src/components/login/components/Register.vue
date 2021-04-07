@@ -42,7 +42,6 @@
     </Modal>
   </div>
 </template>
-
 <script lang="ts" setup>
 import { ElNotification } from 'element-plus'
 import { GButton, GInput } from '../../geek'
@@ -75,10 +74,7 @@ const [majorFlag, majorMsg] = useNullCheck(toRef(regOpt, "major"))
 const [passwordFlag, passwordMsg] = useNullCheck(toRef(regOpt, "password"))
 
 /**检验密码是否一致 */
-const [passwordConfirmFlag, passwordConfirmMsg] = useSameCheck(
-  toRef(regOpt, "password"),
-  toRef(regOpt, "passwordConfirm")
-)
+const [passwordConfirmFlag, passwordConfirmMsg] = useSameCheck(toRef(regOpt, "password"))(toRef(regOpt, "passwordConfirm"))
 
 /**检验是否全部输入都合法 */
 const flagCollection = ref([emailFlag, userFlag, nameFlag, majorFlag, passwordFlag, passwordConfirmFlag])

@@ -688,8 +688,8 @@ csstype@^2.6.8:
 
 dart-sass@^1.25.0:
   version "1.25.0"
-  resolved "https://registry.npmjs.org/dart-sass/-/dart-sass-1.25.0.tgz#e00c0348118916e9d81cb485297184c131af1dad"
-  integrity sha512-syNOAstJXAmvD3RifcDk3fiPMyYE2fY8so6w9gf2/wNlKpG0zyH+oiXubEYVOy1WAWkzOc72pbAxwx+3OU4JJA==
+  resolved "https://registry.npm.taobao.org/dart-sass/download/dart-sass-1.25.0.tgz#e00c0348118916e9d81cb485297184c131af1dad"
+  integrity sha1-4AwDSBGJFunYHLSFKXGEwTGvHa0=
   dependencies:
     chokidar ">=2.0.0 <4.0.0"
 
@@ -1235,10 +1235,10 @@ rxjs@^6.6.3:
   dependencies:
     tslib "^1.9.0"
 
-sass@^1.32.6:
-  version "1.32.6"
-  resolved "https://registry.npmjs.org/sass/-/sass-1.32.6.tgz#e3646c8325cd97ff75a8a15226007f3ccd221393"
-  integrity sha512-1bcDHDcSqeFtMr0JXI3xc/CXX6c4p0wHHivJdru8W7waM7a1WjKMm4m/Z5sY7CbVw4Whi2Chpcw6DFfSWwGLzQ==
+sass@^1.32.8:
+  version "1.32.8"
+  resolved "https://registry.npm.taobao.org/sass/download/sass-1.32.8.tgz?cache=0&sync_timestamp=1613687400541&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fsass%2Fdownload%2Fsass-1.32.8.tgz#f16a9abd8dc530add8834e506878a2808c037bdc"
+  integrity sha1-8WqavY3FMK3Yg05QaHiigIwDe9w=
   dependencies:
     chokidar ">=2.0.0 <4.0.0"
 

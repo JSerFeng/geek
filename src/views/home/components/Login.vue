@@ -44,15 +44,27 @@
       <div class="bg"></div>
       <div class="info-bar">
         <div>
-          <img class="avatar" v-if="userInfo.image" :src="userInfo.image" :alt="userInfo.userName" />
-          <img class="avatar" v-else />
+          <router-link to="/userinfo">
+            <ElAvatar
+              class="avatar"
+              v-if="userInfo.image"
+              :src="userInfo.image"
+              :alt="userInfo.userName"
+            />
+            <ElAvatar class="avatar" v-else />
+          </router-link>
         </div>
         <div class="intro">
           <h3 class="username">
-            {{ userInfo.userName }}
-            <span class="email">{{ userInfo.mail }}</span>
+            <router-link class="username" to="/userinfo">{{ userInfo.userName }}</router-link>
           </h3>
-          <p class="introduction">{{ userInfo.introduce }}</p>
+          <p class="introduction" @click="openSetIntro">{{ userInfo.introduce }}</p>
+          <Modal ref="modalCtx" width="70%">
+            <div style="padding: 30px 15px;">
+              <GInput v-model="introduction" placeholder="简介" />
+              <GButton :loading="introduceFlag === Flags.Pending" @click="changeIntroduction">确定</GButton>
+            </div>
+          </Modal>
           <el-tooltip
             :content="userInfo.directionVOList.length > 0 ? '我选择的方向' : '选择方向'"
             placement="top"
@@ -102,22 +114,47 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue';
 import { RouterLink } from 'vue-router'
+import type { Response } from '../../../api'
 import { useStore } from '../../../store'
 import type { Course, User } from '../../../store/modules/user/state'
 import { ActionTypes } from '../../../store/modules/user/actions'
-import { Flags } from '../../../utils/shared';
-import { ElTooltip, ElPopover } from 'element-plus'
-import { GButton, GLoadingIcon } from '../../../components/geek'
+import { Flags, useWithLoadingRef } from '../../../utils/shared';
+import { ElTooltip, ElPopover, ElAvatar } from 'element-plus'
+import { GButton, GLoadingIcon, GInput } from '../../../components/geek'
 import { logoMap } from '../../../config/config'
 import Modal from '../../../components/modal/Modal.vue'
 import { useFetchAllCourses } from '../hooks'
+import { ErrorCode } from '../../../api/request';
 
 const store = useStore()
+const userInfo = store.state.user.userInfo as User
+
+const [introduceFlag, introduction] = useWithLoadingRef(userInfo.introduce)
+const changeIntroduction = async () => {
+  introduceFlag.value = Flags.Pending
+  const res = await store.dispatch(ActionTypes.ChangeIntro, introduction.value) as Response
+  if (res && res.error_code === ErrorCode.Success) {
+    modalCtx.value?.close()
+    introduceFlag.value = Flags.Success
+  } else {
+    introduceFlag.value = Flags.Fail
+  }
+}
+
+/**控制开关modal */
+const modalCtx = ref<{
+  open(): void,
+  close(): void
+} | null>(null)
+/**打开简历设置 */
+const openSetIntro = () => {
+  modalCtx.value?.open()
+}
 
 /**打开或者关闭modal */
 const modalCourse = ref<{ close(): void, open(): void }>()
 
-/**退出登陆是否可见 */
+/**退出登陆按钮是否可见 */
 const logoutVisible = ref(false)
 
 /**退出登陆 */
@@ -126,14 +163,12 @@ const logout = () => {
   logoutVisible.value = false
 }
 
-const userInfo = store.state.user.userInfo as User
-
 const [allCourses, status, retry] = useFetchAllCourses()
 
 const unselectedList = ref<Course[]>([])
 
+/**记录下每个课程的id */
 const memo = new Set()
-
 watchEffect(() => {
   if (status.value === Flags.Success) {
     memo.clear()
@@ -190,9 +225,11 @@ watchEffect(() => {
         width: 100%;
 
         .username {
+          color: rgb(97, 97, 97);
           cursor: pointer;
           font-size: 24px;
           margin: 0;
+          text-decoration: none;
         }
 
         .email {

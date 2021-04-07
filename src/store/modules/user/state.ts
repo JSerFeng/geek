@@ -34,7 +34,7 @@ export interface User {
   "type": null,
   "directionVOList": Course[],
   "token": string,
-  "refreshToken": string
+  "refreshToken": string,
 }
 export interface SuperAdmin {
   "id": 2,
@@ -50,7 +50,7 @@ export interface SuperAdmin {
   "refreshToken": string
 }
 export type State = {
-  userInfo: Admin | SuperAdmin | User | {},
+  userInfo: Admin | SuperAdmin | User,
   isLogin: boolean,
   allCourses: Map<number, Course>
 }

@@ -8,7 +8,7 @@ import {
   Reset
 } from './mutations'
 import { ErrorCode } from "../../../api/request";
-import { logout, login, queryMyCourse, chooseCourse, delCourse, queryCourse } from "../../../api/user";
+import { logout, login, queryMyCourse, chooseCourse, delCourse, queryCourse, changeUserIntro } from "../../../api/user";
 
 type A<T, P> = {
   type: T,
@@ -24,7 +24,8 @@ export enum ActionTypes {
   Logout = "logout",
   Reset = "reset",
   ChooseCourse = "ChooseCourse",
-  DelCourse = "DelCourse"
+  DelCourse = "DelCourse",
+  ChangeIntro = "ChangeIntro"
 }
 
 type Login = A<ActionTypes.Login, {
@@ -91,5 +92,17 @@ export const actions: ActionTree<State, RootState> = {
       return res
     }
     commit({ type: MutationTypes.DelCourse, payload: courseId })
+  },
+  async [ActionTypes.ChangeIntro]({ state, commit }, intro: string) {
+    if (!intro) return false
+    const res = await changeUserIntro((state.userInfo as User).userId, intro)
+    if (res.error_code ===  ErrorCode.Success) {
+      commit({
+        type: MutationTypes.ChangeIntro,
+        payload: intro
+      })
+      return res
+    }
+    return false
   }
 }

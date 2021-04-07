@@ -1,7 +1,7 @@
 import { storage } from '../../../utils/shared'
 import { actions } from './actions'
 import { mutations } from './mutations'
-import { State, state } from './state'
+import { state } from './state'
 
 export const userStore = {
   state,

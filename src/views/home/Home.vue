@@ -32,7 +32,9 @@
 
       <div class="item rightBottomTop rightBottom link-to">经管实验室系统</div>
       <div class="item rightBottomMid rightBottom link-to">成员管理系统</div>
-      <div class="item rightBottomBottom rightBottom link-to">教务在线</div>
+      <div class="item rightBottomBottom rightBottom link-to">
+        <router-link to="/admin" >教务在线</router-link>
+      </div>
     </div>
   </div>
 </template>

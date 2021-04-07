@@ -1,10 +1,10 @@
 <template>
   <div class="main">
-    <RouterView v-slot="{ Component, route }">
+    <router-view v-slot="{ Component, route }">
       <WithTransition :path="route.path">
         <component :is="Component" />
       </WithTransition>
-    </RouterView>
+    </router-view>
   </div>
 </template>
 
@@ -15,13 +15,12 @@
  * 代码看不懂的地方 联系：
  *    1114550440 冯学长 | 2149857139 曾学长 | you
  *    PS: obviously写的更好的用户端部分是冯学长写的，垃圾的管理端是曾学长写的
- * !!!完全阅读此代码前置技术栈包含: 
+ * !!!完全理解项目前置技术栈包含: 
  *  ts
  *  vue3全家桶
- *  script setup语法糖
+ *  vue3 script setup语法糖
  *  rxjs基础
  */
-import { RouterView } from 'vue-router'
 import { useStore } from './store'
 import { ActionTypes } from './store/modules/user/actions'
 import WithTransition from './components/withTransition/WithTransition.vue'
@@ -70,7 +69,7 @@ ul {
   left: 0;
   top: 0;
   right: 0;
-  bottom: 0;
+  bottom: 0; 
 }
 .main {
   perspective: 1000;
@@ -78,6 +77,26 @@ ul {
   overflow-x: hidden;
   width: 100vw;
   height: 100vh;
-  overflow-x: hidden;
+}
+.shade {
+  box-shadow: -1px -1px 3px #ffffff, 1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
+}
+.active-drag {
+  position: relative;
+  &::after {
+    content: "拖放到此处";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgb(255, 255, 255);
+    filter: opacity(1);
+    border-radius: 20px;
+    box-shadow: 0 0 50px rgb(0, 0, 51);
+  }
 }
 </style>

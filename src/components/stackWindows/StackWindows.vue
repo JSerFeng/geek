@@ -62,6 +62,8 @@ expose({
   pop,
   reset
 })
+
+/**为包含的组件注册下一页或者上一页的方法 */
 provide("push", push)
 provide("pop", pop)
 provide("reset", reset)

@@ -8,9 +8,7 @@
       <i class="el-icon-close close-icon" @click="close"></i>
       <slot></slot>
       <div class="footer">
-        <slot name="footer">
-          Geek
-        </slot>
+        <slot name="footer">Geek</slot>
       </div>
     </div>
   </teleport>
@@ -44,7 +42,12 @@ expose({
   open
 })
 </script>
-
+<script lang="ts">
+export interface ModalMethods {
+  close(): void
+  open(): void
+}
+</script>
 <style lang="scss" scoped>
 .fy-mask {
   cursor: pointer;

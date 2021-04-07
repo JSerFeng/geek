@@ -1,10 +1,8 @@
 import { BehaviorSubject } from "rxjs"
-import { onMounted, onUnmounted, Ref, ref, watchEffect, toRaw } from "vue"
-import { ElMessage } from 'element-plus'
-import request, { ErrorCode } from "../api/request"
+import { onMounted, onUnmounted, Ref, ref, watchEffect, toRaw, UnwrapRef } from "vue"
+import { ElMessage, ElNotification } from 'element-plus'
+import { ErrorCode } from "../api/request"
 import { Response } from "../api"
-import { Data } from "../store/modules/user/mutations"
-import { useLink } from "vue-router"
 
 export enum Flags {
   Fail = 0,
@@ -18,7 +16,7 @@ export const storage = {
     try {
       const item = localStorage.getItem(key)
       return item && JSON.parse(item)
-    } catch(e) {
+    } catch (e) {
       return localStorage.getItem(key)
     }
   },
@@ -120,15 +118,15 @@ export const useRefreshCheck = () => {
 }
 
 // 判断此管理员是否具有发送邮件的条件
-export const adminSendEmail = (selValue:string, userIdArr:Set<string>):boolean => {
-  if(selValue) {
-    if(userIdArr.size !== 0) {
+export const adminSendEmail = (selValue: string, userIdArr: Set<string>): boolean => {
+  if (selValue) {
+    if (userIdArr.size !== 0) {
       ElMessage('只能选择一个具体报名的方向或者具体的学员发送邮件！')
       return false
     }
     return true
-  }else{
-    if(userIdArr.size === 0) {
+  } else {
+    if (userIdArr.size === 0) {
       ElMessage('只能选择一个具体报名的方向或者具体的学员发送邮件！')
       return false
     }
@@ -137,8 +135,8 @@ export const adminSendEmail = (selValue:string, userIdArr:Set<string>):boolean =
 }
 
 
-export const getRegistTime = (time:any):string => {
-  if(!time){
+export const getRegistTime = (time: any): string => {
+  if (!time) {
     return '无'
   }
   return time
@@ -185,34 +183,34 @@ type AdminList<T> = T[]
 
 export function updateUser<T extends K[], K extends Admin>(arr: T, item: K): AdminList<Admin> {
   for (let i = 0; i < arr.length; i++) {
-      if (arr[i].id === item.id) {
-          arr[i] = item
-      }
+    if (arr[i].id === item.id) {
+      arr[i] = item
+    }
   }
   return arr
 }
 
-export  function getValue<T extends {[key: string]: any}> (obj:T) {
-  const res = {} as Record<keyof T,T[keyof T]>
-  for(let i in obj){
-      if(obj[i]){
-          res[i] = obj[i]
-      }
+export function getValue<T extends { [key: string]: any }>(obj: T) {
+  const res = {} as Record<keyof T, T[keyof T]>
+  for (let i in obj) {
+    if (obj[i]) {
+      res[i] = obj[i]
+    }
   }
   return res
 }
 
 export function deleteUser<T extends K[], K extends { adminId: string }>(userList: T, adminId: string): T {
-  for (let i:number = 0; i < userList.length; i++) {
-      if (userList[i].adminId === adminId) {
-          userList.splice(i, 1)
-      }
+  for (let i: number = 0; i < userList.length; i++) {
+    if (userList[i].adminId === adminId) {
+      userList.splice(i, 1)
+    }
   }
   return userList
 }
 
-export function getIdList (userList:Admin[]):string[] {
-  const res = userList.map((i:Admin)=>{
+export function getIdList(userList: Admin[]): string[] {
+  const res = userList.map((i: Admin) => {
     return i.adminId
   })
   return res
@@ -220,11 +218,146 @@ export function getIdList (userList:Admin[]):string[] {
 
 export function filterAdminId(adminIdList: Admin[], deleteArr: string[]) {
   for (let i = 0; i < adminIdList.length; i++) {
-      for (let j = 0; j < deleteArr.length; j++) {
-          if (adminIdList[i].adminId === deleteArr[j]) {
-              adminIdList.splice(i, 1)
-          }
+    for (let j = 0; j < deleteArr.length; j++) {
+      if (adminIdList[i].adminId === deleteArr[j]) {
+        adminIdList.splice(i, 1)
       }
+    }
   }
   return adminIdList
+}
+
+export const useWithLoadingRef = <T>(defaultValue: T, defaultFlag: Flags = Flags.Normal): [Ref<Flags>, Ref<UnwrapRef<T>>] => {
+  const newFlag = ref(defaultFlag)
+  return [newFlag, ref(defaultValue)]
+}
+
+const openFileSelection = (): Promise<File | null> => new Promise((resolve) => {
+  const file$ = document.createElement("input")
+  file$.type = "file"
+  file$.style.visibility = "hidden"
+  function handleFileChange(e: Event) {
+    const files = (e.target as HTMLInputElement).files
+    resolve((files && files[0]) || null)
+    file$.removeEventListener("change", handleFileChange)
+    document.body.removeChild(file$)
+  }
+  file$.addEventListener("change", handleFileChange)
+  document.body.appendChild(file$)
+  file$.click()
+})
+
+export function useDropUpload(
+  checkFile: (file: File) => ([boolean, string] | Promise<[boolean, string]>),
+  uploadFn: (file: File) => any
+): Ref<HTMLElement | undefined>;
+
+export function useDropUpload(
+  checkFile: (file: File) => (boolean | Promise<boolean>),
+  uploadFn: (file: File) => any
+): Ref<HTMLElement | undefined>;
+
+export function useDropUpload(
+  checkFile: (file: File) => (boolean | Promise<boolean> | [boolean, string] | Promise<[boolean, string]>),
+  uploadFn: (file: File) => any
+): Ref<HTMLElement | undefined> {
+  checkFile = typeof checkFile === "function" ? checkFile : (file) => !!file
+  const domRef = ref<HTMLElement>()
+  const handler = async (e: Event) => {
+    e.preventDefault();
+    (e.target as HTMLElement).classList.remove("active-drag")
+    const dataTransfer = (e as DragEvent).dataTransfer!
+    dataTransfer.dropEffect = "none"
+    const file = dataTransfer.files[0]
+    if (!file) {
+      ElNotification({
+        message: "未选择文件"
+      })
+      return
+    }
+    const result = await checkFile(file)
+    let valid: boolean
+    let errMsg: string
+    if (Array.isArray(result)) {
+      valid = result[0]
+      errMsg = result[1]
+    } else {
+      valid = result
+      errMsg = "文件格式不符合要求"
+    }
+    if (!valid) {
+      ElNotification({
+        message: errMsg
+      })
+      return
+    }
+    uploadFn(file)
+    resetStyle()
+  }
+  const handleDragstart = (e: Event) => {
+    (e as DragEvent).dataTransfer!.effectAllowed = "none"
+  }
+  const handleClick = async () => {
+    const file = await openFileSelection()
+    if (!file) {
+      ElNotification({
+        message: "未选择文件"
+      })
+      return
+    }
+    const result = await checkFile(file)
+    let valid: boolean
+    let errMsg: string
+    if (Array.isArray(result)) {
+      valid = result[0]
+      errMsg = result[1]
+    } else {
+      valid = result
+      errMsg = "文件格式不符合要求"
+    }
+    if (!valid) {
+      ElNotification({
+        message: errMsg
+      })
+      return
+    }
+    uploadFn(file)
+  }
+  const handleDragover = (e: Event) => {
+    e.preventDefault();
+    addStyle()
+  }
+  const handleDragEnd = (e: Event) => {
+    e.preventDefault();
+    resetStyle()
+  }
+  const addStyle = () => {
+    if (domRef.value) {
+      domRef.value.classList.add("active-drag")
+    }
+  }
+  const resetStyle = () => {
+    if (domRef.value) {
+      domRef.value.classList.remove("active-drag")
+    }
+  }
+  onMounted(() => {
+    if (domRef.value) {
+      domRef.value!.addEventListener("click", handleClick)
+      domRef.value!.addEventListener("drop", handler)
+      document.addEventListener("dragstart", handleDragstart)
+      document.addEventListener("dragover", handleDragover)
+      document.addEventListener("dragend", handleDragEnd)
+    }
+  })
+  onUnmounted(() => {
+    if (domRef.value) {
+      domRef.value!.removeEventListener("click", handleClick)
+      domRef.value!.removeEventListener("drop", handler)
+      document.removeEventListener("dragstart", handleDragstart)
+      document.removeEventListener("dragover", handleDragover)
+      document.removeEventListener("dragend", handleDragEnd)
+    }
+  })
+  return domRef
 }

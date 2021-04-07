@@ -1,17 +1,17 @@
 <template>
   <div class="g-input">
-    <input class="props.class" @input="onInput" ref="input" />
+    <input class="props.class" @input="onInput" :value="props.modelValue" ref="input" />
     <span class="placeholder" ref="placeholder">{{ props.placeholder }}</span>
   </div>
 </template>
 <script lang="ts" setup>
-
 import { ref, onMounted, onUnmounted, defineProps, defineEmit } from "vue"
 
 const props = defineProps<{
   class?: string,
   value?: string,
-  placeholder?: string
+  modelValue?: string
+  placeholder?: string,
 }>()
 const emits = defineEmit(["update:modelValue"])
 const onInput = (e: Event) => {
@@ -20,7 +20,6 @@ const onInput = (e: Event) => {
 
 const placeholder = ref<HTMLSpanElement | null>(null)
 const input = ref<HTMLInputElement | null>(null)
-
 
 const blurHandler = () => {
   if (!input.value?.value) {
@@ -31,9 +30,10 @@ const inputHandler = () => {
   placeholder.value?.classList.add("focus")
 }
 const placeholderHandler = () => {
-  input.value?.focus()
+  placeholder.value?.classList.add("focus")
 }
 onMounted(() => {
+  input.value?.value && placeholderHandler()
   placeholder.value?.addEventListener("click", placeholderHandler)
   input.value?.addEventListener("focus", inputHandler)
   input.value?.addEventListener("blur", blurHandler)
@@ -55,7 +55,7 @@ onUnmounted(() => {
   input {
     position: absolute;
     box-sizing: border-box;
-    transition: .2s;
+    transition: 0.2s;
     height: 100%;
     width: 100%;
     padding: 0 10px;
@@ -64,7 +64,7 @@ onUnmounted(() => {
     outline: none;
     border: 1px solid rgb(199, 199, 199);
 
-    &:focus{
+    &:focus {
       border: 1px solid black;
     }
   }

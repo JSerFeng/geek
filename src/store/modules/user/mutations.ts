@@ -1,5 +1,6 @@
 import { MutationTree } from "vuex";
-import store from "../..";
+import { currentAuth } from "../../../router";
+import { Auth } from '../../../router'
 import { forEach, storage } from "../../../utils/shared";
 import { Course, State, User } from "./state";
 
@@ -22,6 +23,7 @@ export type Reset = M<MutationTypes.Reset, {
   directionVOList: Course[],
   allCourses: Course[]
 }>
+export type Intro = M<MutationTypes.ChangeIntro, string>
 
 export const enum MutationTypes {
   Login = "login",
@@ -29,7 +31,8 @@ export const enum MutationTypes {
   Logout = "Logout",
   ChooseCourse = "ChooseCourse",
   DelCourse = "DelCourse",
-  AddCount = ""
+  AddCount = "AddCount",
+  ChangeIntro = "ChangeIntro",
 }
 
 export const mutations: MutationTree<State> = {
@@ -37,10 +40,20 @@ export const mutations: MutationTree<State> = {
     storage.store(payload.user)
     storage.set("token", payload.token)
     storage.set("refreshToken", payload.refreshToken)
-    forEach(payload, (k: string, v: any) => {
+    forEach(payload.user, (k: string, v: any) => {
       (state.userInfo as any)[k] = v
     })
     state.isLogin = true
+    switch (payload.user.type) {
+      case "admin":
+        currentAuth.current |= Auth.ADMIN
+        break
+      case "super":
+        currentAuth.current |= Auth.SUPER_ADMIN
+        break
+      default:
+        currentAuth.current |= Auth.STUDENT
+    }
   },
   [MutationTypes.Reset](state, { payload }: Data<Reset>) {
     state.isLogin = !!storage.get("token");
@@ -78,5 +91,8 @@ export const mutations: MutationTree<State> = {
     const userInfo = state.userInfo as User
     userInfo.directionVOList = userInfo.directionVOList.filter(item => item.courseId !== courseId)
     storage.set("directionVOList", userInfo.directionVOList)
+  },
+  [MutationTypes.ChangeIntro](state, { payload }: Data<Intro>) {
+    (state.userInfo as User).introduce = payload
   }
 };

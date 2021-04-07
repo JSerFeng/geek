@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="m">
     <h3 class="header">
       <slot name="header">我们需要验证</slot>
       {{ props.address }}
@@ -8,13 +8,17 @@
     <div class="code-input">
       <CodeInput v-model="authCode" />
     </div>
-    <GButton class="confirm-btn" type="broke" @click="confirm" :loading="loading">
-      <slot name="confirmBtn">注册</slot>
-    </GButton>
+    <slot name="btn">
+      <GButton 
+      class="confirm-btn" :disabled="!canGo"
+      type="broke" @click="confirm" :loading="loading">
+        确定
+      </GButton>
+    </slot>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, computed } from 'vue';
 import { ElNotification } from 'element-plus'
 import { useCountingSend } from './hooks';
 import CodeInput from '../code-input/CodeInput.vue'
@@ -36,8 +40,9 @@ const send = (e: Event) => {
 
 const authCode = ref("")
 const loading = ref(false)
+const canGo = computed(() => authCode.value.trim().length === 6)
 const confirm = async () => {
-  if (authCode.value.trim().length === 6) {
+  if (canGo) {
     loading.value = true
     await props.confirm(authCode.value)
     loading.value = false
@@ -69,5 +74,9 @@ const confirm = async () => {
   display: flex;
   justify-content: center;
   margin: 10px 0;
+}
+
+.m {
+  background-color: #fff;
 }
 </style>

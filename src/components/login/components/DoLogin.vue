@@ -1,8 +1,15 @@
 <template lang="">
   <div>
-    <GInput v-model="userId" placeholder="用户名"/>
-    <GInput v-model="password" placeholder="密码"/>
-    <a class="a-tip p">忘记密码?</a>
+    <div class="input-item">
+      <GInput v-model="userId" placeholder="学号"/>
+      <CheckMsg :flag="userFlag" :msg="userMsg"></CheckMsg>
+    </div>
+    <div class="input-item">
+      <GInput v-model="password" placeholder="密码"/>
+      <CheckMsg :flag="pwdFlag" :msg="pwdMsg"></CheckMsg>
+    </div>
+    <a class="a-tip p" @click="openFindPassword">忘记密码?</a>
+    <ForgotPassword ref="operator" />
     <GQueryBtn :request="login" type="broke" class="login-btn">登陆</GQueryBtn>
   </div>
 </template>
@@ -15,11 +22,18 @@ import { GInput, GQueryBtn } from '../../geek'
 import { ElNotification } from 'element-plus';
 import { ActionTypes } from '../../../store/modules/user/actions';
 import { ErrorCode } from '../../../api/request';
+import ForgotPassword from './forgot-password/ForgotPassword.vue'
+import type { ExposeMethods } from './forgot-password/ForgotPassword.vue'
+import CheckMsg from './CheckMsg.vue'
+import { useNullCheck, useUserIdLocalCheck } from '../hooks';
 
 const { dispatch } = useStore()
 const router = useRouter()
 const userId = ref("")
 const password = ref("")
+
+const [userFlag, userMsg] = useUserIdLocalCheck(userId)
+const [pwdFlag, pwdMsg] = useNullCheck(password)
 
 const login = async () => {
   if (userId.value && password.value) {
@@ -45,6 +59,10 @@ const login = async () => {
   }
 }
 
+const operator = ref<ExposeMethods | null>(null)
+const openFindPassword = () => {
+  operator.value?.open()
+}
 </script>
 <style lang="scss" scoped>
 .login-btn {

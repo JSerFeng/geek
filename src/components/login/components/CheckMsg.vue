@@ -3,6 +3,7 @@
     <i class="el-icon-loading" v-show="isPending"></i>
     <i class="el-icon-circle-check" v-show="isSuccess"></i>
     <span v-show="isFail">{{ msg }}</span>
+    &nbsp;
   </div>
 </template>
 <script lang="ts" setup>
@@ -17,6 +18,7 @@ const isFail = computed(() => props.flag === Flags.Fail)
 
 <style lang="scss" scoped>
 .check-msg {
+  display: flex;
   span {
     font-size: 12px;
   }

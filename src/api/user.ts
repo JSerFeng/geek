@@ -36,3 +36,15 @@ export const delCourse = (courseId: number) => request.post("/user/delCourse", {
 export const queryCourse = () => request.post("/course/queryCourse") as Promise<Response<Course[]>>
 
 export const queryMyCourse = () => request.post("/course/queryMyCourse") as Promise<Response<Course[]>>
+
+export const findBackPassword = (userId: string, newPassword: string, activeCode: string) => request.post("/user/findBackPassword", {
+  userId,
+  newPassword,
+  activeCode
+}) as Promise<Response>
+
+export const changeUserIntro = (userId: string, introduction: string) => request.post("/user/setIntroduce", {
+  userId,
+  introduce: introduction
+}) as Promise<Response>
+

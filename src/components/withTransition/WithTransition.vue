@@ -18,6 +18,8 @@ const historyStack: Ref<(string | undefined)[]> = ref([props.path])
 
 watch(() => props.path, (newPath: string | undefined) => {
   if (!props.method) {
+    //当前路由是historyStack.value[historyStack.value.length - 1]
+    //如果信路由和当前的上一次路由一样代表着是后退操作，把类名改成pop
     if (newPath === historyStack.value[historyStack.value.length - 2]) {
       historyStack.value.pop()
       className.value = "pop"
@@ -26,6 +28,8 @@ watch(() => props.path, (newPath: string | undefined) => {
       className.value = "push"
     }
   }
+}, {
+  flush: "sync"
 })
 </script>
 <style lang="scss" scoped>
