@@ -45,6 +45,8 @@ export const getPersonCount = (courseId?: string) => axios.post('/admin', { cour
 
 export const getSignListList = () => axios.get('/admin/queryUsersInfo') as Promise<Response>
 
+export const getAdminHomework = () => axios.get('/admin/queryMyTasks') as Promise<Response>
+
 export const reqAdminSendEmail = (
   title: string,
   text: string,

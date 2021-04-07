@@ -1,10 +1,10 @@
 <template>
   <ul class="sign-person-item">
-    <li class="avatar item-1"><img :src="personList.image" alt="" /></li>
-    <li class="item-2">{{ personList.userId }}</li>
-    <li class="item-3">{{ personList.userName }}</li>
-    <li class="item-4">{{ personList.major }}</li>
-    <li class="item-4">{{ personList.email ? personList.email:'无' }}</li>
+    <li class="avatar item-1"><img :src="info.image" alt="" /></li>
+    <li class="item-2">{{ info.userId }}</li>
+    <li class="item-3">{{ info.userName }}</li>
+    <li class="item-4">{{ info.major }}</li>
+    <li class="item-5">{{ info.email ? info.email:'无' }}</li>
   </ul>
 </template>
 <script lang = 'ts'>
@@ -21,36 +21,36 @@ interface SignPerson {
 export default defineComponent({
   props: ["info"],
   setup(props) {
-    const personList = ref<SignPerson[] | []>([]);
+    const personInfo = ref<SignPerson>();
     onMounted(() => {
-      personList.value = computed(() => props.info.item).value;
-      console.log(toRaw(personList.value));
+      personInfo.value = computed(() => props.info).value;
     });
     return {
-      personList,
+      personInfo
     };
   },
 });
 </script>
 
 <style lang="scss">
+
 .sign-person-item {
   font-size: 12px;
   display: flex;
-
-  @for $i from 1 through 4 {
+  @for $i from 1 through 5 {
     .item-#{$i} {
       width: 50px;
-      margin: 3px 0 3px 0;
-      margin-left: 25px * $i;
+      margin: 3px 0 3px -50px;
+      margin-left: 20px * $i;
     }
   }
   .avatar {
     width: 20px;
+    height: 20px;
+    margin-top: 8px;
     border-radius: 50%;
     background-color: #f7f7f7;
     border: 1px solid #cecece;
-    
   }
   &:hover{
         background-color: #f7f7f7;
