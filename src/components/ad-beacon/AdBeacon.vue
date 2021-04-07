@@ -5,7 +5,9 @@
 </template>
 <script lang="ts">
 import { defineComponent, toRaw } from "vue";
-
+interface Props{
+    boxStyle: 'right' | 'left'
+}
 export default defineComponent({
   props: {
     boxStyle: {
@@ -52,4 +54,5 @@ export default defineComponent({
     top: 3vh;
   }
 }
+
 </style>

@@ -1,5 +1,6 @@
 <template>
-  <ul class="person-count">
+<div>
+    <ul class="person-count">
     <li class="font">
       <img src="../../assets/imgs/1.jpg" alt="" />
       <h4>前端</h4>
@@ -26,8 +27,8 @@
     </li>
   </ul>
   <div class="detail-info">
-    <DetailTitle/>
-    <SignPersonItem :key="index" :info={item} v-for="(item, index) in signPersonList"/>
+    <AdVartualList  :items="signPersonList"></AdVartualList>
+    <!-- <SignPersonItem  :key="index" :info={item} v-for="(item, index) in signPersonList"/> -->
   </div>
   <div @click="handleClose" class="send-email">
     发送邮件 <i class="el-icon-s-promotion"></i>
@@ -60,6 +61,7 @@
     </el-dialog>
     <router-link to='/check/homework' ><AdBeacon boxStyle='right'/></router-link>
   </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -70,12 +72,14 @@ import SendEmail from "./components/SendEmail.vue";
 import SignPersonItem from './components/SignPerson.vue'
 import DetailTitle from './components/DetailTitle.vue'
 import AdBeacon from '../../components/ad-beacon/AdBeacon.vue'
+import AdVartualList from '../../components/virtual-list/VirtualList.vue'
 export default defineComponent({
   setup() {
     const { res, signPersonList } = useRequestCount();
     let sendEmailRef = ref<null | HTMLDivElement | any>(null);
     const { dialogVisible, handleClose, root } = useDialog();
     const courseList = computed(() => res.data.data);
+    const virtualList = ref<null | HTMLDivElement>(null)
     return {
       courseList,
       dialogVisible,
@@ -83,18 +87,23 @@ export default defineComponent({
       root,
       sendEmailRef,
       signPersonList,
+      virtualList
     };
   },
   components: {
     SendEmail,
     SignPersonItem,
     DetailTitle,
-    AdBeacon
+    AdBeacon,
+    AdVartualList
   },
 });
 </script>
 
 <style lang="scss" scoped>
+#item{
+  height: 30px;
+}
 * {
   list-style: none;
   padding: 0;
@@ -102,24 +111,25 @@ export default defineComponent({
 }
 @media screen and (max-width: 799px) and (min-width: 200px) {
   .detail-info {
-    width: 40rem;
+    width: 90vh;
     transform: scale(.8);
     margin: -10vh 0 0 -2vh;
      box-shadow: 0px 0px 10px #CECECE ;
      height: 40rem;
      overflow: auto;
     border-radius: 2rem;
+    position: relative;
   }
 }
 @media screen and(min-width: 800px) {
   .detail-info {
-    width: 37rem;
+    width: 85vh;
     margin-left: 7rem;
     position: absolute;
     left: 35rem;
     top: 5rem;
     border-radius: 20px;
-    height: 500px;
+    height: 67vh;
     overflow: auto;
      box-shadow: 0px 0px 10px #CECECE ;
   }

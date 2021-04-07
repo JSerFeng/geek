@@ -14,6 +14,6 @@ export default defineComponent({});
     .container{
         text-align: center;
         font-size: 20px;
-        line-height: 80px;
+        line-height: 11vh;
     }
 </style>
