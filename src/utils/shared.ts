@@ -328,6 +328,7 @@ export function useDropUpload(
     addStyle()
   }
   const handleDragEnd = (e: Event) => {
+    console.log("drag end");
     e.preventDefault();
     resetStyle()
   }
@@ -343,6 +344,8 @@ export function useDropUpload(
   }
   onMounted(() => {
     if (domRef.value) {
+      console.log("监听drag");
+      
       domRef.value!.addEventListener("click", handleClick)
       domRef.value!.addEventListener("drop", handler)
       document.addEventListener("dragstart", handleDragstart)
@@ -352,6 +355,7 @@ export function useDropUpload(
   })
   onUnmounted(() => {
     if (domRef.value) {
+      console.log("移除监听");
       domRef.value!.removeEventListener("click", handleClick)
       domRef.value!.removeEventListener("drop", handler)
       document.removeEventListener("dragstart", handleDragstart)
