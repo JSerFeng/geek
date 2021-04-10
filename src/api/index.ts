@@ -47,6 +47,28 @@ export const getSignListList = () => axios.get('/admin/queryUsersInfo') as Promi
 
 export const getAdminHomework = () => axios.get('/admin/queryMyTasks') as Promise<Response>
 
+export const getDetailHomeworkInfo = (taskId: number, page?: number, rows?: number) => {
+  console.log(taskId, page, rows)
+  return axios.get('/admin/queryOneTask', ) as Promise<Response>
+}
+
+export const markScore = (taskId:number, score?:number) => {
+  // console.log(taskId, score)
+  return axios.post('/admin/giveScore',{taskId, score})
+}
+
+export const downloadAllStudentsFiles = (taskId:number) => {
+  return axios.post('/admin/downloadWorks',{taskId})
+}
+
+export const getHomeworkStatus = (courseId?:number) => {
+  return axios.get('/admin/queryScores',{params:{courseId}})
+}
+// 这里要传入taskId
+export const getHomeworkSubmitStatus = (taskId:number) => {
+  return axios.get('/admin/countStudent')
+}
+
 export const reqAdminSendEmail = (
   title: string,
   text: string,
@@ -95,6 +117,6 @@ export const editAdmin = ({
 }: AddAdmin
 ) => axios.post('/superAdmin/updateAdmin', { adminId, password, adminName, courseName, id }) as Promise<Response>
 
-export const deleteAdmin = (adminId:string) => axios.post('/superAdmin/delAdmin',{adminId}) as Promise<Response>
+export const deleteAdmin = (adminId: string) => axios.post('/superAdmin/delAdmin', { adminId }) as Promise<Response>
 
-export const deleleAdmins = (adminList:string[]) => axios.post('/superAdmin/delAdmins',{adminList}) as Promise<Response>
+export const deleleAdmins = (adminList: string[]) => axios.post('/superAdmin/delAdmins', { adminList }) as Promise<Response>

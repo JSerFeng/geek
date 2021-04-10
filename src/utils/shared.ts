@@ -361,3 +361,13 @@ export function useDropUpload(
   })
   return domRef
 }
+
+type CourseName = 'Python' | '前端' | '后端' | '移动' | ''
+
+export const computedCourse = (courseId:number):CourseName => {
+  if (courseId === 1) return '前端'
+  if(courseId === 2) return '后端'
+  if(courseId === 3) return 'Python'
+  if(courseId === 4) return '移动'
+  return ''
+}

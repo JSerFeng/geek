@@ -34,11 +34,6 @@ export default defineComponent({
       reqired:true
     }
   },
-  setup(props) {
-    onMounted(()=>{
-      console.log(toRaw(props))
-    })
-  },
   components:{
     SignPerson
   },

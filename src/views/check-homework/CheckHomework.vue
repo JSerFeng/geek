@@ -1,56 +1,87 @@
 <template>
-  <div class="long-list">
-    <el-tabs class="homework-tab" v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane  label="作业管理" name="first">
-        <HomeworkManagement/>
-      </el-tab-pane>
-      <el-tab-pane   label="作业详情" name="second">作业详情</el-tab-pane>
-      <el-tab-pane   label="查看成绩" name="third">查看成绩</el-tab-pane>
-      <el-tab-pane   label="提交情况" name="fourth">提交情况</el-tab-pane>
-    </el-tabs>
+  <div class="check-homework">
+    <router-link to="/admin">
+      <AdBeacon boxStyle="left" title="招生管理" />
+    </router-link>
+    <router-link to="/homwwork/status">
+      <AdBeacon boxStyle="right" title="完成状况" />
+    </router-link>
+    <virtual-list
+      :size="10"
+      :list="homeworkList"
+      :itemHeight="45"
+      title="作 业 管 理"
+      :containerHeight="550"
+    >
+      <template v-slot:default="{ item }">
+        <span @click="handleToHomeworkDetail(item.id, item.taskFileVOList)">
+          <HomeworkItem :item="item" />
+        </span>
+      </template>
+    </virtual-list>
   </div>
 </template>
-/*TODO*/
+
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
-import { ElTabPane, ElTabs } from "element-plus";
-import HomeworkManagement from './components/HomeworkManagement.vue'
+import { computed, defineComponent, onMounted, ref, toRaw } from "vue";
+import VirtualList from "./components/virtualList.vue";
+import HomeworkItem from "./components/HomeworkItem.vue";
+import { getAdminHomework } from "../../api/index";
+import AdBeacon from "../../components/ad-beacon/AdBeacon.vue";
+import { useStore } from '../../store/index'
+import { useRouter } from 'vue-router'
+import { MutationTypes } from '../../store/modules/admin/mutation'
+export interface File {
+    addTime: string;
+    fileName: string;
+    filePath: string;
+}
+
+export interface Homework<T> {
+  addTime: string;
+  adminId: string;
+  closeTime: string;
+  commitLate: number;
+  courseId: number;
+  filePath: null | string;
+  id: number;
+  isClosed: number;
+  taskFileVOList: T[];
+  taskName: string;
+  weight: number;
+}
 export default defineComponent({
-  data() {
-      return {
-        activeName: 'first'
-      };
-    },
-    methods: {
-      handleClick(tab:number, event:Event) {
-      }
-    },
   components: {
-    ElTabs,
-    ElTabPane,
-    HomeworkManagement
+    VirtualList,
+    HomeworkItem,
+    AdBeacon,
   },
   setup() {
-    
+    const getHomework = getAdminHomework;
+    const homeworkList = ref<Homework<File>[]>([]);
+    const Router = useRouter()
+    const Store = useStore()
+    function handleToHomeworkDetail (id:number, files:File[]) {
+      Router.push('/homework/detail/' + id)
+      Store.commit({
+        type:`${MutationTypes.addFiles}`,
+        payload:files
+      })
+    }
+    onMounted(async () => {
+      const result = await getHomework();
+      homeworkList.value = computed(() => result.data.data.taskPOList).value;
+    });
+    return {
+      homeworkList,
+      handleToHomeworkDetail
+    };
   },
 });
 </script>
 <style lang="scss">
-.long-list {
-  width: 95%;
-  height: 550px;
-  border-radius: 50px;
-  margin: 10vh auto;
-  border: 1px solid #EEF1EF;
-  box-shadow: -1px -1px 3px #ffffff, 1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
-  .homework-tab{
-    width: 170vh;
-    margin: 5vh auto;
-    height: 80%;
-    .el-tabs__item{
-      width: 35vh;
-      text-align: center;
-    }
-  }
+*{
+  text-decoration: none;
+  color: black;
 }
 </style>
