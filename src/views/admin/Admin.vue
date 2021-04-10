@@ -59,7 +59,7 @@
         </span>
       </template>
     </el-dialog>
-    <router-link to='/check/homework' ><AdBeacon boxStyle='right'/></router-link>
+    <router-link to='/check/homework' ><AdBeacon title="作业管理" boxStyle='right'/></router-link>
   </div>
 </div>
 </template>
@@ -124,7 +124,7 @@ export default defineComponent({
 @media screen and(min-width: 800px) {
   .detail-info {
     width: 85vh;
-    margin-left: 7rem;
+    margin-left: 5rem;
     position: absolute;
     left: 35rem;
     top: 5rem;

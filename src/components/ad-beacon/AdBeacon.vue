@@ -1,6 +1,6 @@
 <template>
   <div :class="boxStyle === 'right' ? 'beacon-right' : 'beacon-left'">
-    作 业 &nbsp;>
+    {{title}}
   </div>
 </template>
 <script lang="ts">
@@ -14,6 +14,10 @@ export default defineComponent({
       type: String,
       require: true,
     },
+    title:{
+      type:String,
+      reqire:true
+    }
   },
   setup(props) {
     console.log(toRaw(props));
@@ -22,37 +26,49 @@ export default defineComponent({
 </script>
 <style lang="scss">
 @mixin common {
-  width: 27vh;
+  width: 13%;
   border: 1px solid black;
   height: 14vh;
   position: absolute;
   left: 176vh;
   top: 5vh;
   z-index: 999;
-  border-radius: 7vh 0 0 7vh;
   border: 20px solid #eef1ef;
   box-sizing: border-box;
   text-align: center;
   line-height: 9vh;
-  font-size: 20px;
+  font-size: 1vw;
   transition: all 0.4s;
   background-color: #cecece;
   color: black;
   &:hover {
     transform: scale(1.1);
+    color: white;
   }
 }
 .beacon-right {
   @include common;
-  left: 176vh;
+  left: 87%;
   top: 5vh;
+  border-radius: 7vh 0 0 7vh;
+
 }
 @media screen and(max-width: 800px) {
   .beacon-right {
     @include common;
     left: 55vh;
     top: 3vh;
+  border-radius: 7vh 0 0 7vh;
+
   }
+}
+
+.beacon-left {
+  @include common;
+  left: 0vh;
+  top: 5vh;
+  border-radius: 0vh 7vh 7vh 0vh;
+
 }
 
 </style>
