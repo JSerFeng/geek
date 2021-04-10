@@ -2,13 +2,15 @@ import { createApp } from 'vue'
 import { router } from './router'
 // TypeScript error? Run VSCode command
 // TypeScript: Select TypeScript version - > Use Workspace Version
+/**@ts-ignore */
 import App from './App.vue'
-import {ElTooltip, ElTableColumn, ElTable,ElButton,ElAlert, ElDialog, ElInput, ElSelect, ElOption, ElPopover, ElCheckbox, ElTabs, ElTabPane, ElPagination, ElNotification } from 'element-plus'
+import { ElTooltip, ElTableColumn, ElTable, ElButton, ElAlert, ElDialog, ElInput, ElSelect, ElOption, ElPopover, ElCheckbox, ElTabs, ElTabPane, ElPagination, ElNotification } from 'element-plus'
 import store, { key } from './store'
 import 'element-plus/lib/theme-chalk/index.css';
 import './config/theme.scss'
 import './assets/iconfont/iconfont.css'
 import './assets/iconfont/iconfont'
+import "./utils/bigFile"
 
 const app = createApp(App)
 

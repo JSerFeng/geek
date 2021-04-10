@@ -27,8 +27,9 @@ import WithTransition from './components/withTransition/WithTransition.vue'
 import { onMounted } from 'vue';
 
 const store = useStore()
-onMounted(() => {
-  store.dispatch(ActionTypes.Reset)
+onMounted(async () => {
+  await store.dispatch(ActionTypes.UpdateUserInfo)
+  await store.dispatch(ActionTypes.Reset)
 })
 </script>
 

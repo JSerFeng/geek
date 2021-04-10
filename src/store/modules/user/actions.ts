@@ -5,10 +5,13 @@ import { Response } from "../../../api";
 import {
   MutationTypes,
   Login as MLogin,
-  Reset
+  Reset,
+  UpdateInfo
 } from './mutations'
 import { ErrorCode } from "../../../api/request";
-import { logout, login, queryMyCourse, chooseCourse, delCourse, queryCourse, changeUserIntro } from "../../../api/user";
+import { logout, login, queryMyCourse, chooseCourse, delCourse, queryCourse, changeUserIntro, apiUpdateUserInfo } from "../../../api/user";
+import { apiUploadAvatar } from "../../../api/file";
+import { storage } from "../../../utils/shared";
 
 type A<T, P> = {
   type: T,
@@ -22,10 +25,12 @@ type Data<Act extends { payload: any }> = {
 export enum ActionTypes {
   Login = "login-user",
   Logout = "logout",
+  UpdateUserInfo = "UpdateUserInfo",
   Reset = "reset",
   ChooseCourse = "ChooseCourse",
   DelCourse = "DelCourse",
-  ChangeIntro = "ChangeIntro"
+  ChangeIntro = "ChangeIntro",
+  ChangeAvatar = "ChangeIntro",
 }
 
 type Login = A<ActionTypes.Login, {
@@ -37,6 +42,19 @@ export type Actions =
   | Login
 
 export const actions: ActionTree<State, RootState> = {
+  async [ActionTypes.UpdateUserInfo]({ state, commit }) {
+    let token = storage.get("token")
+    if (!token) {
+      return
+    }
+    const res = await apiUpdateUserInfo()
+    if (res.error_code === ErrorCode.Success) {
+      commit<UpdateInfo>({
+        type: MutationTypes.UpdateUserInfo,
+        payload: res.data
+      })
+    }
+  },
   async [ActionTypes.Login]({ commit }, { payload }: Data<Login>) {
     const { userId, password } = payload
     const res = await login(userId, password) as Response<{
@@ -56,35 +74,27 @@ export const actions: ActionTree<State, RootState> = {
     }
   },
   async [ActionTypes.Reset]({ commit, state }) {
-    /**每次登陆都请求一下某些可能会变的数据，重新存储下来 */
-    const myCourses = await queryMyCourse()
-    if (myCourses.error_code !== ErrorCode.Success) {
-      myCourses.data = []
-    }
-    const allCourses = await queryCourse()
-    if (allCourses.error_code !== ErrorCode.Success) {
-      allCourses.data = []
-    }
-    commit<Reset>({
-      type: MutationTypes.Reset,
-      payload: {
-        directionVOList: myCourses.data,
-        allCourses: allCourses.data
+    if (state.isLogin) {
+      /**每次登陆都请求一下某些可能会变的数据，重新存储下来 */
+      const allCourses = await queryCourse()
+      if (allCourses.error_code !== ErrorCode.Success) {
+        allCourses.data = []
       }
-    })
+      commit<Reset>({
+        type: MutationTypes.Reset,
+        payload: {
+          allCourses: allCourses.data
+        }
+      })
+    }
   },
   async [ActionTypes.ChooseCourse]({ commit, state }, courseId: number) {
     const res = await chooseCourse(courseId)
     if (res.error_code !== ErrorCode.Success) {
       return res
     }
-    const myCourse = (state.userInfo as User).directionVOList
-    const addCourse = state.allCourses.get(courseId)
-    if (addCourse) {
-      myCourse.push(addCourse)
-    }
-
-    commit({ type: MutationTypes.ChooseCourse, payload: myCourse })
+    const addCourse = state.allCourses.find(item => item.courseId === courseId)
+    commit({ type: MutationTypes.ChooseCourse, payload: addCourse })
   },
   async [ActionTypes.DelCourse]({ commit }, courseId: number) {
     const res = await delCourse(courseId)
@@ -96,7 +106,7 @@ export const actions: ActionTree<State, RootState> = {
   async [ActionTypes.ChangeIntro]({ state, commit }, intro: string) {
     if (!intro) return false
     const res = await changeUserIntro((state.userInfo as User).userId, intro)
-    if (res.error_code ===  ErrorCode.Success) {
+    if (res.error_code === ErrorCode.Success) {
       commit({
         type: MutationTypes.ChangeIntro,
         payload: intro
@@ -104,5 +114,16 @@ export const actions: ActionTree<State, RootState> = {
       return res
     }
     return false
+  },
+  async [ActionTypes.ChangeAvatar]({ state, commit }, file: File) {
+    const userInfo = state.userInfo as User
+
+    const res = await apiUploadAvatar(userInfo.userId, file)
+    if (res.error_code === ErrorCode.Success) {
+      commit({
+        type: MutationTypes.ChangeAvatar,
+        payload: file
+      })
+    }
   }
 }
