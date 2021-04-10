@@ -1,5 +1,5 @@
 import { BehaviorSubject } from "rxjs"
-import { onMounted, onUnmounted, Ref, ref, watchEffect, toRaw, UnwrapRef } from "vue"
+import { onMounted, onUnmounted, Ref, ref, watchEffect, onBeforeUnmount, UnwrapRef } from "vue"
 import { ElMessage, ElNotification } from 'element-plus'
 import { ErrorCode } from "../api/request"
 import { Response } from "../api"
@@ -53,7 +53,7 @@ export const forEach = <T extends Record<string, any> | Array<any>>(
     return objOrArr.forEach(fn)
   } else {
     // @ts-ignore
-    Reflect.ownKeys(objOrArr).forEach(key => fn(key, objOrArr[key as string]))
+    Reflect.ownKeys(objOrArr).forEach((key: keyof T) => fn(key, objOrArr[key as string]))
   }
 }
 
@@ -267,7 +267,7 @@ export function useDropUpload(
     e.preventDefault();
     (e.target as HTMLElement).classList.remove("active-drag")
     const dataTransfer = (e as DragEvent).dataTransfer!
-    dataTransfer.dropEffect = "none"
+    dataTransfer.dropEffect = "link"
     const file = dataTransfer.files[0]
     if (!file) {
       ElNotification({
@@ -293,9 +293,6 @@ export function useDropUpload(
     }
     uploadFn(file)
     resetStyle()
-  }
-  const handleDragstart = (e: Event) => {
-    (e as DragEvent).dataTransfer!.effectAllowed = "none"
   }
   const handleClick = async () => {
     const file = await openFileSelection()
@@ -323,12 +320,16 @@ export function useDropUpload(
     }
     uploadFn(file)
   }
+  const handleDragstart = (e: Event) => {
+    e.preventDefault();
+    (e as DragEvent).dataTransfer!.effectAllowed = "link"
+  }
   const handleDragover = (e: Event) => {
     e.preventDefault();
+    (e as DragEvent).dataTransfer!.dropEffect = "link"
     addStyle()
   }
   const handleDragEnd = (e: Event) => {
-    console.log("drag end");
     e.preventDefault();
     resetStyle()
   }
@@ -345,22 +346,21 @@ export function useDropUpload(
   onMounted(() => {
     if (domRef.value) {
       console.log("监听drag");
-      
       domRef.value!.addEventListener("click", handleClick)
       domRef.value!.addEventListener("drop", handler)
       document.addEventListener("dragstart", handleDragstart)
       document.addEventListener("dragover", handleDragover)
-      document.addEventListener("dragend", handleDragEnd)
+      document.addEventListener("drop", handleDragEnd)
     }
   })
-  onUnmounted(() => {
+  onBeforeUnmount(() => {
     if (domRef.value) {
       console.log("移除监听");
       domRef.value!.removeEventListener("click", handleClick)
       domRef.value!.removeEventListener("drop", handler)
       document.removeEventListener("dragstart", handleDragstart)
       document.removeEventListener("dragover", handleDragover)
-      document.removeEventListener("dragend", handleDragEnd)
+      document.removeEventListener("drop", handleDragEnd)
     }
   })
   return domRef
@@ -375,3 +375,13 @@ export const computedCourse = (courseId:number):CourseName => {
   if(courseId === 4) return '移动'
   return ''
 }
+export const file2buffer = (file: Blob) => new Promise((resolve, reject) => {
+  const reader = new FileReader()
+  reader.readAsArrayBuffer(file)
+  reader.onload = () => {
+    resolve(reader.result as ArrayBuffer)
+  }
+  reader.onerror = (err) => {
+    reject(err)
+  }
+}) as Promise<ArrayBuffer>

@@ -10,6 +10,8 @@ export const logout = () => request.post('/user/logout', {
 
 export const login = async (userId: string, password: string) => request.post("/user/login", { userId, password }) as any as Response<{ user: State['userInfo'] }>
 
+export const apiUpdateUserInfo = () => request.post("/user/updateInfo") as Promise<Response<State['userInfo']>>
+
 export const checkEmail = async (mail: string) => request.post("/user/checkEmail", { mail }) as any as Response
 
 export const checkUserId = async (userId: string) => request.post("/user/checkUserId", { userId }) as any as Response
@@ -47,4 +49,3 @@ export const changeUserIntro = (userId: string, introduction: string) => request
   userId,
   introduce: introduction
 }) as Promise<Response>
-

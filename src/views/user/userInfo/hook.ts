@@ -1,5 +1,9 @@
-import { useDropUpload } from "../../../utils/shared"
-import {apiUploadAvatar} from '../../../api/file'
+import { file2buffer, useDropUpload } from "../../../utils/shared"
+import { apiUploadAvatar } from '../../../api/file'
+import { ErrorCode } from "../../../api/request"
+import { useStore } from "../../../store"
+import { ActionTypes } from "../../../store/modules/user/actions"
+import { getHash, makeHash } from "../../../utils/bigFile"
 
 const AVATAR_FILE_MIME = new Set([
   "image/jpeg",
@@ -8,17 +12,14 @@ const AVATAR_FILE_MIME = new Set([
   "image/png",
 ])
 
-export const useImgUpload = (userId: string) => {
-
+export const useImgUpload = () => {
+  const store = useStore()
   const domRef = useDropUpload(
     file => {
-      console.log(file);
       return AVATAR_FILE_MIME.has(file.type)
     },
-    file => {
-      const fd = new FormData()
-      fd.append("file", file)
-      apiUploadAvatar(userId, fd)
+    async file => {
+      store.dispatch(ActionTypes.ChangeAvatar, file)
     }
   )
   return domRef

@@ -1,7 +1,7 @@
 import { MutationTree } from "vuex";
 import { currentAuth } from "../../../router";
 import { Auth } from '../../../router'
-import { forEach, storage } from "../../../utils/shared";
+import { storage } from "../../../utils/shared";
 import { Course, State, User } from "./state";
 
 type Mutation = { "type": MutationTypes, "payload": any }
@@ -18,9 +18,9 @@ export type Login = M<MutationTypes.Login, {
   token: string,
   refreshToken: string
 }>
-export type ChooseCourse = M<MutationTypes.ChooseCourse, Course[]>
+export type UpdateInfo = M<MutationTypes.UpdateUserInfo, State["userInfo"]>
+export type ChooseCourse = M<MutationTypes.ChooseCourse, Course>
 export type Reset = M<MutationTypes.Reset, {
-  directionVOList: Course[],
   allCourses: Course[]
 }>
 export type Intro = M<MutationTypes.ChangeIntro, string>
@@ -28,54 +28,47 @@ export type Intro = M<MutationTypes.ChangeIntro, string>
 export const enum MutationTypes {
   Login = "login",
   Reset = "Reset",
+  UpdateUserInfo = "UpdateUserInfo",
   Logout = "Logout",
   ChooseCourse = "ChooseCourse",
   DelCourse = "DelCourse",
   AddCount = "AddCount",
   ChangeIntro = "ChangeIntro",
+  ChangeAvatar = "ChangeIntro"
+}
+
+function updateUserInfo(state: State, info: State["userInfo"]) {
+  storage.store(info)
+  state.isLogin = true
+  for (const k in info) {
+    /**@ts-ignore */
+    state.userInfo[k] = info[k]
+  }
+  switch (info.type) {
+    case "admin":
+      currentAuth.current |= Auth.ADMIN
+      break
+    case "super":
+      currentAuth.current |= Auth.SUPER_ADMIN
+      break
+    default:
+      currentAuth.current |= Auth.STUDENT
+  }
 }
 
 export const mutations: MutationTree<State> = {
   [MutationTypes.Login](state, { payload }: Data<Login>) {
-    storage.store(payload.user)
     storage.set("token", payload.token)
     storage.set("refreshToken", payload.refreshToken)
-    forEach(payload.user, (k: string, v: any) => {
-      (state.userInfo as any)[k] = v
-    })
-    state.isLogin = true
-    switch (payload.user.type) {
-      case "admin":
-        currentAuth.current |= Auth.ADMIN
-        break
-      case "super":
-        currentAuth.current |= Auth.SUPER_ADMIN
-        break
-      default:
-        currentAuth.current |= Auth.STUDENT
-    }
+    updateUserInfo(state, payload.user)
+  },
+  [MutationTypes.UpdateUserInfo](state, { payload: info }: Data<UpdateInfo>) {
+    updateUserInfo(state, info)
   },
   [MutationTypes.Reset](state, { payload }: Data<Reset>) {
-    state.isLogin = !!storage.get("token");
-    const userInfo = state.userInfo as User
     if (state.isLogin) {
-      const { directionVOList, allCourses } = payload
-      storage.set("directionVOList", directionVOList)
-
-      allCourses.forEach(item => state.allCourses.set(item.id, item))
-
-      userInfo.userId = storage.get("userId");
-      userInfo.major = storage.get("major");
-      userInfo.mail = storage.get("mail");
-      userInfo.introduce = storage.get("introduce");
-      userInfo.refreshToken = storage.get("refreshToken");
-      userInfo.id = storage.get("id");
-      userInfo.token = storage.get("token");
-      userInfo.grade = storage.get("grade");
-      userInfo.registerTime = storage.get("registerTime");
-      userInfo.userName = storage.get("userName");
-      userInfo.receiveMail = storage.get("receiveMail");
-      userInfo.directionVOList = directionVOList;
+      const { allCourses } = payload
+      state.allCourses = allCourses
     }
   },
   [MutationTypes.Logout](state) {
@@ -84,8 +77,8 @@ export const mutations: MutationTree<State> = {
   },
   [MutationTypes.ChooseCourse](state, { payload }: Data<ChooseCourse>) {
     const userInfo = state.userInfo as User
-    userInfo.directionVOList = payload
-    storage.set("directionVOList", payload)
+    userInfo.directionVOList.push(payload)
+    storage.set("directionVOList", userInfo.directionVOList)
   },
   [MutationTypes.DelCourse](state, { payload: courseId }: { payload: number }) {
     const userInfo = state.userInfo as User
@@ -94,5 +87,11 @@ export const mutations: MutationTree<State> = {
   },
   [MutationTypes.ChangeIntro](state, { payload }: Data<Intro>) {
     (state.userInfo as User).introduce = payload
+  },
+  [MutationTypes.ChangeAvatar](state, { payload: file }: Data<M<MutationTypes.ChangeAvatar, File>>) {
+    /**@TODO */
+    const url = URL.createObjectURL(file);
+    (state.userInfo as User).image = url
+    // URL.revokeObjectURL(url)
   }
 };

@@ -850,6 +850,11 @@ hash-sum@^2.0.0:
   resolved "https://registry.npmjs.org/hash-sum/-/hash-sum-2.0.0.tgz#81d01bb5de8ea4a214ad5d6ead1b523460b0b45a"
   integrity sha512-WdZTbAByD+pHfl/g9QSsBIIwy8IT+EsPiKDs0KNX+zSHhdDLFKdZu0BQHljvO+0QI/BasbMSUa8wYNCZTvhslg==
 
+hash-wasm@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.npm.taobao.org/hash-wasm/download/hash-wasm-4.6.0.tgz#6944a0dd33696d9ab1245e407af22a3a459a0773"
+  integrity sha1-aUSg3TNpbZqxJF5AevIqOkWaB3M=
+
 highlight.js@^10.0.0:
   version "10.5.0"
   resolved "https://registry.npmjs.org/highlight.js/-/highlight.js-10.5.0.tgz#3f09fede6a865757378f2d9ebdcbc15ba268f98f"

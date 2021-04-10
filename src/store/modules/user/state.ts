@@ -15,8 +15,6 @@ export interface Admin {
   "image": null | string,
   "registerTime": string,
   "type": "admin",
-  "token": string,
-  "refreshToken": string
 }
 export interface User {
   "id": string,
@@ -33,8 +31,6 @@ export interface User {
   "receiveMail": boolean,
   "type": null,
   "directionVOList": Course[],
-  "token": string,
-  "refreshToken": string,
 }
 export interface SuperAdmin {
   "id": 2,
@@ -45,14 +41,12 @@ export interface SuperAdmin {
   "courseName": string,
   "image": null | string,
   "registerTime": null | string,
-  "type": "super",
-  "token": string,
-  "refreshToken": string
+  "type": "super"
 }
 export type State = {
   userInfo: Admin | SuperAdmin | User,
   isLogin: boolean,
-  allCourses: Map<number, Course>
+  allCourses: Course[]
 }
 
 export const state: State = {
@@ -71,9 +65,7 @@ export const state: State = {
     "receiveMail": false,
     "type": null,
     "directionVOList": [],
-    "token": '',
-    "refreshToken": '',
   },
   isLogin: false,
-  allCourses: new Map()
+  allCourses: []
 }
