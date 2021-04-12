@@ -26,7 +26,9 @@
         <div class="juejin">掘金</div>
       </div>
 
-      <div class="item midBottomLeft">经管工作室</div>
+      <div class="item midBottomLeft">
+        <router-link to="/articleList">精选文章</router-link>
+      </div>
       
       <div class="item midBottomRight">课程文档</div>
 

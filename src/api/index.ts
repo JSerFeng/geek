@@ -1,7 +1,7 @@
 import request, { ErrorCode } from "./request"
 import axios from "axios";
-import '../mock/admin/index'
-import '../mock/super-admin/index'
+// import '../mock/admin/index'
+// import '../mock/super-admin/index'
 import { ElNotification } from "element-plus";
 import { State } from '../store/modules/user/state'
 

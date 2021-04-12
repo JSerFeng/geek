@@ -54,22 +54,26 @@ export const apiDelArticle = deleteFile("userId", "/article/deleteArticle")
 
 /********大文件上传**********/
 export const apiBigFileUpload = (
-  chunk: ArrayBuffer,
+  chunk: Blob,
   shardIndex: number,
   shardTotal: number,
   fileSize: number,
   courseId: number,
-  hash: string
+  hash: string,
+  onUploadProgress?: (e: ProgressEvent) => void
 ): Promise<Response> => {
   const fd = new FormData()
-  fd.set("file", new Blob([chunk]))
+  fd.set("file", chunk)
   fd.set("shardIndex", shardIndex.toString())
   fd.set("shardTotal", shardTotal.toString())
   fd.set("fileSize", fileSize.toString())
   fd.set("courseId", courseId.toString())
   fd.set("fileKey", hash.toString())
 
-  return request.post("/announce/announceUpload", fd)
+  /**@TODO */
+  return request.post("http://localhost:7001/announce/announceUpload", fd, {
+    onUploadProgress
+  })
 }
 
 export const apiBigFileCheck = (

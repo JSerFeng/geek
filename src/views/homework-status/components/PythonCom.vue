@@ -1,4 +1,4 @@
-<template lang="">
+<!-- <template lang="">
     <div class="python-homework-status">
          <virtual-list
           :containerWidth="120"
@@ -58,4 +58,4 @@ export default defineComponent({
         }
       }
     }
-</style>
+</style> -->

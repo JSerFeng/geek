@@ -10,5 +10,8 @@ export enum EmailType {
 export const logoMap: { [k: string]: string } = {
   "前端": "#icon-js",
   "后端_JAVA": "#icon-java",
-  "后端_PYTHON": "#icon-python"
+  "后端_PYTHON": "#icon-python",
+  "安卓": "icon-anzhuo",
+  "c++": "icon-anzhuo",
+  "php": "icon-anzhuo",
 }

@@ -3,6 +3,7 @@ import { onMounted, onUnmounted, Ref, ref, watchEffect, onBeforeUnmount, UnwrapR
 import { ElMessage, ElNotification } from 'element-plus'
 import { ErrorCode } from "../api/request"
 import { Response } from "../api"
+import "./shared.scss"
 
 export enum Flags {
   Fail = 0,
@@ -161,11 +162,7 @@ export const useRequest = <DataType extends any = any, T extends Array<any> = Ar
   }
   dispatchRequest()
 
-  const retry = () => {
-    dispatchRequest()
-  }
-
-  return [data, flag, retry]
+  return [data, flag, dispatchRequest]
 }
 
 interface Admin {
@@ -235,14 +232,16 @@ export const useWithLoadingRef = <T>(defaultValue: T, defaultFlag: Flags = Flags
 const openFileSelection = (): Promise<File | null> => new Promise((resolve) => {
   const file$ = document.createElement("input")
   file$.type = "file"
-  file$.style.visibility = "hidden"
+  file$.classList.add("file-input")
   function handleFileChange(e: Event) {
     const files = (e.target as HTMLInputElement).files
     resolve((files && files[0]) || null)
     file$.removeEventListener("change", handleFileChange)
-    document.body.removeChild(file$)
   }
   file$.addEventListener("change", handleFileChange)
+  file$.addEventListener("click", () =>{ 
+    document.body.removeChild(file$)
+  })
   document.body.appendChild(file$)
   file$.click()
 })
@@ -368,20 +367,40 @@ export function useDropUpload(
 
 type CourseName = 'Python' | '前端' | '后端' | '移动' | ''
 
-export const computedCourse = (courseId:number):CourseName => {
+export const computedCourse = (courseId: number): CourseName => {
   if (courseId === 1) return '前端'
-  if(courseId === 2) return '后端'
-  if(courseId === 3) return 'Python'
-  if(courseId === 4) return '移动'
+  if (courseId === 2) return '后端'
+  if (courseId === 3) return 'Python'
+  if (courseId === 4) return '移动'
   return ''
 }
 export const file2buffer = (file: Blob) => new Promise((resolve, reject) => {
-  const reader = new FileReader()
-  reader.readAsArrayBuffer(file)
-  reader.onload = () => {
-    resolve(reader.result as ArrayBuffer)
-  }
-  reader.onerror = (err) => {
-    reject(err)
-  }
+  // const reader = new FileReader()
+  // reader.readAsArrayBuffer(file)
+  // reader.onload = () => {
+  //   resolve(reader.result as ArrayBuffer)
+  // }
+  // reader.onerror = (err) => {
+  //   reject(err)
+  // }
+  
 }) as Promise<ArrayBuffer>
+
+export const showFileSize = (size: number = 0) => {
+  if (!size) {
+    return ""
+  } else {
+    let ext = ["Byte", "Kb", "M", "G", "TB(文件过大，不适宜发送)"]
+    let i = 0
+    let ret = size
+    let mod = 0
+    while (size >= 1024) {
+      i++
+      mod = size % 1024
+      size = Math.floor(size / 1024)
+      ret = size
+    }
+
+    return (ret + mod / 1024).toFixed(2) + ext[i]
+  }
+}

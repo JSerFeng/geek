@@ -1,4 +1,4 @@
-import { storage, useRequest } from "../utils/shared";
+import { storage } from "../utils/shared";
 import request from "./request";
 import { Response } from './index'
 import { Course, State } from "../store/modules/user/state";
@@ -6,7 +6,6 @@ import { Course, State } from "../store/modules/user/state";
 export const logout = () => request.post('/user/logout', {
   refreshToken: storage.get("refreshToken")
 }) as Promise<Response>
-
 
 export const login = async (userId: string, password: string) => request.post("/user/login", { userId, password }) as any as Response<{ user: State['userInfo'] }>
 
@@ -49,3 +48,4 @@ export const changeUserIntro = (userId: string, introduction: string) => request
   userId,
   introduce: introduction
 }) as Promise<Response>
+

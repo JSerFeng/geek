@@ -70,7 +70,7 @@ ul {
   left: 0;
   top: 0;
   right: 0;
-  bottom: 0; 
+  bottom: 0;
 }
 .main {
   perspective: 1000;
@@ -99,5 +99,22 @@ ul {
     border-radius: 20px;
     box-shadow: 0 0 50px rgb(0, 0, 51);
   }
+}
+
+.view-main {
+  box-sizing: border-box;
+  padding: 5%;
+  width: 100%;
+  height: 100%;
+  // position: relative;
+  background-color: rgb(241, 241, 241);
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }
 </style>

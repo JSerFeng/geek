@@ -31,35 +31,3 @@
     "vite": "^2.0.0-beta.64"
   }
 }
-{
-  "name": "geek",
-  "version": "0.0.0",
-  "scripts": {
-    "dev": "vite",
-    "build": "vuedx-typecheck . && vite build",
-    "serve": "vite preview"
-  },
-  "dependencies": {
-    "@types/mockjs": "^1.0.3",
-    "axios": "^0.21.1",
-    "dart-sass": "^1.25.0",
-    "element-plus": "^1.0.2-beta.31",
-    "hash-wasm": "^4.6.0",
-    "mockjs": "^1.1.0",
-    "rxjs": "^6.6.3",
-    "sass": "^1.32.8",
-    "vue": "^3.0.5",
-    "vue-router": "4",
-    "vuex": "^4.0.0",
-    "wangeditor": "^4.6.6"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^1.1.4",
-    "@vue/compiler-sfc": "^3.0.5",
-    "@vuedx/typecheck": "^0.6.0",
-    "@vuedx/typescript-plugin-vue": "^0.6.0",
-    "babel-plugin-component": "^1.1.1",
-    "typescript": "^4.1.3",
-    "vite": "^2.0.0-beta.64"
-  }
-}

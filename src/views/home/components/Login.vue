@@ -4,19 +4,11 @@
       <div class="bg"></div>
       <div class="info-bar">
         <div>
-          <router-link to="/userinfo">
-            <ElAvatar
-              class="avatar"
-              v-if="userInfo.image"
-              :src="userInfo.image"
-              :alt="userInfo.userName"
-            />
-            <ElAvatar class="avatar" v-else />
-          </router-link>
+          <ElAvatar class="avatar" :src="userInfo.image" :alt="userInfo.userName" />
         </div>
         <div class="intro">
           <h3 class="username">
-            <router-link class="username" to="/userinfo">{{ userInfo.userName }}</router-link>
+            <router-link class="username" to="/user/userinfo">{{ userInfo.userName }}</router-link>
           </h3>
           <p class="introduction" @click="openSetIntro">{{ userInfo.introduce }}</p>
           <Modal ref="modalCtx" width="70%">
@@ -179,14 +171,15 @@ const logout = () => {
         cursor: pointer;
       }
       .avatar {
-        width: 150px;
-        height: 150px;
         top: 0;
         flex-shrink: 0;
         transform: translate(0, -50%);
-        border-radius: 10px;
+        border-radius: 50%;
         background-color: rgb(236, 236, 236);
         border: 3px solid rgb(255, 255, 255);
+        display: block;
+        width: 150px;
+        height: 150px;
       }
       .logout {
         border-radius: 50%;

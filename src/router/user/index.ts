@@ -2,7 +2,8 @@ import Login from '../../components/login/Login.vue'
 import DoLogin from '../../components/login/components/DoLogin.vue'
 import Register from '../../components/login/components/Register.vue'
 import UserInfoVue from '../../views/user/userInfo/UserInfo.vue'
-// import { Auth } from '../'
+import ArticleView from '../../views/user/articles/ArticleView.vue'
+import ArticleDetailVue from '../../views/user/articles/ArticleDetail.vue'
 
 export enum Auth {
   NONE = /*         */ 0b00000000,
@@ -25,10 +26,19 @@ export default [
       }
     ]
   }, {
-    path: "/userinfo",
+    path: "/user",
+    redirect: "/user/userinfo"
+  }, {
+    path: "/user/userinfo",
     meta: {
       auth: Auth.STUDENT,
     },
     component: UserInfoVue
+  }, {
+    path: "/articleList",
+    component: ArticleView
+  }, {
+    path: "/article",
+    component: ArticleDetailVue
   }
 ]

@@ -1,5 +1,5 @@
 <template lang="">
-  <div class="user-main flex jb">
+  <div class="view-main flex jb">
     <div class="user-left shade">
       <div ref="avatarArea">
         <ElAvatar :src="userInfo.image" class="avatar p">
@@ -21,7 +21,6 @@
       </div>
     </div>
     <div class="user-right">
-      right
     </div>
   </div>
 </template>
@@ -65,37 +64,28 @@ const changeIntroduction = async () => {
 const avatarArea = useImgUpload()
 </script>
 <style lang="scss" scoped>
-.user-main {
+.user-left {
+  width: 20%;
+  padding: 15px;
   box-sizing: border-box;
-  padding: 5%;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  background-color: rgb(241, 241, 241);
+  background-color: #fff;
+  text-align: center;
 
-  .user-left {
-    width: 20%;
-    padding: 15px;
-    box-sizing: border-box;
-    background-color: #fff;
-    text-align: center;
-
-    .intro {
-      font-size: 16px;
-      font-weight: 100;
-    }
-
-    .avatar {
-      width: 15vw;
-      height: 15vw;
-      display: block;
-      margin: 0 auto 3vw;
-    }
+  .intro {
+    font-size: 16px;
+    font-weight: 100;
   }
 
-  .user-right {
-    width: 77%;
-    background-color: #fff;
+  .avatar {
+    width: 15vw;
+    height: 15vw;
+    display: block;
+    margin: 0 auto 3vw;
   }
+}
+
+.user-right {
+  width: 77%;
+  background-color: #fff;
 }
 </style>

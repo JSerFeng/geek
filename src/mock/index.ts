@@ -1,11 +1,11 @@
 
 
-export const runMock = () => {
+// export const runMock = () => {
 
-}
-function doSomething(callback?: () => void) {
-    // Error: Object is possibly 'undefined'.
-    if(typeof callback == 'function'){
-        callback()
-    }
-  }
+// }
+// function doSomething(callback?: () => void) {
+//     // Error: Object is possibly 'undefined'.
+//     // if(typeof callback == 'function'){
+//     //     callback()
+//     // }
+//   }

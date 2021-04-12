@@ -55,7 +55,7 @@ import { computed, ref, watchEffect } from "vue"
 import { ElTooltip } from 'element-plus';
 import { useStore } from "../../../store"
 import { ActionTypes } from "../../../store/modules/user/actions"
-import type { Course, User } from "../../../store/modules/user/state"
+import type { User } from "../../../store/modules/user/state"
 import { logoMap } from '../../../config/config'
 import Modal from '../../../components/modal/Modal.vue'
 
@@ -82,7 +82,14 @@ const unselectedList = computed(() => store.state.user.allCourses.filter(course 
   return !memo.value.has(course.id)
 }))
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
 .courses {
   font-weight: 100;
 

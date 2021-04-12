@@ -18,8 +18,8 @@ export enum ErrorCode {
   No_Token = 425,
   Token_Expire_Code = 430,
   UserIdOrPasswordWrong = 435,
-  Abort = 16625,
-  Connect_Fail = 16626,
+  Connect_Fail = 500,
+  Abort = 510,
 }
 let now = window.performance
   ? () => performance.now()
@@ -30,7 +30,7 @@ let requestNum = 0
 let pendingQueue: PendingQueue = []
 let isRefreshing = false
 
-/** 不需要token的请求 */
+/** 跳过token检查的请求 */
 const whiteList = new Set([
   'http://wthrcdn.etouch.cn/',
   '/user/resetToken',
@@ -53,12 +53,13 @@ const request = axios.create({
 
 request.interceptors.request.use(
   async config => {
+    requestNum++
     if (!storage.get('token') && !whiteList.has(config.url!)) {
       config.cancelToken = new axios.CancelToken(c => c())
       return config
     }
 
-    if (!config.headers.priority && (isRefreshing || requestNum >= CONNECT_LIMIT)) { //如果正在请求新的token，代表当前token是过期了的
+    if (!config.headers.priority && (isRefreshing || requestNum > CONNECT_LIMIT)) { //如果正在请求新的token，代表当前token是过期了的
       try {
         await block() //等待前面的请求完
       } catch (e) {//这里表示等待时间过长, 仍然取消请求
@@ -72,6 +73,10 @@ request.interceptors.request.use(
       contentType: 'application/json;charset=utf-8',
     }
     return config
+  },
+  (err) => {
+    /**请求发送前极少数可能出现此情况 */
+    console.log("未知错误",err);
   }
 )
 
@@ -127,8 +132,8 @@ request.interceptors.response.use(
       if (axios.isCancel(err)) { //是被取消的请求
         if (!storage.get('token')) { //因为没有token取消的，需要重新登陆
           return {
-            ...err,
             data: {
+              data: err,
               message: "未登陆",
               error_code: ErrorCode.No_Token
             }
@@ -137,15 +142,15 @@ request.interceptors.response.use(
         return {
           ...err,
           data: {
-            message: err.data.message,
+            message: "请求取消",
             error_code: ErrorCode.Abort
           }
         }
       }
-      /** 网络异常 */
+      /** 网络异常或者有其它未知情况错误：比如说监听了ajax上传的回调函数。回调函数执行出错 */
       return {
-        ...err,
         data: {
+          data: err,
           message: "网络异常",
           error_code: ErrorCode.Connect_Fail
         }
@@ -161,6 +166,7 @@ request.interceptors.response.use(
   res => {
     switch (res.data.error_code) {
       case ErrorCode.HasBeenUsed:
+      case ErrorCode.Reject:
       case ErrorCode.Success: {
         return res.data
       }
@@ -168,11 +174,7 @@ request.interceptors.response.use(
         ElNotification({
           message: res.data.message
         })
-        return {
-          error_code: res.data.error_code,
-          message: res.data.message,
-          data: res.data
-        }
+        return res.data
     }
   }
 )
@@ -226,7 +228,6 @@ function block() {
 
 function send() {
   if (!isRefreshing && pendingQueue.length) {
-    console.log('resolve one');
     const resolve = pendingQueue.shift()!
     resolve(undefined)
   }
