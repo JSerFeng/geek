@@ -1,7 +1,7 @@
 <template lang="">
   <div>
     详情
-    <BigFileUploaderVue :id="1" :courseId="2" />
+    <BigFileUploaderVue :id="1" :courseId="3" />
   </div>
 </template>
 <script lang="ts" setup>

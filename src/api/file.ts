@@ -57,6 +57,7 @@ export const apiBigFileUpload = (
   chunk: Blob,
   shardIndex: number,
   shardTotal: number,
+  shardSize: number,
   fileSize: number,
   courseId: number,
   hash: string,
@@ -64,14 +65,16 @@ export const apiBigFileUpload = (
 ): Promise<Response> => {
   const fd = new FormData()
   fd.set("file", chunk)
-  fd.set("shardIndex", shardIndex.toString())
+  fd.set("shardIndex", (shardIndex + 1).toString())
   fd.set("shardTotal", shardTotal.toString())
+  fd.set("shardSize", shardSize.toString())
   fd.set("fileSize", fileSize.toString())
   fd.set("courseId", courseId.toString())
   fd.set("fileKey", hash.toString())
 
   /**@TODO */
-  return request.post("http://localhost:7001/announce/announceUpload", fd, {
+  /**192.168.43.88 */
+  return request.post("http://192.168.43.56:8080/announce/announceUpload", fd, {
     onUploadProgress
   })
 }
@@ -79,15 +82,17 @@ export const apiBigFileUpload = (
 export const apiBigFileCheck = (
   hash: string,
   shardSize: number
-): Promise<Response<number | null>> => request.post("/announce/check", {
+): Promise<Response<number | null>> => request.post("http://192.168.43.56:8080/announce/check", {
   fileKey: hash,
   shardSize
 })
 
 export const apiBigFileMerge = (
+  fileName: string,
   hash: string,
   id: number
-): Promise<Response> => request.post("/announce/merge", {
+): Promise<Response> => request.post("http://192.168.43.56:8080/announce/merge", {
   fileKey: hash,
-  id
+  id,
+  fileName
 })
