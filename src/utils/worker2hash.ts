@@ -24,7 +24,10 @@ async function readChunk(hasher: IHasher, file: Blob): Promise<any> {
     const rd = new FileReader()
     rd.readAsArrayBuffer(file)
     rd.onload = () => {
+      console.time("chunk");
+      
       hasher.update(new Uint8Array(rd.result as ArrayBuffer))
+      console.timeEnd("chunk");
       resolve()
     }
     rd.onerror = reject

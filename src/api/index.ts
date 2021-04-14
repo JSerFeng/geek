@@ -1,10 +1,12 @@
 import request, { ErrorCode } from "./request"
-import axios from "axios";
-// import '../mock/admin/index'
-// import '../mock/super-admin/index'
+import axios, { AxiosResponse } from "axios";
+import '../mock/admin/index'
+import '../mock/super-admin/index'
 import { ElNotification } from "element-plus";
 import { State } from '../store/modules/user/state'
-
+// @ts-ignore
+import { PublishHomework } from '../views/check-homework/CheckHomework.vue'
+import { EditHomework } from '../views/check-homework/components/HomeworkItem.vue'
 export interface Response<T = any> {
   error_code: ErrorCode,
   message: string,
@@ -49,26 +51,48 @@ export const getAdminHomework = () => axios.get('/admin/queryMyTasks') as Promis
 
 export const getDetailHomeworkInfo = (taskId: number, page?: number, rows?: number) => {
   console.log(taskId, page, rows)
-  return axios.get('/admin/queryOneTask', ) as Promise<Response>
+  return axios.get('/admin/queryOneTask',) as Promise<Response>
 }
 
-export const markScore = (taskId:number, score?:number) => {
+export const markScore = (taskId: number, score?: number) => {
   // console.log(taskId, score)
-  return axios.post('/admin/giveScore',{taskId, score})
+  return axios.post('/admin/giveScore', { taskId, score })
 }
 
-export const downloadAllStudentsFiles = (taskId:number) => {
-  return axios.post('/admin/downloadWorks',{taskId})
+export const downloadAllStudentsFiles = (taskId: number) => {
+  return axios.post('/admin/downloadWorks', { taskId })
 }
 
-export const getHomeworkStatus = (courseId?:number) => {
-  return axios.get('/admin/queryScores',{params:{courseId}})
+export const getHomeworkStatus = (courseId?: number) => {
+  return axios.get('/admin/queryScores', { params: { courseId } })
 }
 // 这里要传入taskId
-export const getHomeworkSubmitStatus = (taskId:number) => {
+export const getHomeworkSubmitStatus = (taskId: number) => {
   return axios.get('/admin/countStudent')
 }
+// 后面把params传进去
+export const publishHomework = (params?: PublishHomework): Promise<AxiosResponse<any>> => {
+  console.log(params)
+  return axios.post('/task/addTask')
+}
 
+// 编辑作业 后面把params传进去
+export const updateHomeworkk = (params?:EditHomework):Promise<AxiosResponse<any>>=>{
+  console.log(params)
+  return axios.post('/task/updateTask')
+}
+
+// 手动关闭作业提交通道 后面把params传进去
+export const closeHomeworkSubmit = (params?:any) =>{
+  console.log(params)
+  return axios.post('/task/closeTask')
+}
+
+// 删除作业  后面把params传进去
+export const deleteHomework = (params?:{id:number, adminId:string}) => {
+  console.log(params)
+  return axios.post('/task/deleteTask')
+}
 export const reqAdminSendEmail = (
   title: string,
   text: string,

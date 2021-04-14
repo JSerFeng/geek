@@ -1,6 +1,6 @@
 <template>
   <ul class="homework-detail">
-    <router-link to="/check/homework"
+    <router-link to="/checkTask"
       ><AdBeacon title="作业管理"
     /></router-link>
     <li class="title">作业提交详情</li>
@@ -46,6 +46,7 @@
       </el-pagination>
     </li>
     <li id="diagram"></li>
+    <div @click="handleCloseHomework" class="close-homework">关闭</div>
     <li>
       <ul class="files">
         <li class="file-title">任务附件 :</li>
@@ -74,10 +75,11 @@ import { useStore } from "../../store/index";
 import useMarkScore from "./hooks/useMarkScore";
 import useHomeworkTable from "./hooks/useHomeworkTable";
 import AdBeacon from "../../components/ad-beacon/AdBeacon.vue";
-import useDiagram from './hooks/useDiagram'
+import useDiagram from "./hooks/useDiagram";
 import {
   getDetailHomeworkInfo,
   downloadAllStudentsFiles,
+  closeHomeworkSubmit,
 } from "../../api/index";
 import {
   ElTable,
@@ -86,6 +88,8 @@ import {
   ElFormItem,
   ElPagination,
   ElButton,
+  ElMessageBox,
+  ElMessage,
 } from "element-plus";
 import { DetailInfo, Person } from "../../store/modules/admin/state";
 export interface File {
@@ -119,6 +123,34 @@ export default defineComponent({
       /*TODO*/
       downloadFileUrl.value = result.data.data;
     }
+    function handleCloseHomework() {
+      ElMessageBox.confirm("此操作将关闭此作业的提交通道, 是否继续?", "", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          // 传入作业id和adminId
+          const result = await closeHomeworkSubmit({ taskId });
+          if (result.status === 200) {
+            ElMessage({
+              type: "success",
+              message: "关闭成功！",
+            });
+          } else {
+            ElMessage({
+              type: "error",
+              message: "网络错误！",
+            });
+          }
+        })
+        .catch(() => {
+          ElMessage({
+            type: "warning",
+            message: "取消关闭",
+          });
+        });
+    }
     onMounted(async () => {
       const result = await getDetailHomeworkInfo(taskId, 1, 5);
       total.value = computed(
@@ -126,7 +158,7 @@ export default defineComponent({
       ).value;
       personList.value = comPersonList(result);
       homeworkFileList.value = Store.state.homework.currentFiles;
-      useDiagram(taskId)
+      useDiagram(taskId);
     });
     return {
       homeworkFileList,
@@ -136,6 +168,7 @@ export default defineComponent({
       handleDownloadFiles,
       handleMarkScore,
       downloadFileUrl,
+      handleCloseHomework,
     };
   },
 });
@@ -206,6 +239,24 @@ export default defineComponent({
   }
 
   @media screen and (max-width: 799px) {
+    .close-homework {
+      position: relative;
+      transform: translateX(-50%);
+      left: 50%;
+      top: 65vh;
+      width: 60%;
+      line-height: 5vh;
+      border: 2vh solid red;
+      text-align: center;
+      border-radius: 4vh;
+      cursor: pointer;
+      box-shadow: 0 0 1vh red;
+      background-color: red;
+      color: white;
+      &:hover {
+        color: black;
+      }
+    }
     .table {
       width: 80%;
       border: 1px solid #cecece;
@@ -224,12 +275,18 @@ export default defineComponent({
         font-weight: 600;
         color: black;
         margin-right: 10vh;
+        margin-left: -10vh;
       }
       .file-name {
-        margin: 0 5vh;
+        margin: 0 0vh;
         font-size: 12px;
         .file-a {
           color: #24acf2;
+          width: 20vh;
+          overflow: hidden;
+          height: 1vh;
+          line-height: 1vh;
+          text-overflow: ellipsis;
         }
       }
       li {
@@ -239,6 +296,23 @@ export default defineComponent({
     }
   }
   @media screen and (min-width: 800px) {
+    .close-homework {
+      position: relative;
+      left: 82%;
+      top: -30vh;
+      width: 15vh;
+      line-height: 5vh;
+      border: 2vh solid red;
+      text-align: center;
+      border-radius: 4vh;
+      cursor: pointer;
+      box-shadow: 0 0 1vh red;
+      background-color: red;
+      color: white;
+      &:hover {
+        color: black;
+      }
+    }
     .table {
       width: 60%;
       border: 1px solid #cecece;
@@ -261,6 +335,11 @@ export default defineComponent({
         margin: 0 5vh;
         .file-a {
           color: #24acf2;
+          width: 20vh;
+          overflow: hidden;
+          height: 1vh;
+          line-height: 1vh;
+          text-overflow: ellipsis;
         }
       }
       li {
@@ -284,7 +363,7 @@ export default defineComponent({
         font-size: 14px;
         font-weight: 600;
         color: black;
-        margin-left: 15vh;
+        margin-left: 5vh;
       }
     }
     @media screen and (min-width: 800px) {

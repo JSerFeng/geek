@@ -1,5 +1,5 @@
 import { BehaviorSubject } from "rxjs"
-import { onMounted, onUnmounted, Ref, ref, watchEffect, onBeforeUnmount, UnwrapRef } from "vue"
+import { onMounted,toRaw, onUnmounted, Ref, ref, watchEffect, onBeforeUnmount, UnwrapRef } from "vue"
 import { ElMessage, ElNotification } from 'element-plus'
 import { ErrorCode } from "../api/request"
 import { Response } from "../api"
@@ -403,4 +403,16 @@ export const showFileSize = (size: number = 0) => {
 
     return (ret + mod / 1024).toFixed(2) + ext[i]
   }
+}
+
+// 根据taskId删除对应homeworkList中的任务
+export function deleteTaskById (homeworkList:Array<any>, taskId:number) {
+  console.log(toRaw(homeworkList[0]))
+  homeworkList.forEach((item, index)=>{
+    if(item.id === taskId){
+      console.log(index, homeworkList[index].id, taskId);
+      homeworkList.splice(index, 1)
+    }
+  })
+  return homeworkList
 }

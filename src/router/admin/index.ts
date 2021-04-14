@@ -9,15 +9,15 @@ export default [{
   component: Admin,
 },
 {
-  path: '/check/homework',
+  path: '/checkTask',
   component: CheckHomework
 }, {
   path: '/superadmin',
   component: SuperAdmin
 },{
-  path: '/homework/detail/:id',
+  path: '/taskDetail/:id',
   component: HomeworkDetail
 },{
-  path: '/homwwork/status',
+  path: '/taskStatus',
   component: HowmworkStatus
 }]

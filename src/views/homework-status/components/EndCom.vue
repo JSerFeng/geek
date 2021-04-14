@@ -1,4 +1,4 @@
-<!-- <template lang="">
+<template lang="">
     <div class="end-homework-status">
          <virtual-list
           :containerWidth="120"
@@ -45,17 +45,35 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-    .end-homework-status{
-      .item{
-        display: flex;
-        font-size: 14px;
-        &:hover{
-            font-size: 18px;
-          }
-        li{
-          width: 19vh;
-          
-        }
+   @media screen and (max-width: 799px) {
+  .end-homework-status {
+    transform: scale(.5);
+    margin-left: -15vw;
+    margin-top: -20vh;
+    .item {
+      display: flex;
+      font-size: 14px;
+      &:hover {
+        font-size: 18px;
+      }
+      li {
+        width: 19vh;
       }
     }
-</style> -->
+  }
+}
+@media screen and (min-width: 800px) {
+  .end-homework-status {
+    .item {
+      display: flex;
+      font-size: 14px;
+      &:hover {
+        font-size: 18px;
+      }
+      li {
+        width: 19vh;
+      }
+    }
+  }
+}
+</style> 

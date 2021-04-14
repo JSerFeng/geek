@@ -30,7 +30,6 @@ export default defineComponent({
   border: 1px solid black;
   height: 14vh;
   position: absolute;
-  left: 176vh;
   top: 5vh;
   z-index: 999;
   border: 20px solid #eef1ef;
@@ -56,10 +55,10 @@ export default defineComponent({
 @media screen and(max-width: 800px) {
   .beacon-right {
     @include common;
-    left: 55vh;
+    left: 87%;
     top: 3vh;
   border-radius: 7vh 0 0 7vh;
-
+overflow: hidden
   }
 }
 
@@ -68,7 +67,7 @@ export default defineComponent({
   left: 0vh;
   top: 5vh;
   border-radius: 0vh 7vh 7vh 0vh;
-
+  overflow: hidden;
 }
 
 </style>

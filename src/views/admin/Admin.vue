@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="admin">
     <ul class="person-count">
     <li class="font">
       <img src="../../assets/imgs/1.jpg" alt="" />
@@ -26,10 +26,20 @@
       </div>
     </li>
   </ul>
-  <div class="detail-info">
-    <AdVartualList  :items="signPersonList"></AdVartualList>
-    <!-- <SignPersonItem  :key="index" :info={item} v-for="(item, index) in signPersonList"/> -->
-  </div>
+   <adVirtualLIst
+   class="virtual-list"
+   title="招生详情"
+      :size="10"
+      :list="signPersonList"
+      :itemHeight="40"
+      :containerWidth="80"
+      :containerHeight="450"
+      :fontSize="2"
+    >
+      <template v-slot:default="{ item }">
+        <SignPersonItem :info="item"/>
+      </template>
+    </adVirtualLIst>
   <div @click="handleClose" class="send-email">
     发送邮件 <i class="el-icon-s-promotion"></i>
   </div>
@@ -59,7 +69,7 @@
         </span>
       </template>
     </el-dialog>
-    <router-link to='/check/homework' ><AdBeacon title="作业管理" boxStyle='right'/></router-link>
+    <router-link to='/checkTask' ><AdBeacon title="作业管理" boxStyle='right'/></router-link>
   </div>
 </div>
 </template>
@@ -73,6 +83,7 @@ import SignPersonItem from './components/SignPerson.vue'
 import DetailTitle from './components/DetailTitle.vue'
 import AdBeacon from '../../components/ad-beacon/AdBeacon.vue'
 import AdVartualList from '../../components/virtual-list/VirtualList.vue'
+import adVirtualLIst from '../check-homework/components/virtualList.vue'
 export default defineComponent({
   setup() {
     const { res, signPersonList } = useRequestCount();
@@ -95,7 +106,8 @@ export default defineComponent({
     SignPersonItem,
     DetailTitle,
     AdBeacon,
-    AdVartualList
+    AdVartualList,
+    adVirtualLIst
   },
 });
 </script>
@@ -109,7 +121,8 @@ export default defineComponent({
   padding: 0;
   margin: 0;
 }
-@media screen and (max-width: 799px) and (min-width: 200px) {
+.admin{
+  @media screen and (max-width: 799px) and (min-width: 200px) {
   .detail-info {
     width: 90vh;
     transform: scale(.8);
@@ -119,6 +132,9 @@ export default defineComponent({
      overflow: auto;
     border-radius: 2rem;
     position: relative;
+  }
+   .virtual-list{
+    margin: -5vh auto 10vh auto;
   }
 }
 @media screen and(min-width: 800px) {
@@ -132,6 +148,12 @@ export default defineComponent({
     height: 67vh;
     overflow: auto;
      box-shadow: 0px 0px 10px #CECECE ;
+  }
+  .virtual-list{
+    position: absolute;
+    left: 45%;
+    top: 3%;
+    font-size: 12px !important;
   }
 }
 .person-count {
@@ -234,4 +256,6 @@ export default defineComponent({
     display: block;
   }
 }
+}
+
 </style>

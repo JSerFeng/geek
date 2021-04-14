@@ -1,10 +1,10 @@
 <template>
-  <div class="virtual-list">
+  <div class="virtual-list" >
     <h3 class="new-detail">招生详情</h3>
     <div
       class="container"
       ref="container"
-      :style="`height:${container.height}px`"
+      :style="`height:${container.height}px; padding:0;margin:0;`"
       @scroll="test"
     >
       <ul
