@@ -9,12 +9,11 @@ interface sendEmail {
     title: string,
     text: string
 }
-Mock.mock('/admin', 'post', function (options: getCount) {
-    
+Mock.mock('/admin/countAllUser', 'post', function (options: getCount) {
     return Mock.mock({
-        font: 23,
-        end: 43,
-        py: 33,
+        "error_code": 200,
+        "message": "成功获取到人数！",
+        "data": 4
     })
 })
 
@@ -25,50 +24,6 @@ Mock.mock('/admin/sendDailyMail', 'post', function (options: sendEmail) {
         "message": "一共发送通知给2个邮箱,通知推送成功的有2个",
         "data": []
     })
-})
-
-Mock.mock('/admin/queryUsersInfo','get',function(options:any){
-    console.log(options)
-    return Mock.mock({
-        "total": 4,
-        "currentPage": 1,
-        "totalPage": 1,
-        "rows": 10,
-        "items": [
-            {
-                "userId": "2019211290",
-                "userName": "喜喜",
-                "mail": "1114550440@qq.com",
-                "major": "信管",
-                "image": null,
-                "grade": null
-            },
-            {
-                "userId": "2019666",
-                "userName": "验证邮箱",
-                "mail": "2534232295@qq.com",
-                "major": "电子商务",
-                "image": "/image/picture5-2019666.jpg",
-                "grade": null
-            },
-            {
-                "userId": "2019777",
-                "userName": "kkk",
-                "mail": "wangjiahui20011014@163.com",
-                "major": "信管",
-                "image": null,
-                "grade": null
-            },
-            {
-                "userId": "201922222",
-                "userName": "come",
-                "mail": "wangjiahui20011014@163.com",
-                "major": "电商",
-                "image": null,
-                "grade": "2021"
-            }
-        ]
-      })
 })
 
 Mock.mock('/admin/queryUsersInfo', 'get', function(options:any){
@@ -82,25 +37,8 @@ Mock.mock('/admin/queryUsersInfo', 'get', function(options:any){
             "totalPage": 1,
             "rows": 10,
             "items": [
-                
                 {
-                    "userId": "2019211290",
-                    "userName": "喜喜",
-                    "mail": "1114550440@qq.com",
-                    "major": "信管",
-                    "image": null,
-                    "grade": null
-                },
-                {
-                    "userId": "2019666",
-                    "userName": "验证邮箱",
-                    "mail": "2534232295@qq.com",
-                    "major": "电子商务",
-                    "image": "/image/picture5-2019666.jpg",
-                    "grade": null
-                },
-                {
-                    "userId": "2019777",
+                    "userId": "1",
                     "userName": "kkk",
                     "mail": "wangjiahui20011014@163.com",
                     "major": "信管",
@@ -108,7 +46,7 @@ Mock.mock('/admin/queryUsersInfo', 'get', function(options:any){
                     "grade": null
                 },
                 {
-                    "userId": "201922222",
+                    "userId": "2",
                     "userName": "come",
                     "mail": "wangjiahui20011014@163.com",
                     "major": "电商",
@@ -116,7 +54,7 @@ Mock.mock('/admin/queryUsersInfo', 'get', function(options:any){
                     "grade": "2021"
                 },
                 {
-                    "userId": "2019211290",
+                    "userId": "3",
                     "userName": "喜喜",
                     "mail": "1114550440@qq.com",
                     "major": "信管",
@@ -124,7 +62,7 @@ Mock.mock('/admin/queryUsersInfo', 'get', function(options:any){
                     "grade": null
                 },
                 {
-                    "userId": "2019666",
+                    "userId": "4",
                     "userName": "验证邮箱",
                     "mail": "2534232295@qq.com",
                     "major": "电子商务",
@@ -132,7 +70,7 @@ Mock.mock('/admin/queryUsersInfo', 'get', function(options:any){
                     "grade": null
                 },
                 {
-                    "userId": "2019777",
+                    "userId": "5",
                     "userName": "kkk",
                     "mail": "wangjiahui20011014@163.com",
                     "major": "信管",
@@ -140,7 +78,7 @@ Mock.mock('/admin/queryUsersInfo', 'get', function(options:any){
                     "grade": null
                 },
                 {
-                    "userId": "201922222",
+                    "userId": "6",
                     "userName": "come",
                     "mail": "wangjiahui20011014@163.com",
                     "major": "电商",
@@ -148,7 +86,7 @@ Mock.mock('/admin/queryUsersInfo', 'get', function(options:any){
                     "grade": "2021"
                 },
                 {
-                    "userId": "2019211290",
+                    "userId": "7",
                     "userName": "喜喜",
                     "mail": "1114550440@qq.com",
                     "major": "信管",
@@ -156,7 +94,7 @@ Mock.mock('/admin/queryUsersInfo', 'get', function(options:any){
                     "grade": null
                 },
                 {
-                    "userId": "2019666",
+                    "userId": "8",
                     "userName": "验证邮箱",
                     "mail": "2534232295@qq.com",
                     "major": "电子商务",
@@ -164,7 +102,7 @@ Mock.mock('/admin/queryUsersInfo', 'get', function(options:any){
                     "grade": null
                 },
                 {
-                    "userId": "2019777",
+                    "userId": "9",
                     "userName": "kkk",
                     "mail": "wangjiahui20011014@163.com",
                     "major": "信管",
@@ -172,103 +110,7 @@ Mock.mock('/admin/queryUsersInfo', 'get', function(options:any){
                     "grade": null
                 },
                 {
-                    "userId": "201922222",
-                    "userName": "come",
-                    "mail": "wangjiahui20011014@163.com",
-                    "major": "电商",
-                    "image": null,
-                    "grade": "2021"
-                },
-                {
-                    "userId": "2019211290",
-                    "userName": "喜喜",
-                    "mail": "1114550440@qq.com",
-                    "major": "信管",
-                    "image": null,
-                    "grade": null
-                },
-                {
-                    "userId": "2019666",
-                    "userName": "验证邮箱",
-                    "mail": "2534232295@qq.com",
-                    "major": "电子商务",
-                    "image": "/image/picture5-2019666.jpg",
-                    "grade": null
-                },
-                {
-                    "userId": "2019777",
-                    "userName": "kkk",
-                    "mail": "wangjiahui20011014@163.com",
-                    "major": "信管",
-                    "image": null,
-                    "grade": null
-                },
-                {
-                    "userId": "201922222",
-                    "userName": "come",
-                    "mail": "wangjiahui20011014@163.com",
-                    "major": "电商",
-                    "image": null,
-                    "grade": "2021"
-                },
-                {
-                    "userId": "2019211290",
-                    "userName": "喜喜",
-                    "mail": "1114550440@qq.com",
-                    "major": "信管",
-                    "image": null,
-                    "grade": null
-                },
-                {
-                    "userId": "2019666",
-                    "userName": "验证邮箱",
-                    "mail": "2534232295@qq.com",
-                    "major": "电子商务",
-                    "image": "/image/picture5-2019666.jpg",
-                    "grade": null
-                },
-                {
-                    "userId": "2019777",
-                    "userName": "kkk",
-                    "mail": "wangjiahui20011014@163.com",
-                    "major": "信管",
-                    "image": null,
-                    "grade": null
-                },
-                {
-                    "userId": "201922222",
-                    "userName": "come",
-                    "mail": "wangjiahui20011014@163.com",
-                    "major": "电商",
-                    "image": null,
-                    "grade": "2021"
-                },
-                {
-                    "userId": "2019211290",
-                    "userName": "喜喜",
-                    "mail": "1114550440@qq.com",
-                    "major": "信管",
-                    "image": null,
-                    "grade": null
-                },
-                {
-                    "userId": "2019666",
-                    "userName": "验证邮箱",
-                    "mail": "2534232295@qq.com",
-                    "major": "电子商务",
-                    "image": "/image/picture5-2019666.jpg",
-                    "grade": null
-                },
-                {
-                    "userId": "2019777",
-                    "userName": "kkk",
-                    "mail": "wangjiahui20011014@163.com",
-                    "major": "信管",
-                    "image": null,
-                    "grade": null
-                },
-                {
-                    "userId": "201922222",
+                    "userId": "10",
                     "userName": "come",
                     "mail": "wangjiahui20011014@163.com",
                     "major": "电商",

@@ -1,11 +1,6 @@
-import { AxiosResponse } from 'axios'
-import { reactive, onMounted, ref, toRaw, computed } from 'vue'
+import {  onMounted, ref,  computed } from 'vue'
 import { getPersonCount, getSignListList } from '../../../api/index'
 import '../../../mock/admin/index'
-
-interface Date<T> {
-    data:T
-}
 
 interface Person {
     "userId": string,
@@ -16,34 +11,25 @@ interface Person {
     "grade": null | string
 }
 
-interface personObj {
-    font: number,
-    end: number,
-    py: number,
-}
-
-type resType = {
-    data: AxiosResponse<personObj> | Date<personObj>
-}
-
 export const useRequestCount = () => {
+    const frontPerson = ref<number>(0)
+    const endPerson = ref<number>(0)
+    const pythonPerson = ref<number>(0)
+    const androidPerson = ref<number>(0)
     const signPersonList = ref<Person[]>([])
-    let res = reactive<resType>({
-        data: {
-            data: {
-                font: 0,
-                end: 0,
-                py: 0,
-            }
-        }
-    })
     onMounted(async () => {
-        res.data = await getPersonCount()
-        const sPersonList = await getSignListList()
-        signPersonList.value = sPersonList.data.data.items
+        frontPerson.value = (await getPersonCount(1)).data.data
+        endPerson.value = (await getPersonCount(2)).data.data    
+        pythonPerson.value = (await getPersonCount(3)).data.data    
+        androidPerson.value = (await getPersonCount(4)).data.data    
+        const result = (await getSignListList()).data
+        signPersonList.value = computed(()=>result.data.items).value
     })
     return {
-        res,
+        frontPerson,
+        endPerson,
+        pythonPerson,
+        androidPerson, 
         signPersonList
     }
 }

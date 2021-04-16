@@ -21,9 +21,6 @@ export enum ErrorCode {
   Connect_Fail = 500,
   Abort = 510,
 }
-let now = window.performance
-  ? () => performance.now()
-  : () => Date.now();
 
 /** 当前请求数 */
 let requestNum = 0
@@ -46,6 +43,24 @@ const whiteList = new Set([
   '/course/queryCourse'
 ])
 
+
+/**所有的大文件上传请求的取消函数会被放入这个队列 */
+let pause = false
+const BIG_FILE_URL = /announceUpload/;
+let cancelQueue: Map<any, () => void> = new Map()
+export const { port1: recvPort, port2: providePort } = new MessageChannel()
+recvPort.onmessage = (e) => {
+  if (e.data === true) {
+    for (const [_, cancel] of cancelQueue) {
+      cancel()
+    }
+    cancelQueue.clear()
+    pause = true
+  } else {
+    pause = false
+  }
+}
+
 const request = axios.create({
   baseURL: BASE_URL,
   timeout: TIMEOUT
@@ -54,11 +69,24 @@ const request = axios.create({
 request.interceptors.request.use(
   async config => {
     requestNum++
+    /*将取消请求的方法存在cancelQueue中，以后好取消全部的请求*/
+    if (BIG_FILE_URL.test(config.url || '')) {
+      if (!pause) {
+        config.cancelToken = new axios.CancelToken(c => {
+          cancelQueue.set(config, c)
+        })
+      } else {
+        config.cancelToken = new axios.CancelToken(c => c())
+      }
+    }
+
+    /**不需要token的请求 */
     if (!storage.get('token') && !whiteList.has(config.url!)) {
       config.cancelToken = new axios.CancelToken(c => c())
       return config
     }
 
+    /**需要token的验证 */
     if (!config.headers.priority && (isRefreshing || requestNum > CONNECT_LIMIT)) { //如果正在请求新的token，代表当前token是过期了的
       try {
         await block() //等待前面的请求完
@@ -76,13 +104,19 @@ request.interceptors.request.use(
   },
   (err) => {
     /**请求发送前极少数可能出现此情况 */
-    console.log("未知错误",err);
+    console.log("未知错误", err);
   }
 )
 
 request.interceptors.response.use(
   async res => {
     try {
+      /**清掉已经得到结果的请求的cancel函数 */
+      if (cancelQueue.has(res.config)) {
+        cancelQueue.delete(res.config)
+      }
+
+
       if (res.data.error_code === ErrorCode.Token_Expire_Code) {
         /**
          *  token过期有两种情况
@@ -167,6 +201,7 @@ request.interceptors.response.use(
     switch (res.data.error_code) {
       case ErrorCode.HasBeenUsed:
       case ErrorCode.Reject:
+      case ErrorCode.Abort:
       case ErrorCode.Success: {
         return res.data
       }

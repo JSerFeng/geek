@@ -6,7 +6,7 @@
       <h4>前端</h4>
       <div class="sign-person-count">
         <span class="title">报名人数&nbsp;</span
-        ><span> {{ courseList.font }} </span>
+        ><span> {{ frontPerson }} </span>
       </div>
     </li>
     <li class="end">
@@ -14,7 +14,7 @@
       <h4>后端</h4>
       <div class="sign-person-count">
         <span class="title">报名人数&nbsp;</span
-        ><span> {{ courseList.end }} </span>
+        ><span> {{ endPerson }} </span>
       </div>
     </li>
     <li class="python">
@@ -22,24 +22,18 @@
       <h4>Python</h4>
       <div class="sign-person-count">
         <span class="title">报名人数&nbsp;</span
-        ><span> {{ courseList.py }} </span>
+        ><span> {{ pythonPerson }} </span>
+      </div>
+    </li>
+    <li class="android">
+      <img src="../../assets/imgs/android.jpg" alt="" />
+      <h4>移动</h4>
+      <div class="sign-person-count">
+        <span class="title">报名人数&nbsp;</span
+        ><span> {{ androidPerson }} </span>
       </div>
     </li>
   </ul>
-   <adVirtualLIst
-   class="virtual-list"
-   title="招生详情"
-      :size="10"
-      :list="signPersonList"
-      :itemHeight="40"
-      :containerWidth="80"
-      :containerHeight="450"
-      :fontSize="2"
-    >
-      <template v-slot:default="{ item }">
-        <SignPersonItem :info="item"/>
-      </template>
-    </adVirtualLIst>
   <div @click="handleClose" class="send-email">
     发送邮件 <i class="el-icon-s-promotion"></i>
   </div>
@@ -47,7 +41,7 @@
     <el-dialog
       top="7vh"
       v-model="dialogVisible"
-      width="70%"
+      width="50%"
       title="发送邮件"
       :before-close="handleClose"
       custom-class="send-email-dialog"
@@ -58,56 +52,52 @@
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button
             type="primary"
-            @click="
-              () => {
-                sendEmailRef.handleSendEmailClick();
-                dialogVisible = false;
-              }
-            "
+            @click="handleSendEmail"
             >确 定</el-button
           >
         </span>
       </template>
     </el-dialog>
     <router-link to='/checkTask' ><AdBeacon title="作业管理" boxStyle='right'/></router-link>
+    <router-link to='/stuDetail' ><AdBeacon title="招生详情" boxStyle='left'/></router-link>
   </div>
 </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { useRequestCount } from "./hooks/useRequestCount";
 import useDialog from "./hooks/useDialog";
-import SendEmail from "./components/SendEmail.vue";
 import SignPersonItem from './components/SignPerson.vue'
-import DetailTitle from './components/DetailTitle.vue'
 import AdBeacon from '../../components/ad-beacon/AdBeacon.vue'
-import AdVartualList from '../../components/virtual-list/VirtualList.vue'
-import adVirtualLIst from '../check-homework/components/virtualList.vue'
+import SendEmail from './components/SendEmail.vue'
 export default defineComponent({
   setup() {
-    const { res, signPersonList } = useRequestCount();
-    let sendEmailRef = ref<null | HTMLDivElement | any>(null);
+    const { frontPerson, endPerson, pythonPerson, androidPerson, signPersonList } = useRequestCount();
     const { dialogVisible, handleClose, root } = useDialog();
-    const courseList = computed(() => res.data.data);
     const virtualList = ref<null | HTMLDivElement>(null)
+    const sendEmailRef = ref<any>(null)
+    function handleSendEmail (){
+      sendEmailRef.value.sendEmail(dialogVisible)
+    }
     return {
-      courseList,
       dialogVisible,
+      frontPerson,
+      endPerson,
+      pythonPerson,
+      androidPerson,
       handleClose,
       root,
-      sendEmailRef,
       signPersonList,
-      virtualList
+      virtualList,
+      sendEmailRef,
+      handleSendEmail
     };
   },
   components: {
-    SendEmail,
     SignPersonItem,
-    DetailTitle,
     AdBeacon,
-    AdVartualList,
-    adVirtualLIst
+    SendEmail
   },
 });
 </script>
@@ -122,40 +112,6 @@ export default defineComponent({
   margin: 0;
 }
 .admin{
-  @media screen and (max-width: 799px) and (min-width: 200px) {
-  .detail-info {
-    width: 90vh;
-    transform: scale(.8);
-    margin: -10vh 0 0 -2vh;
-     box-shadow: 0px 0px 10px #CECECE ;
-     height: 40rem;
-     overflow: auto;
-    border-radius: 2rem;
-    position: relative;
-  }
-   .virtual-list{
-    margin: -5vh auto 10vh auto;
-  }
-}
-@media screen and(min-width: 800px) {
-  .detail-info {
-    width: 85vh;
-    margin-left: 5rem;
-    position: absolute;
-    left: 35rem;
-    top: 5rem;
-    border-radius: 20px;
-    height: 67vh;
-    overflow: auto;
-     box-shadow: 0px 0px 10px #CECECE ;
-  }
-  .virtual-list{
-    position: absolute;
-    left: 45%;
-    top: 3%;
-    font-size: 12px !important;
-  }
-}
 .person-count {
   display: flex;
   background-color: rgba($color: #fff, $alpha: 0.7);
@@ -164,21 +120,21 @@ export default defineComponent({
   min-height: 550px;
   margin: 10vh auto;
   box-shadow: -1px -1px 3px #ffffff, 1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
-
   .font,
   .end,
-  .python {
+  .python,
+  .android {
     background-color: #eef1ef;
     box-shadow: -1px -1px 3px #ffffff, 1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
     height: 55vh;
     overflow: hidden;
     transition: all 0.5s;
-    width: 20vh;
+    width: 10vw;
     margin-top: 10vh;
-    margin-left: 4vh;
+    margin-left: 10vw;
     border-radius: 75px;
     &:hover {
-      transform: scale(1.2);
+      transform: scale(1.1);
     }
     h4 {
       text-align: center;
@@ -229,7 +185,7 @@ export default defineComponent({
 .send-email-dialog {
   border-radius: 20px;
 }
-@each $i in font, end, python {
+@each $i in font, end, python, android {
   @if $i == font {
     .#{$i} {
       animation: scale 1s 0s backwards;
@@ -237,12 +193,17 @@ export default defineComponent({
   }
   @if $i == end {
     .#{$i} {
-      animation: scale 1s 0.5s backwards;
+      animation: scale 1s 0.3s backwards;
     }
   }
   @if $i == python {
     .#{$i} {
-      animation: scale 1s 1s backwards;
+      animation: scale 1s .6s backwards;
+    }
+  }
+  @if $i == android {
+    .#{$i} {
+      animation: scale 1s .9s backwards;
     }
   }
 }

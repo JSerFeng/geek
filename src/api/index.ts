@@ -43,11 +43,19 @@ export const register = (
   activeCode: string
 ) => request.post("/user/register", { userId, userName, password, mail, major, activeCode })
 
-export const getPersonCount = (courseId?: string) => axios.post('/admin', { courseId }) as Promise<Response>
+export const getPersonCount = (courseId?: number) => axios.post('/admin/countAllUser', { courseId }) as Promise<Response>
 
-export const getSignListList = () => axios.get('/admin/queryUsersInfo') as Promise<Response>
+export const getSignListList = (
+  page?:number,
+  rows?:number,
+  courseId?: 1 | 2 | 3 | 4
+) => {
+  const params = {page, rows, courseId}
+  // 测试的时候把params加进去
+  return axios.get('/admin/queryUsersInfo') as Promise<Response>
+}
 
-export const getAdminHomework = () => axios.get('/admin/queryMyTasks') as Promise<Response>
+export const getAdminHomework = () =>axios.get('/admin/queryMyTasks') as Promise<Response>
 
 export const getDetailHomeworkInfo = (taskId: number, page?: number, rows?: number) => {
   console.log(taskId, page, rows)
@@ -97,8 +105,8 @@ export const reqAdminSendEmail = (
   title: string,
   text: string,
   adminId?: string,
-  courseId?: string,
-  userIdList?: Set<string>,
+  courseId?: string | number,
+  userIdList?: string[],
 ) => axios.post('/admin/sendDailyMail', { adminId, courseId, userIdList, title, text }) as Promise<Response>
 
 export const getUserInfoList = (
@@ -115,7 +123,11 @@ export const getAdminInfoList = (
   courseName?: string,
   adminName?: string,
   adminId?: string
-) => axios.post('/superAdmin/queryAdmins', { page, rows, courseName, adminName, adminId }) as any as Response
+) => {
+  // 等测试接口把参数传进去
+  const params = { page, rows, courseName, adminName, adminId }
+  return axios.get('/superAdmin/queryAdmins')
+}
 
 interface AddAdmin {
   adminId: string,

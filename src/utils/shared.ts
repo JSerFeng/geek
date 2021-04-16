@@ -239,7 +239,7 @@ const openFileSelection = (): Promise<File | null> => new Promise((resolve) => {
     file$.removeEventListener("change", handleFileChange)
   }
   file$.addEventListener("change", handleFileChange)
-  file$.addEventListener("click", () =>{ 
+  file$.addEventListener("click", () => {
     document.body.removeChild(file$)
   })
   document.body.appendChild(file$)
@@ -383,7 +383,7 @@ export const file2buffer = (file: Blob) => new Promise((resolve, reject) => {
   // reader.onerror = (err) => {
   //   reject(err)
   // }
-  
+
 }) as Promise<ArrayBuffer>
 
 export const showFileSize = (size: number = 0) => {
@@ -405,6 +405,7 @@ export const showFileSize = (size: number = 0) => {
   }
 }
 
+<<<<<<< HEAD
 // 根据taskId删除对应homeworkList中的任务
 export function deleteTaskById (homeworkList:Array<any>, taskId:number) {
   console.log(toRaw(homeworkList[0]))
@@ -416,3 +417,38 @@ export function deleteTaskById (homeworkList:Array<any>, taskId:number) {
   })
   return homeworkList
 }
+=======
+export const isUndef = (x: unknown): x is (undefined | null) => {
+  return typeof x === "undefined" || x === null
+}
+
+/**控制调度 */
+const channel = new MessageChannel()
+const port1 = channel.port1
+const port2 = channel.port2
+
+let pendingQueue: (() => void)[] = []
+let activeQueue: Set<() => void> | null = null
+
+port1.onmessage = () => {
+  if (pendingQueue.length) {
+    activeQueue = new Set([...pendingQueue])
+    pendingQueue.length = 0
+    pendingQueue = []
+    for (const job of activeQueue) {
+      job()
+    }
+
+    port2.postMessage(null)
+  }
+}
+
+export const nextTick = (fn?: () => void) => new Promise(resolve => {
+  /**@ts-ignore */
+  pendingQueue.push(resolve)
+  if (fn) {
+    pendingQueue.push(fn)
+  }
+  port2.postMessage(null)
+})
+>>>>>>> 42c7d4a34261261d0ebde8cd85a95acf26dc715d

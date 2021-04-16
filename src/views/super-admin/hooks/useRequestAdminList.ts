@@ -1,5 +1,5 @@
 import { onMounted, reactive, toRaw, watch } from 'vue'
-import  { useStore } from '../../../store/index'
+import  store, { useStore } from '../../../store/index'
 import { ActionTypes } from '../../../store/modules/super-admin/actions'
 
 interface TableData<T = any> {
@@ -37,6 +37,7 @@ export function useRequestAdminList () {
       });
       onMounted(async () => {
         await Store.dispatch(`${ActionTypes.addAdminListAsycn}`, {page:1});
+        console.log(Store)
         tableData.data = Store.state.superAdmin.adminList.data.data.items;
         tableData.total = Store.state.superAdmin.adminList.data.data.total
       });
