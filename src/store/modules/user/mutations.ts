@@ -1,4 +1,5 @@
 import { MutationTree } from "vuex";
+import { Article, Articles } from "../../../api/article";
 import { currentAuth } from "../../../router";
 import { Auth } from '../../../router'
 import { storage } from "../../../utils/shared";
@@ -8,7 +9,7 @@ type Mutation = { "type": MutationTypes, "payload": any }
 
 type M<T, P> = {
   type: T,
-  payload: P
+  payload: P,
 }
 
 export type Data<Mut extends Mutation> = Pick<Mut, "payload">
@@ -25,6 +26,8 @@ export type Reset = M<MutationTypes.Reset, {
 }>
 export type Intro = M<MutationTypes.ChangeIntro, string>
 
+
+
 export const enum MutationTypes {
   Login = "login",
   Reset = "Reset",
@@ -34,7 +37,7 @@ export const enum MutationTypes {
   DelCourse = "DelCourse",
   AddCount = "AddCount",
   ChangeIntro = "ChangeIntro",
-  ChangeAvatar = "ChangeIntro"
+  ChangeAvatar = "ChangeIntro",
 }
 
 function updateUserInfo(state: State, info: State["userInfo"]) {
@@ -88,10 +91,9 @@ export const mutations: MutationTree<State> = {
   [MutationTypes.ChangeIntro](state, { payload }: Data<Intro>) {
     (state.userInfo as User).introduce = payload
   },
-  [MutationTypes.ChangeAvatar](state, { payload: file }: Data<M<MutationTypes.ChangeAvatar, File>>) {
+  [MutationTypes.ChangeAvatar](state, { payload: file }: { payload: Blob }) {
     /**@TODO */
     const url = URL.createObjectURL(file);
     (state.userInfo as User).image = url
-    // URL.revokeObjectURL(url)
-  }
+  },
 };

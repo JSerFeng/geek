@@ -4,6 +4,7 @@ import { ElMessage, ElNotification } from 'element-plus'
 import { ErrorCode } from "../api/request"
 import { Response } from "../api"
 import "./shared.scss"
+import { useStore } from "../store"
 
 export enum Flags {
   Fail = 0,
@@ -248,17 +249,17 @@ const openFileSelection = (): Promise<File | null> => new Promise((resolve) => {
 
 export function useDropUpload(
   checkFile: (file: File) => ([boolean, string] | Promise<[boolean, string]>),
-  uploadFn: (file: File) => any
+  uploadFn?: (file: File) => any
 ): Ref<HTMLElement | undefined>;
 
 export function useDropUpload(
   checkFile: (file: File) => (boolean | Promise<boolean>),
-  uploadFn: (file: File) => any
+  uploadFn?: (file: File) => any
 ): Ref<HTMLElement | undefined>;
 
 export function useDropUpload(
   checkFile: (file: File) => (boolean | Promise<boolean> | [boolean, string] | Promise<[boolean, string]>),
-  uploadFn: (file: File) => any
+  uploadFn?: (file: File) => any
 ): Ref<HTMLElement | undefined> {
   checkFile = typeof checkFile === "function" ? checkFile : (file) => !!file
   const domRef = ref<HTMLElement>()
@@ -290,7 +291,7 @@ export function useDropUpload(
       })
       return
     }
-    uploadFn(file)
+    uploadFn && uploadFn(file)
     resetStyle()
   }
   const handleClick = async () => {
@@ -317,7 +318,7 @@ export function useDropUpload(
       })
       return
     }
-    uploadFn(file)
+    uploadFn && uploadFn(file)
   }
   const handleDragstart = (e: Event) => {
     e.preventDefault();
@@ -438,3 +439,60 @@ export const nextTick = (fn?: () => void) => new Promise(resolve => {
   }
   port2.postMessage(null)
 })
+
+export const checkIfLogin = (cb: (isLogin: boolean) => void) => {
+  const store = useStore()
+  cb(store.state.user.isLogin)
+}
+
+
+const SEC = 1000
+const MIN = SEC * 60
+const HOUR = MIN * 60
+const DAY = HOUR * 24
+const MONTH = DAY * 30
+const YEAR = MONTH * 12
+export const getTime = (time: string | Date | number) => {
+  const now = Date.now()
+  if (typeof time === "string") {
+    time = Date.parse(time)
+  } else if (typeof time === "object") {
+    time = time.getTime()
+  }
+  const duration = now - time
+  if (duration > YEAR) {
+    return Math.floor(duration / YEAR) + "年前"
+  } else if (duration > MONTH) {
+    return Math.floor(duration / MONTH) + "月前"
+  } else if (duration > DAY) {
+    return Math.floor(duration / DAY) + "天前"
+  } else if (duration > HOUR) {
+    return Math.floor(duration / MONTH) + "小时前"
+  } else if (duration > MIN) {
+    return Math.floor(duration / MIN) + "分钟前"
+  } else {
+    return "刚刚"
+  }
+}
+export const remainTime = (time: string | Date | number) => {
+  const now = Date.now()
+  if (typeof time === "string") {
+    time = Date.parse(time)
+  } else if (typeof time === "object") {
+    time = time.getTime()
+  }
+  const duration = time - now
+  if (duration > YEAR) {
+    return Math.floor(duration / YEAR) + "年后"
+  } else if (duration > MONTH) {
+    return Math.floor(duration / MONTH) + "月后"
+  } else if (duration > DAY) {
+    return Math.floor(duration / DAY) + "天后"
+  } else if (duration > HOUR) {
+    return Math.floor(duration / MONTH) + "小时后"
+  } else if (duration > MIN) {
+    return Math.floor(duration / MIN) + "分钟后"
+  } else {
+    return "立刻"
+  }
+}

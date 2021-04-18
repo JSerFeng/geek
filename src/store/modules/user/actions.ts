@@ -6,12 +6,13 @@ import {
   MutationTypes,
   Login as MLogin,
   Reset,
-  UpdateInfo
+  UpdateInfo,
 } from './mutations'
 import { ErrorCode } from "../../../api/request";
-import { logout, login, queryMyCourse, chooseCourse, delCourse, queryCourse, changeUserIntro, apiUpdateUserInfo } from "../../../api/user";
+import { logout, login, chooseCourse, delCourse, queryCourse, changeUserIntro, apiUpdateUserInfo } from "../../../api/user";
 import { apiUploadAvatar } from "../../../api/file";
 import { storage } from "../../../utils/shared";
+import { ROW } from "../../../config/config";
 
 type A<T, P> = {
   type: T,
@@ -20,7 +21,6 @@ type A<T, P> = {
 type Data<Act extends { payload: any }> = {
   payload: Pick<Act, "payload">["payload"]
 }
-
 
 export enum ActionTypes {
   Login = "login-user",
@@ -55,7 +55,7 @@ export const actions: ActionTree<State, RootState> = {
       })
     }
   },
-  async [ActionTypes.Login]({ commit }, { payload }: Data<Login>) {
+  async [ActionTypes.Login]({ commit, dispatch }, { payload }: Data<Login>) {
     const { userId, password } = payload
     const res = await login(userId, password) as Response<{
       token: string,
@@ -125,5 +125,5 @@ export const actions: ActionTree<State, RootState> = {
         payload: file
       })
     }
-  }
+  },
 }

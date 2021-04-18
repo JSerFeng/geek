@@ -8,7 +8,7 @@
         </div>
         <div class="intro">
           <h3 class="username">
-            <router-link class="username" to="/user/userinfo">{{ userInfo.userName }}</router-link>
+            <router-link class="username" to="/userinfo">{{ userInfo.userName }}</router-link>
           </h3>
           <p class="introduction" @click="openSetIntro">{{ userInfo.introduce }}</p>
           <Modal ref="modalCtx" width="70%">

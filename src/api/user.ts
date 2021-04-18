@@ -2,6 +2,35 @@ import { storage } from "../utils/shared";
 import request from "./request";
 import { Response } from './index'
 import { Course, State } from "../store/modules/user/state";
+import { ROW } from "../config/config";
+
+
+export interface ApiAnnounce {
+  "total": number,
+  "currentPage": number,
+  "totalPage": number,
+  "rows": number,
+  "items": {
+    "id": number,
+    "courseId": number,
+    "adminId": string,
+    "title": string,
+    "addTime": string
+  }[]
+}
+
+export interface ApiAnnounceDetail {
+  "id": number,
+  "courseId": number,
+  "adminId": string,
+  "adminName": string,
+  "image": string,
+  "title": string,
+  "content": string,
+  "addTime": string,
+  "fileName": string,
+  "filePath": string
+}
 
 export const logout = () => request.post('/user/logout', {
   refreshToken: storage.get("refreshToken")
@@ -48,4 +77,14 @@ export const changeUserIntro = (userId: string, introduction: string) => request
   userId,
   introduce: introduction
 }) as Promise<Response>
+
+export const apiGetAnnounce = (page?: number, courseId?: number, rows?: number) => request.get("/announce/queryAnnounce", {
+  params: {
+    page: page || null,
+    rows: rows || ROW,
+    courseId: courseId || null
+  }
+}) as Promise<Response<ApiAnnounce>>
+
+export const apiGetAnnounceDetail = (id: number) => request.get(`/announce/queryAnnounce/${id}`) as Promise<Response<ApiAnnounceDetail>>
 

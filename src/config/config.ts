@@ -2,6 +2,10 @@ export const EmailRegex = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
 export const NotNullRegex = /.+/
 export const UserIdLocalRegex = /\d\d\d\d\d\d\d\d\d\d/
 
+export const CHUNK_SIZE = 1024 * 1024 * 2 //分片大小
+
+export const ROW = 10 //每页多少个
+
 export enum EmailType {
   Activate = 1,
   Password = 2

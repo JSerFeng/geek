@@ -21,6 +21,10 @@
       </div>
     </div>
     <div class="user-right">
+      <div class="header flex ac">
+        收藏文章
+      </div>
+      <ArticlesVue :my-favorites="true"/>
     </div>
   </div>
 </template>
@@ -37,6 +41,8 @@ import { GButton, GInput } from '../../../components/geek'
 import { useImgUpload } from './hook';
 import Modal from '../../../components/modal/Modal.vue'
 import ChooseCourse from '../../home/components/ChooseCourse.vue'
+import ArticlesVue from '../../../components/articles/Articles.vue';
+
 
 const store = useStore()
 const userInfo = store.state.user.userInfo as unknown as User
@@ -62,6 +68,11 @@ const changeIntroduction = async () => {
 
 /**头像上传功能 */
 const avatarArea = useImgUpload()
+
+const activeTab = ref(0)
+const changeActiveTab = (idx: number) => {
+  activeTab.value = idx
+}
 </script>
 <style lang="scss" scoped>
 .user-left {
@@ -87,5 +98,30 @@ const avatarArea = useImgUpload()
 .user-right {
   width: 77%;
   background-color: #fff;
+
+  .header {
+    position: relative;
+    padding: 15px;
+    overflow: hidden;
+    height: 30px;
+    .tab {
+      width: 20%;
+      position: absolute;
+      font-size: 14px;
+      font-weight: 100;
+      color: rgb(167, 167, 167);
+      transform: translateX(100%);
+      transition: .2s;
+
+      &.active {
+        font-size: 20px;
+        font-weight: 500;
+        color: #000;
+        transform: translateX(0);
+      }
+    }
+  }
+
+
 }
 </style>

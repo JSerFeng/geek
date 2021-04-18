@@ -6,37 +6,41 @@ export interface Articles {
   "currentPage": number,
   "totalPage": number,
   "rows": number,
-  "items": {
-    "id": number,
-    "courseName": string,
-    "adminId": string,
-    "adminName": string,
-    "image": string,
-    "title": string,
-    "content": string,
-    "addTime": string,
-    "articleType": string,
-    "likeCount": number,
-    "likeStatus": string,
-    "favoriteStatus": string,
-    "articleFileVOList": null
-  }[]
+  "items": Article[]
 }
-export interface MyFavorites {
-  "total": number,
-  "currentPage": number,
-  "totalPage": number,
-  "rows": number,
-  "items": {
-    "id": number,
-    "courseName": string,
-    "adminId": string,
-    "adminName": string,
-    "image": null | string,
-    "title": string,
-    "articleType": string,
-    "likeCount": 0,
-    "favoriteTime": string
+
+export interface Article {
+  "id": number,
+  "courseName": string,
+  "adminId": string,
+  "adminName": string,
+  "image": string,
+  "title": string,
+  "articleType": string,
+  "likeCount": 0,
+  "favoriteTime": string,
+  "likeStatus": number,
+  "favoriteStatus": number,
+}
+
+export interface ArticleDetail {
+  "id": number,
+  "courseName": string,
+  "adminId": string,
+  "adminName": string,
+  "image": string,
+  "title": string,
+  "content": string,
+  "addTime": string
+  "articleType": string,
+  "likeCount": number,
+  "likeStatus": number,
+  "favoriteStatus": number,
+  "articleFileVOList": {
+    "articleId": number,
+    "fileName": string,
+    "filePath": string,
+    "richText": string
   }[]
 }
 
@@ -46,7 +50,7 @@ export const apiQueryFavorites = (userId: string, page: number, rows = 10) => re
     page,
     rows
   }
-}) as Promise<Response<MyFavorites>>
+}) as Promise<Response<Articles>>
 
 export const apiQueryMyArticles = (userId: string, page: number, rows = 10) => request.get("/article/queryMyArticles", {
   params: {
@@ -59,17 +63,33 @@ export const apiQueryMyArticles = (userId: string, page: number, rows = 10) => r
 export const apiQueryArticles = (
   page: number,
   rows = 10,
-  options: {
-    userId: string | null,
-    adminName: string | null,
-    courseName: string | null
-  }
+  userId: string | null,
+  courseName: string | null,
+  adminName: string | null,
 ): Promise<Response<Articles>> => {
   return request.get("/article/queryArticles", {
     params: {
       page,
       rows,
-      ...options
+      userId,
+      adminName,
+      courseName
     }
   })
 }
+
+export const apiQueryDetail = (articleId: number) => request.get("/article/queryOneArticle", {
+  params: {
+    articleId
+  }
+}) as Promise<Response<ArticleDetail>>
+
+export const apiChangeLikeStatus = (userId: string, articleId: number) => request.post("/like/changeLikeStatus", {
+  userId,
+  articleId
+}) as Promise<Response>
+
+export const apiChangeFavoriteState = (userId: string, articleId: number) => request.post("/favorite/changeFavoriteStatus", {
+  userId,
+  articleId
+}) as Promise<Response>

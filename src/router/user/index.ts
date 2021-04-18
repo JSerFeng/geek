@@ -4,6 +4,7 @@ import Register from '../../components/login/components/Register.vue'
 import UserInfoVue from '../../views/user/userInfo/UserInfo.vue'
 import ArticleView from '../../views/user/articles/ArticleView.vue'
 import ArticleDetailVue from '../../views/user/articles/ArticleDetail.vue'
+import HomeWorkVue from '../../views/user/homework/HomeWork.vue'
 
 export enum Auth {
   NONE = /*         */ 0b00000000,
@@ -26,19 +27,19 @@ export default [
       }
     ]
   }, {
-    path: "/user",
-    redirect: "/user/userinfo"
-  }, {
-    path: "/user/userinfo",
+    path: "/userinfo",
     meta: {
       auth: Auth.STUDENT,
     },
-    component: UserInfoVue
+    component: UserInfoVue,
   }, {
     path: "/articleList",
     component: ArticleView
   }, {
     path: "/article",
     component: ArticleDetailVue
+  }, {
+    path: "/homework",
+    component: HomeWorkVue
   }
 ]

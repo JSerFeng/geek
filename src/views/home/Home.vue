@@ -3,15 +3,20 @@
     <div class="menu">
       <div class="item leftTop">
         <div class="weather">
-          <h3 class="temp">{{ temp }}</h3>
-          <div class="icon-sheshidu01"></div>
+          <h3 class="temp">
+            {{ temp }}
+            <span class="iconfont icon-sheshidu01"></span>
+          </h3>
+        
           <p class="msg">{{ msg }}</p>
         </div>
       </div>
       <div class="item midTop">
         <Login />
       </div>
-      <div class="item rightTop">消息</div>
+      <div class="item rightTop">
+        <BroadCastVue />
+      </div>
 
       <div class="item leftBottomTop leftBottom">
         <div class="zhihu">
@@ -30,7 +35,9 @@
         <router-link to="/articleList">精选文章</router-link>
       </div>
       
-      <div class="item midBottomRight">课程文档</div>
+      <div class="item midBottomRight">
+        <router-link to="/homework">作业</router-link>
+      </div>
 
       <div class="item rightBottomTop rightBottom link-to">经管实验室系统</div>
       <div class="item rightBottomMid rightBottom link-to">成员管理系统</div>
@@ -44,6 +51,7 @@
 import { useWeather } from './hooks';
 import { ElButton } from 'element-plus'
 import Login from './components/Login.vue'
+import BroadCastVue from '../user/broad-cast/BroadCast.vue';
 
 const { temp, msg } = useWeather()
 </script>
@@ -97,7 +105,7 @@ const { temp, msg } = useWeather()
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgb(53, 53, 53);
+        background: rgb(134, 134, 134);
         filter: opacity(0.8);
       }
       .temp {
@@ -106,6 +114,16 @@ const { temp, msg } = useWeather()
         color: #fff;
         font-size: 40px;
         text-align: center;
+        position: relative;
+        z-index: 1;
+
+        .icon-sheshidu01 {
+          z-index: 0;
+          color: #fff;
+          left: 0;
+          top: 0;
+          color: #fff;
+        }
       }
       .msg {
         color: #fff;

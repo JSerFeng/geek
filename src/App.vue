@@ -61,6 +61,8 @@ body {
   align-items: center;
 }
 ul {
+  padding: 0;
+  margin: 0;
   list-style: none;
 }
 .bg-video {
@@ -80,7 +82,7 @@ ul {
   height: 100vh;
 }
 .shade {
-  box-shadow: -1px -1px 3px #ffffff, 1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
+  box-shadow: 0 10px 50px rgb(211, 211, 211);
 }
 .active-drag {
   position: relative;
@@ -100,13 +102,22 @@ ul {
     box-shadow: 0 0 50px rgb(0, 0, 51);
   }
 }
+.big-font {
+  color: black;
+  font-size: 1em;
+}
+.small-font {
+  font-size: .7em;
+  color: #a8a8a8;
+  font-weight: 100;
+}
 
 .view-main {
   box-sizing: border-box;
   padding: 5%;
   width: 100%;
   height: 100%;
-  // position: relative;
+  overflow-y: scroll;
   background-color: rgb(241, 241, 241);
 }
 

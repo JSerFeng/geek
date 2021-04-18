@@ -7,7 +7,7 @@ type PendingQueue = ((...args: any) => void)[]
 const BASE_URL = 'http://localhost:3000/api'
 
 const CONNECT_LIMIT = 6 // 最大网络连接数
-const TIMEOUT = 1000 * 10 //最大请求到期时间 10s
+const TIMEOUT = 1000 * 30 //最大请求到期时间 10s
 
 export enum ErrorCode {
   Success = 200,
@@ -40,7 +40,8 @@ const whiteList = new Set([
   '/user/findBackPassword',
   '/user/checkUserLegality',
   '/token',
-  '/course/queryCourse'
+  '/course/queryCourse',
+  '/article/queryArticles',
 ])
 
 

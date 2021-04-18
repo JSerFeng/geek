@@ -283,6 +283,11 @@
   resolved "https://registry.npmjs.org/@types/braces/-/braces-3.0.0.tgz#7da1c0d44ff1c7eb660a36ec078ea61ba7eb42cb"
   integrity sha512-TbH79tcyi9FHwbyboOKeRachRq63mSuWYXOflsNO9ZyE5ClQ/JaozNKl+aWUq87qPNsXasXxi2AbgfwIJ+8GQw==
 
+"@types/marked@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.npm.taobao.org/@types/marked/download/@types/marked-2.0.2.tgz?cache=0&sync_timestamp=1618270402410&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fmarked%2Fdownload%2F%40types%2Fmarked-2.0.2.tgz#33a15106383f6e42cd6bdd38093e6b19904e29e1"
+  integrity sha1-M6FRBjg/bkLNa904CT5rGZBOKeE=
+
 "@types/micromatch@^4.0.1":
   version "4.0.1"
   resolved "https://registry.npmjs.org/@types/micromatch/-/micromatch-4.0.1.tgz#9381449dd659fc3823fd2a4190ceacc985083bc7"
@@ -997,6 +1002,11 @@ magic-string@^0.25.7:
   integrity sha512-4CrMT5DOHTDk4HYDlzmwu4FVCcIYI8gauveasrdCu2IKIFOJ3f0v/8MDGJCDL9oD2ppz/Av1b0Nj345H9M+XIA==
   dependencies:
     sourcemap-codec "^1.4.4"
+
+marked@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.npm.taobao.org/marked/download/marked-2.0.3.tgz#3551c4958c4da36897bda2a16812ef1399c8d6b0"
+  integrity sha1-NVHElYxNo2iXvaKhaBLvE5nI1rA=
 
 merge-source-map@^1.1.0:
   version "1.1.0"
