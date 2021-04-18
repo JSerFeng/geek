@@ -1,182 +1,217 @@
 <template>
-  <el-alert
-    title="注意:只能选择一个具体报名的方向或者具体的学员发送邮件！"
-    type="warning"
-  >
-  </el-alert>
-  <el-input
-    class="title-input"
-    v-model="title"
-    placeholder="请输入标题"
-  ></el-input>
-  <div id="div1"></div>
-  <el-select
-    @clear="handleSelectClear"
-    clearable
-    class="course-select"
-    v-model="selValue"
-    @change="handleSelectChange"
-    placeholder="请选择方向"
-  >
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
+  <div class="send-email-warp">
+    <el-alert
+      title="注意:只能选择一个具体报名的方向或者具体的学员发送邮件！"
+      type="warning"
     >
-    </el-option>
-  </el-select>
-  <el-popover
-    placement="top-start"
-    title="选择要发送的学员"
-    :width="230"
-    trigger="hover"
-  >
-    <template #reference>
-      <el-button>选择要发送的学员</el-button>
-    </template>
-    <el-tabs v-model="activeName" type="card" @tab-click="handleTabsClick">
-      <el-tab-pane ref="fonttab" label="前端" name="1">
-        <el-checkbox
-          v-model="checkedList[index]"
-          v-for="(item, index) in userInfo.data.data.items"
-          :key="index"
-          @change="
-            (value) => {
-              checkChange(item.userId, value);
-            }
-          "
-          :label="item.userId"
-          >{{ item.userName }}</el-checkbox
-        >
-      </el-tab-pane>
-      <el-tab-pane label="后端" name="2">
-        <el-checkbox
-          v-model="checkedList[index]"
-          v-for="(item, index) in userInfo.data.data.items"
-          :key="index"
-          @change="
-            (value) => {
-              checkChange(item.userId, value);
-            }
-          "
-          :label="item.userId"
-          >{{ item.userName }}</el-checkbox
-        ></el-tab-pane
-      >
-      <el-tab-pane label="Python" name="3">
-        <el-checkbox
-          v-model="checkedList[index]"
-          v-for="(item, index) in userInfo.data.data.items"
-          :key="index"
-          @change="
-            (value) => {
-              checkChange(item.userId, value);
-            }
-          "
-          :label="item.userId"
-          >{{ item.userName }}</el-checkbox
-        ></el-tab-pane
-      >
-    </el-tabs>
-    <el-pagination
-      @update:current-page="handlePaginationClick"
-      layout="prev, pager, next"
-      :total="userInfo.data.data.total"
+    </el-alert>
+    <el-input
+      class="title-input"
+      v-model="title"
+      placeholder="请输入标题"
+    ></el-input>
+    <el-input
+      type="textarea"
+      :rows="10"
+      placeholder="请输入内容"
+      v-model="emailContent"
     >
-    </el-pagination>
-  </el-popover>
+    </el-input>
+    <el-select
+      @change="handleSelectCourse"
+      class="course-select"
+      v-model="courseId"
+      placeholder="请选择"
+    >
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      >
+      </el-option>
+    </el-select>
+    <el-popover
+      @hide="handlePopoverHidden"
+      placement="top"
+      :width="320"
+      trigger="click"
+    >
+      <template #reference>
+        <el-button class="select-students">选择学员</el-button>
+      </template>
+      <ul class="select-student-warp">
+        <el-checkbox-group style="margin: 0 auto" v-model="checkList">
+          <el-checkbox
+            class="check-item"
+            :key="item.userId"
+            v-for="item in studentList"
+            :label="item.userId"
+            >{{ item.userName }}</el-checkbox
+          >
+        </el-checkbox-group>
+      </ul>
+      <el-pagination
+        class="select-pageination"
+        layout="prev, pager, next"
+        :total="total"
+        @current-change="handlePaginationChange"
+      >
+      </el-pagination>
+    </el-popover>
+  </div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, onMounted, ref, reactive, Ref, toRaw } from "vue";
-import E from "wangeditor";
-import { useGetUserInfo } from "../hooks/useUserInfo";
-import useSelect from "../hooks/useSelect";
-import { adminSendEmail } from "../../../utils/shared";
-import { reqAdminSendEmail} from '../../../api/index'
-import { ElMessage } from 'element-plus'
+import { defineComponent, onMounted, ref, reactive, computed, Ref } from "vue";
+import { getSignListList, reqAdminSendEmail } from "../../../api/index";
+import { ElCheckboxGroup, ElMessage } from "element-plus";
+import useSendCheck from "../hooks/useCheckSend";
+interface option {
+  value: "1" | "2" | "3" | "4";
+  label: "前端" | "后端" | "移动" | "Python";
+}
+interface Student {
+  grade: null | string;
+  image: null | string;
+  mail: string;
+  major: string;
+  userId: string;
+  userName: string;
+}
 export default defineComponent({
-  setup(props, context) {
-    context.expose({
-      handleSendEmailClick,
+  components: {
+    ElCheckboxGroup,
+  },
+  setup(props, ctx) {
+    const emailContent = ref<string>("");
+    const title = ref<string>("");
+    const courseId = ref<1 | 2 | 3 | 4 | "">("");
+    const total = ref<number>(0);
+    const studentList = ref<Student[]>([]);
+    const checkList = ref<string[]>([]);
+    const options = reactive<option[]>([
+      {
+        value: "1",
+        label: "前端",
+      },
+      {
+        value: "2",
+        label: "后端",
+      },
+      {
+        value: "3",
+        label: "移动",
+      },
+      {
+        value: "4",
+        label: "Python",
+      },
+    ]);
+    ctx.expose({
+      sendEmail,
     });
-    let editor:any
-    let title = ref("") as Ref<string>;
-    const checkedList = reactive<boolean[]>([]);
-    const activeName = ref(1) as Ref<number>;
-    const userIdArr: Set<string> = new Set<string>([]);
-    let {
-      options,
-      handleSelectChange,
-      handleSelectClear,
-      selValue,
-    } = useSelect();
-    const {
-      getUserInfo,
-      userInfo,
-      handleTabsClick,
-      handlePaginationClick,
-      paramsObj,
-    } = useGetUserInfo();
-    onMounted(() => {
-      editor = new E("#div1");
-      editor.create();
-    });
-    async function handleSendEmail(
-      selValue: string,
-      userIdArr: Set<string>,
-      adminId: string = "1"
-    ) {
-      const res = await reqAdminSendEmail(title.value,editor.txt.text(),adminId,selValue,userIdArr)
-      if(res.data.error_code !== 200){
-        ElMessage('网络错误')
-      }else{
-        ElMessage(res.data.message)
+    function handleSelectCourse() {
+      checkList.value = [];
+    }
+    function handlePopoverHidden() {
+      if (checkList.value.length > 0) {
+        courseId.value = "";
       }
     }
-    function handleSendEmailClick() {
-      if (adminSendEmail(selValue.value, userIdArr)) {
-        handleSendEmail(selValue.value, userIdArr, "jonfdsa");
-      }
+    async function handlePaginationChange(index:number){
+      const result = await getSignListList(index, 10);
+      studentList.value = computed(() => result.data.data.items).value;
+      total.value = result.data.data.total;
     }
-    function checkChange(id: string, isSet: boolean): void {
-      if (isSet) {
-        userIdArr.add(id);
+    async function sendEmail(dialogVisible:Ref<boolean>) {
+      // 测试接口的时候传入courseId，checkList， title， emailContent、adminId
+      // console.log(
+      //   courseId.value,
+      //   checkList.value,
+      //   title.value,
+      //   emailContent.value
+      // );
+      const isLegal = useSendCheck(
+        courseId.value,
+        checkList.value,
+        title.value,
+        emailContent.value
+      );
+      if (isLegal) {
+        const result = await reqAdminSendEmail(
+          title.value,
+          emailContent.value,
+          "adminId",
+          courseId.value,
+          checkList.value
+        );
+        if (result.data.error_code === 200) {
+          ElMessage({
+            type: "success",
+            message: result.data.message,
+          });
+          dialogVisible.value = false
+        } else {
+          ElMessage({
+            type: "error",
+            message: result.data.message,
+          });
+        }
       } else {
-        userIdArr.delete(id);
+        ElMessage({
+          type: "error",
+          message: "信息不能为空！",
+        });
       }
-      console.log(toRaw(userIdArr));
     }
-
+    onMounted(async () => {
+      const result = await getSignListList(1, 10);
+      studentList.value = computed(() => result.data.data.items).value;
+      total.value = result.data.data.total;
+    });
     return {
-      title,
+      emailContent,
       options,
-      checkedList,
-      getUserInfo,
-      userInfo,
-      activeName,
-      handleTabsClick,
-      handlePaginationClick,
-      paramsObj,
-      userIdArr,
-      checkChange,
-      handleSelectChange,
-      handleSelectClear,
-      selValue,
-      handleSendEmailClick,
+      courseId,
+      total,
+      studentList,
+      checkList,
+      handleSelectCourse,
+      handlePopoverHidden,
+      title,
+      handlePaginationChange
     };
   },
 });
 </script>
 
 <style lang="scss">
-.title-input {
-  margin-bottom: 10px;
-  margin-top: 10px;
+.send-email-warp {
+  .title-input {
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  .course-select {
+    margin-top: 2vh;
+  }
+  .select-students {
+    margin-left: 2vw;
+  }
 }
-.course-select {
-  margin-top: 10px;
-  margin-right: 20px;
+.select-student-warp {
+  width: 90%;
+  height: 90%;
+  margin: 0 auto;
+  border-radius: 5vh;
+  line-height: 3vh;
+  display: flex;
+  .check-item {
+    width: 6vw;
+  }
+}
+.select-pageination {
+  margin: 5vh auto 0 auto;
+  width: 10vw;
 }
 </style>

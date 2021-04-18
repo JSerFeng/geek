@@ -4,7 +4,7 @@
     <li class="item-2">{{ info.userId }}</li>
     <li class="item-3">{{ info.userName }}</li>
     <li class="item-4">{{ info.major }}</li>
-    <li class="item-5">{{ info.email ? info.email:'无' }}</li>
+    <!-- <li class="item-5">{{ info.email ? info.email:'无' }}</li> -->
   </ul>
 </template>
 <script lang = 'ts'>
@@ -39,7 +39,8 @@ export default defineComponent({
   display: flex;
   @for $i from 1 through 5 {
     .item-#{$i} {
-      width: 50px;
+      width: 60px;
+      line-height: 30px;
       margin: 3px 0 3px -50px;
       margin-left: 20px * $i;
     }

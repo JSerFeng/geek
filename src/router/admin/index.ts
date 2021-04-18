@@ -3,21 +3,25 @@ import SuperAdmin from '../../views/super-admin/SuperAdmin.vue'
 import CheckHomework from '../../views/check-homework/CheckHomework.vue'
 import HomeworkDetail  from '../../views/homework-detail/HomeworkDetail.vue'
 import HowmworkStatus from '../../views/homework-status/HomeworkStatus.vue'
+import StudentDetail from '../../views/student-detail/StudentDetail.vue'
 
 export default [{
   path: '/admin',
   component: Admin,
 },
 {
-  path: '/check/homework',
+  path: '/checkTask',
   component: CheckHomework
 }, {
   path: '/superadmin',
   component: SuperAdmin
 },{
-  path: '/homework/detail/:id',
+  path: '/taskDetail/:id',
   component: HomeworkDetail
 },{
-  path: '/homwwork/status',
+  path: '/taskStatus',
   component: HowmworkStatus
+},{
+  path:'/stuDetail',
+  component:StudentDetail
 }]
