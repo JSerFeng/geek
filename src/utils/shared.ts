@@ -405,7 +405,6 @@ export const showFileSize = (size: number = 0) => {
   }
 }
 
-<<<<<<< HEAD
 // 根据taskId删除对应homeworkList中的任务
 export function deleteTaskById (homeworkList:Array<any>, taskId:number) {
   console.log(toRaw(homeworkList[0]))
@@ -417,7 +416,6 @@ export function deleteTaskById (homeworkList:Array<any>, taskId:number) {
   })
   return homeworkList
 }
-=======
 export const isUndef = (x: unknown): x is (undefined | null) => {
   return typeof x === "undefined" || x === null
 }
@@ -451,4 +449,8 @@ export const nextTick = (fn?: () => void) => new Promise(resolve => {
   }
   port2.postMessage(null)
 })
->>>>>>> 42c7d4a34261261d0ebde8cd85a95acf26dc715d
+
+
+export const getStudentScore = ()=>{
+  
+}

@@ -118,6 +118,7 @@ export default defineComponent({
     const downloadFileUrl = ref<string>("");
     const { handleMarkScore } = useMarkScore();
     const { comPersonList, handlePaginationChange, total } = useHomeworkTable();
+    let fun
     async function handleDownloadFiles() {
       const result = await downloadAllStudentsFiles(taskId);
       /*TODO*/
@@ -157,6 +158,7 @@ export default defineComponent({
         () => result.data.data.totalPage * result.data.data.rows
       ).value;
       personList.value = comPersonList(result);
+      console.log(personList.value)
       homeworkFileList.value = Store.state.homework.currentFiles;
       useDiagram(taskId);
     });
@@ -180,11 +182,10 @@ export default defineComponent({
     width: 48vh;
     position: absolute;
     left: 75%;
-    top: 200px;
+    top: 113px;
     height: 45vh;
   }
 }
-
 @media screen and (max-width: 799px) {
   #diagram {
     text-align: center;
@@ -299,7 +300,7 @@ export default defineComponent({
     .close-homework {
       position: relative;
       left: 82%;
-      top: -30vh;
+      top: -40vh;
       width: 15vh;
       line-height: 5vh;
       border: 2vh solid red;

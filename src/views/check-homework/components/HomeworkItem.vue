@@ -245,7 +245,9 @@ export default defineComponent({
     }
   }
 .homework-wrap {
-  
+  li{
+    line-height: 11vh;
+  }
   .el-icon-edit {
     line-height: 11vh;
   }

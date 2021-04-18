@@ -38,22 +38,6 @@ async function calcHash(chunks: ArrayBuffer[], e: any) {
   postMessage([hash, e.data], [...e.data])
 }
 
-<<<<<<< HEAD
-async function readChunk(hasher: IHasher, file: Blob): Promise<any> {
-  return new Promise((resolve, reject) => {
-    const rd = new FileReader()
-    rd.readAsArrayBuffer(file)
-    rd.onload = () => {
-      console.time("chunk");
-      
-      hasher.update(new Uint8Array(rd.result as ArrayBuffer))
-      console.timeEnd("chunk");
-      resolve()
-    }
-    rd.onerror = reject
-  })
-}
-=======
 // async function readChunk(hasher: IHasher, file: Blob): Promise<any> {
 //   return new Promise((resolve, reject) => {
 //     const rd = new FileReader()
@@ -66,4 +50,3 @@ async function readChunk(hasher: IHasher, file: Blob): Promise<any> {
 //     rd.onerror = reject
 //   })
 // }
->>>>>>> 42c7d4a34261261d0ebde8cd85a95acf26dc715d
