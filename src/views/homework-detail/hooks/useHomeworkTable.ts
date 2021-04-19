@@ -11,15 +11,17 @@ export default function useHomeworkTable () {
     const taskId = (Route.params.id as any) as number;
     // 对请求到的结果进行处理，得出可以方便展示的personList
     function comPersonList(result: any) {
+      console.log(result)
         return computed(() => {
-          result.data.data.items.forEach((item: DetailInfo<Person, File>) => {
+          result.data.items.forEach((item: DetailInfo<Person, File>) => {
             item.userName = item.userVO.userName;
           });
-          return result.data.data.items;
+          return result.data.items;
         }).value;
       }
       async function handlePaginationChange(index: number) {
         const result = await getDetailHomeworkInfo(taskId, index, 5);
+        console.log(result)
         personList.value = comPersonList(result);
       }
       return {

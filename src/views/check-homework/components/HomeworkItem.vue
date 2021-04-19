@@ -4,7 +4,7 @@
     <li>{{ comCourse(info.courseId) }}</li>
     <li>{{ startTime }}</li>
     <li>{{ closeTime }}</li>
-    <li @click="dialogOpen" class="el-icon-edit"></li>
+    <li @click="editOpen" class="el-icon-edit"></li>
     <li @click="handleDeleteHomework" class="el-icon-delete"></li>
   </ul>
   <el-dialog
@@ -16,16 +16,16 @@
     <!-- :before-close="handlePublishHomeworkClose" -->
     <ul class="course-warp">
       <li class="course">
-        <span style="fontWeight: 600; fontSize: 1rem; marginRight: 7vw"
+        <span style="fontweight: 600; fontsize: 1rem; marginright: 7vw"
           >方向:</span
         >
         <el-radio v-model="courseRadio" label="1">前端</el-radio>
         <el-radio v-model="courseRadio" label="2">后端</el-radio>
-        <el-radio v-model="courseRadio" label="3">移动</el-radio>
-        <el-radio v-model="courseRadio" label="4">Python</el-radio>
+        <el-radio v-model="courseRadio" label="4">移动</el-radio>
+        <el-radio v-model="courseRadio" label="3">Python</el-radio>
       </li>
       <li class="name">
-        <span style="fontWeight: 600; fontSize: 1rem; marginRight: 6.5vw"
+        <span style="fontweight: 600; fontsize: 1rem; marginright: 6.5vw"
           >名称:</span
         >
         <el-input
@@ -35,19 +35,14 @@
         ></el-input>
       </li>
       <li class="time">
-        <span style="fontWeight: 600; fontSize: 1rem; marginRight: 5vw"
+        <span style="fontweight: 600; fontsize: 1rem; marginright: 5vw"
           >截止时间:</span
         >
-        <el-date-picker
-          popper-class="pick-close-time"
-          v-model="submitCloseTime"
-          type="date"
-          placeholder="选择日期时间"
-        >
-        </el-date-picker>
+        <el-time-picker v-model="submitCloseTime" placeholder="任意时间点">
+        </el-time-picker>
       </li>
       <li class="submit">
-        <span style="fontWeight: 600; fontSize: 0.9rem; marginRight: 1vw"
+        <span style="fontweight: 600; fontsize: 0.9rem; marginright: 1vw"
           >是否允许超时提交:</span
         >
         <el-radio v-model="allowSubmitClose" label="1">允许</el-radio>
@@ -57,9 +52,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="edithHomeworkDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleEdithHomework"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="handleEdithHomework">确 定</el-button>
       </span>
     </template>
   </el-dialog>
@@ -68,20 +61,20 @@
 import {
   computed,
   defineComponent,
-  toRaw,
   ComputedRef,
   reactive,
   inject,
   Ref,
-  ref
+  ref,
+  toRaw,
 } from "vue";
-import { computedCourse } from "../../../utils/shared";
+import { computedCourse, storage } from "../../../utils/shared";
 import { updateHomeworkk, deleteHomework } from "../../../api/index";
 import {
   ElMessage,
   ElMessageBox,
   ElDialog,
-  ElDatePicker,
+  ElTimePicker,
   ElInput,
   ElRadio,
   ElButton,
@@ -106,7 +99,7 @@ interface File {
 
 export interface Info<F> {
   id: number;
-  courseId: 1 | 2 | 3 | 4;
+  courseId: string;
   adminId: string;
   taskName: string;
   addTime: string;
@@ -121,7 +114,7 @@ export interface Info<F> {
 export default defineComponent({
   components: {
     ElDialog,
-    ElDatePicker,
+    ElTimePicker,
     ElInput,
     ElRadio,
     ElButton,
@@ -132,6 +125,7 @@ export default defineComponent({
     const taskId: ComputedRef<number> = computed(() =>
       Number.parseInt(props.item.id)
     );
+    // 日期格式 --> yyyy-MM-dd HH:mm:ss
     const startTime: ComputedRef<string> = computed(() => {
       const arr = props.item.addTime;
       return arr[5] + arr[6] + "-" + arr[8] + arr[9];
@@ -145,33 +139,59 @@ export default defineComponent({
     const deleteHomeworkById = inject<
       (homeworkList: any[], taskId: number) => any[]
     >("deleteHomeworkById");
-    const edithHomeworkDialogVisible = ref<Boolean>(false)
-     const courseRadio = ref<'1' | '2' | '3' | '4'>("1");
-    const courseName = ref<string>('')
-    const submitCloseTime = ref<Date>()
-    const allowSubmitClose = ref<'1' | '0'>('1')
-    function dialogOpen($event:MouseEvent){
-      $event.stopPropagation()
-      edithHomeworkDialogVisible.value = true
+    const editTaskById = inject<(homeworkList: any[], content: any) => any[]>(
+      "editTaskById"
+    );
+    const edithHomeworkDialogVisible = ref<Boolean>(false);
+    const courseRadio = ref<string>(info.courseId.toString());
+    const courseName = ref<string>(info.taskName);
+    const submitCloseTime = ref<Date>();
+    const allowSubmitClose = ref<"1" | "2">("1");
+    const adminId:string = storage.get('adminId')
+    function editOpen(e: MouseEvent) {
+      e.stopPropagation();
+      edithHomeworkDialogVisible.value = true;
     }
     async function handleEdithHomework($event: MouseEvent) {
       $event.stopPropagation();
-      edithHomeworkDialogVisible.value = false
-       // 传入courseId -> courseRadio
+      // 传入courseId -> courseRadio
       //    adminId -> 登录之后获取
       //    taskName --> courseName
       //    effectiveTime --> submitCloseTime
       //    commitLate --> allowSubmitClose
-      const result = await updateHomeworkk({
-        //@ts-ignore
-        //未知类型错误
-        courseId:Number.parseInt(courseRadio.value),
-        adminId:'jifdo',
-        taskName:courseName.value,
-        effectiveTime:submitCloseTime!.value!.getTime().toString(),
-        commitLate:Number.parseInt(allowSubmitClose.value) as 0 | 1
-      });
-      if (result.status === 200) {
+      const content = {
+        courseId: Number.parseInt(courseRadio.value),
+        adminId: adminId,
+        taskName: courseName.value,
+        effectiveTime: submitCloseTime!.value!.getTime(),
+        commitLate: Number.parseInt(allowSubmitClose.value) as 0 | 1,
+        id:taskId.value
+      };
+      console.log(new Date(content.effectiveTime).toLocaleString());
+      //@ts-ignore
+      //未知类型错误
+      const result = await updateHomeworkk(content);
+      console.log(result)
+      if (result.error_code === 200) {
+        // effectiveTime: 2021/4/18下午5:18:04
+        // 日期格式 --> yyyy-MM-dd HH:mm:ss
+        const effectiveTime: ComputedRef<string> = computed(() => {
+          const localTime = new Date(content.effectiveTime)
+            .toLocaleString()
+            .toString();
+          if (localTime[6] === "/") {
+            const arr = [...localTime];
+            arr.splice(5, 0, "0");
+            return arr.join("");
+          }
+          return localTime;
+        });
+        editTaskById!(data.value, {
+          ...content,
+          effectiveTime: effectiveTime.value,
+        });
+        console.log(data);
+        edithHomeworkDialogVisible.value = false;
         ElMessage({
           type: "success",
           message: "作业修改成功！",
@@ -192,8 +212,9 @@ export default defineComponent({
       })
         .then(async () => {
           // 这里要传入作业id和adminId 作业id就是 taskId
-          const result = await deleteHomework();
-          if (result.status === 200) {
+          const result = await deleteHomework({id:taskId.value, adminId}) as any
+          console.log(result)
+          if (result.error_code === 200) {
             deleteHomeworkById!(data.value, taskId.value);
             ElMessage({
               type: "success",
@@ -225,27 +246,27 @@ export default defineComponent({
       courseName,
       submitCloseTime,
       allowSubmitClose,
-      dialogOpen
+      editOpen,
     };
   },
 });
 </script>
 <style lang="scss">
 .course-warp {
-    line-height: 3rem;
-    .name{
-      display: flex;
-      span{
-        display: block;
-        width: 3vw;
-      }
-      .input{
-        width: 20vw;
-      }
+  line-height: 3rem;
+  .name {
+    display: flex;
+    span {
+      display: block;
+      width: 3vw;
+    }
+    .input {
+      width: 20vw;
     }
   }
+}
 .homework-wrap {
-  li{
+  li {
     line-height: 11vh;
   }
   .el-icon-edit {

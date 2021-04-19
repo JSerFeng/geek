@@ -1,12 +1,13 @@
 import request, { ErrorCode } from "./request"
 import axios, { AxiosResponse } from "axios";
-import '../mock/admin/index'
-import '../mock/super-admin/index'
+// import '../mock/admin/index'
+// import '../mock/super-admin/index'
 import { ElNotification } from "element-plus";
 import { State } from '../store/modules/user/state'
 // @ts-ignore
 import { PublishHomework } from '../views/check-homework/CheckHomework.vue'
 import { EditHomework } from '../views/check-homework/components/HomeworkItem.vue'
+import { storage } from '../utils/shared'
 export interface Response<T = any> {
   error_code: ErrorCode,
   message: string,
@@ -43,63 +44,68 @@ export const register = (
   activeCode: string
 ) => request.post("/user/register", { userId, userName, password, mail, major, activeCode })
 
-export const getPersonCount = (courseId?: number) => axios.post('/admin/countAllUser', { courseId }) as Promise<Response>
-
-export const getSignListList = (
-  page?:number,
-  rows?:number,
-  courseId?: 1 | 2 | 3 | 4
-) => {
-  const params = {page, rows, courseId}
-  // 测试的时候把params加进去
-  return axios.get('/admin/queryUsersInfo') as Promise<Response>
+export const getPersonCount = async (courseId?: number) => {
+  const result =await request.get('/admin/countAllUser', {params:{courseId}})as any as Promise<Response>
+  console.log(result)
+  return result
 }
 
-export const getAdminHomework = () =>axios.get('/admin/queryMyTasks') as Promise<Response>
+export const getSignListList = (
+  page?: number,
+  rows?: number,
+  courseId?: 1 | 2 | 3 | 4
+) => {
+  const params = { page, rows, courseId }
+  console.log(params)
+  // 测试的时候把params加进去
+  return request.get('/admin/queryUsersInfo', {params}) as Promise<Response>
+}
+
+export const getAdminHomework = (adminId:string) => request.get('/admin/queryMyTasks', {params:{adminId}}) as Promise<Response>
 
 export const getDetailHomeworkInfo = (taskId: number, page?: number, rows?: number) => {
   console.log(taskId, page, rows)
-  return axios.get('/admin/queryOneTask',) as Promise<Response>
+  return request.get('/admin/queryOneTask',{params:{taskId, page, rows}}) as Promise<Response>
 }
 
 export const markScore = (taskId: number, score?: number) => {
   // console.log(taskId, score)
-  return axios.post('/admin/giveScore', { taskId, score })
+  return request.post('/admin/giveScore', { taskId, score })
 }
 
 export const downloadAllStudentsFiles = (taskId: number) => {
-  return axios.post('/admin/downloadWorks', { taskId })
+  return request.post('/admin/downloadWorks', { taskId })
 }
 
 export const getHomeworkStatus = (courseId?: number) => {
-  return axios.get('/admin/queryScores', { params: { courseId } })
+  return request.get('/admin/queryScores', { params: { courseId } })
 }
 // 这里要传入taskId
 export const getHomeworkSubmitStatus = (taskId: number) => {
-  return axios.get('/admin/countStudent')
+  return request.get('/admin/countStudent', {params:{taskId}})
 }
 // 后面把params传进去
 export const publishHomework = (params?: PublishHomework): Promise<AxiosResponse<any>> => {
   console.log(params)
-  return axios.post('/task/addTask')
+  return request.post('/task/addTask', params)
 }
 
 // 编辑作业 后面把params传进去
-export const updateHomeworkk = (params?:EditHomework):Promise<AxiosResponse<any>>=>{
+export const updateHomeworkk = (params?: EditHomework): Promise<Response> => {
   console.log(params)
-  return axios.post('/task/updateTask')
+  return request.post('/task/updateTask', params)
 }
 
 // 手动关闭作业提交通道 后面把params传进去
-export const closeHomeworkSubmit = (params?:any) =>{
+export const closeHomeworkSubmit = (params?: any) => {
   console.log(params)
-  return axios.post('/task/closeTask')
+  return request.post('/task/closeTask', params)
 }
 
 // 删除作业  后面把params传进去
-export const deleteHomework = (params?:{id:number, adminId:string}) => {
+export const deleteHomework = (params?: { id: number, adminId: string }) => {
   console.log(params)
-  return axios.post('/task/deleteTask')
+  return request.post('/task/deleteTask',params)
 }
 export const reqAdminSendEmail = (
   title: string,
@@ -107,7 +113,7 @@ export const reqAdminSendEmail = (
   adminId?: string,
   courseId?: string | number,
   userIdList?: string[],
-) => axios.post('/admin/sendDailyMail', { adminId, courseId, userIdList, title, text }) as Promise<Response>
+) => request.post('/admin/sendDailyMail', { adminId, courseId, userIdList, title, text }) as Promise<Response>
 
 export const getUserInfoList = (
   params?: {
@@ -115,7 +121,25 @@ export const getUserInfoList = (
     rows?: number,
     courseId?: number
   }
-) => axios.get('/admin/queryUsersInfo', { params }) as any as Response
+) => request.get('/admin/queryUsersInfo', { params }) as any as Response
+
+// 上传作业文件
+export const adminTaskFileUpload = (taskId: number, file: Blob) => {
+  // 测试接口的时候把参数传进去
+  console.log(file, taskId)
+  const params = new FormData()
+  params.append('taskId', taskId.toString())
+  params.append('file', file)
+  return request.post('/file/taskFileUpload', params) as Promise<Response>
+}
+
+export const adminDeleteTaskById = (taskId: any, adminId: string) => {
+  adminId = adminId.toString()
+  const id = parseInt(taskId)
+  console.log(taskId, adminId)
+  
+  return request.post('/file/delTaskFile', {id, adminId}) as Promise<Response>
+}
 
 export const getAdminInfoList = (
   page?: number,
@@ -126,7 +150,7 @@ export const getAdminInfoList = (
 ) => {
   // 等测试接口把参数传进去
   const params = { page, rows, courseName, adminName, adminId }
-  return axios.get('/superAdmin/queryAdmins')
+  return request.get('/superAdmin/queryAdmins')
 }
 
 interface AddAdmin {
@@ -142,7 +166,7 @@ export const addAdmin = (
     password,
     adminName,
     courseName }: AddAdmin
-) => axios.post('/superAdmin/addAdmin', { adminId, password, adminName, courseName }) as Promise<Response>
+) => request.post('/superAdmin/addAdmin', { adminId, password, adminName, courseName }) as Promise<Response>
 
 export const editAdmin = ({
   adminId,
@@ -151,8 +175,8 @@ export const editAdmin = ({
   courseName,
   id
 }: AddAdmin
-) => axios.post('/superAdmin/updateAdmin', { adminId, password, adminName, courseName, id }) as Promise<Response>
+) => request.post('/superAdmin/updateAdmin', { adminId, password, adminName, courseName, id }) as Promise<Response>
 
-export const deleteAdmin = (adminId: string) => axios.post('/superAdmin/delAdmin', { adminId }) as Promise<Response>
+export const deleteAdmin = (adminId: string) => request.post('/superAdmin/delAdmin', { adminId }) as Promise<Response>
 
-export const deleleAdmins = (adminList: string[]) => axios.post('/superAdmin/delAdmins', { adminList }) as Promise<Response>
+export const deleleAdmins = (adminList: string[]) => request.post('/superAdmin/delAdmins', { adminList }) as Promise<Response>

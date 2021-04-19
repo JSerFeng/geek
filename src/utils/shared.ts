@@ -407,7 +407,6 @@ export const showFileSize = (size: number = 0) => {
 
 // 根据taskId删除对应homeworkList中的任务
 export function deleteTaskById (homeworkList:Array<any>, taskId:number) {
-  console.log(toRaw(homeworkList[0]))
   homeworkList.forEach((item, index)=>{
     if(item.id === taskId){
       console.log(index, homeworkList[index].id, taskId);
@@ -416,6 +415,20 @@ export function deleteTaskById (homeworkList:Array<any>, taskId:number) {
   })
   return homeworkList
 }
+
+export function editTaskById (homeworkList:Array<any>, content:any){
+  homeworkList.forEach(item=>{
+    if(item.id === content.id){
+      item.taskName = content.taskName
+      item.commitLate = content.commitLate
+      item.courseId = content.courseId
+      item.closeTime = content.effectiveTime
+    }
+  })
+  console.log(toRaw(homeworkList))
+  return homeworkList
+}
+
 export const isUndef = (x: unknown): x is (undefined | null) => {
   return typeof x === "undefined" || x === null
 }

@@ -23,8 +23,8 @@ export default async function useDiagram(taskId: number) {
                 type: "pie",
                 radius: "50%",
                 data: [
-                    { value: submitStatus.data.data.submitPeople, name: "已提交" },
-                    { value: submitStatus.data.data.unSubmitPeople, name: "未提交" },
+                    { value: submitStatus.data.submitPeople, name: "已提交" },
+                    { value: submitStatus.data.unSubmitPeople, name: "未提交" },
                 ],
                 emphasis: {
                     itemStyle: {

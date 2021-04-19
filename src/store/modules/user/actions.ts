@@ -57,11 +57,15 @@ export const actions: ActionTree<State, RootState> = {
   },
   async [ActionTypes.Login]({ commit }, { payload }: Data<Login>) {
     const { userId, password } = payload
+    console.log("here");
+    
     const res = await login(userId, password) as Response<{
       token: string,
       refreshToken: string,
       user: State["userInfo"]
     }>
+    console.log(res);
+    
     if (res.error_code === ErrorCode.Success) {
       commit<MLogin>({ type: MutationTypes.Login, payload: res.data })
     }
