@@ -1,10 +1,10 @@
 <template>
   <div class="homework-status">
-    <h1 class="title">完 成 状 况</h1>
+    <h1 class="title">完成状况</h1>
     <router-link to="/checkTask">
       <AdBeacon boxStyle="left" title="作业管理" />
     </router-link>
-    <el-tabs v-model="tableActiveeName" class="table">
+    <el-tabs :stretch='true' tab-position="left" v-model="tableActiveeName" class="table">
       <el-tab-pane class="item" label="前端" name="first">
         <FrontEndCom />
       </el-tab-pane>
@@ -54,39 +54,33 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .homework-status {
-  @media screen and (min-width:799px) {
-       .title {
-    margin: 0 auto;
-    width: 90vw;
-    margin-top: 5vh;
-    margin-bottom: -15vh;
+  .title{
+    width: 50%;
     text-align: center;
+    margin: 5vh auto 0 auto;
   }
-  .table {
-    width: 60%;
-    margin: 10vw auto;
+  @media screen and (min-width: 799px) {
+    .table {
+      width: 70%;
+      height: 1000px;
+      margin: 10vw auto;
+      background-color: #EEF1EF;
+      margin-top: 60px;
+    }
+   .el-tabs__item{
+      height: 150px;
+      line-height: 150px;
+    }
   }
-  .el-tabs__item {
-  width: 14vw;
+  @media screen and (max-width: 800px) {
+    .table {
+      width: 60%;
+      margin: 10vw auto;
+    }
+    .el-tabs__item{
+      height: 200px;
+      line-height: 100px;
+    }
+  }
 }
-  }
-  @media screen and (max-width:800px) {
-     .title {
-    margin: 0 auto;
-    width: 90vw;
-    margin-top: 5vh;
-    margin-bottom: 3vh;
-    text-align: center;
-  }
-  .table {
-    width: 60%;
-    margin: 10vw auto;
-  }
-  .el-tabs__item {
-  width: 14vw;
-}
-  }
- 
-}
-
 </style>

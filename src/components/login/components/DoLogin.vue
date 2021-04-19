@@ -44,6 +44,7 @@ const login = async () => {
         password: password.value
       }
     })
+    
     if (res.error_code === ErrorCode.Success) {
       switch (res.data?.user?.type) {
         case "admin":

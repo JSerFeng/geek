@@ -32,20 +32,29 @@
       </li>
     </ul>
     <el-pagination
-    @current-change="handlePaginationChange"
+      @current-change="handlePaginationChange"
       class="student-detail-pagnination"
       layout="prev, pager, next"
       :total="total"
     >
     </el-pagination>
+    <div id="student-detail-group"></div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref, computed } from "vue";
+import {
+  defineComponent,
+  onMounted,
+  ref,
+  computed,
+  watchEffect,
+} from "vue";
 import { ElRadioGroup, ElRadioButton, ElPagination } from "element-plus";
 import { getSignListList } from "../../api/index";
 import SignPerson from "../admin/components/SignPerson.vue";
+import * as echarts from "echarts";
 import AdBeacon from "../../components/ad-beacon/AdBeacon.vue";
+import { useRequestCount } from "../admin/hooks/useRequestCount";
 interface Student {
   grade: null | string;
   image: null | string;
@@ -72,36 +81,96 @@ export default defineComponent({
     const courseId = ref<1 | 2 | 3 | 4>(1);
     const studentList = ref<Student[]>([]);
     const total = ref<number>();
-    const currentPage = ref<number>(1)
-
-    async function handleTabsClick() {
-      const result = await getSignListList(currentPage.value, 10, courseId.value);
+    const currentPage = ref<number>(1);
+    async function handleTabsClick() {}
+    watchEffect(async () => {
+      if (courseId.value) {
+        const result = await getSignListList(
+          currentPage.value,
+          10,
+          courseId.value
+        );
+        studentList.value = computed(() => result.data.items).value;
+        total.value = result.data.total;
+      }
+    });
+    async function handlePaginationChange(index: number) {
+      currentPage.value = index;
+      const result = await getSignListList(
+        currentPage.value,
+        10,
+        courseId.value
+      );
       studentList.value = computed(() => result.data.data.items).value;
       total.value = result.data.data.total;
-      console.log(currentPage.value, courseId.value)
     }
-    async function handlePaginationChange (index:number){
-        currentPage.value = index
-        const result = await getSignListList(currentPage.value, 10, courseId.value);
-      studentList.value = computed(() => result.data.data.items).value;
-      total.value = result.data.data.total;
-    }
+    const {
+        frontPerson,
+        endPerson,
+        pythonPerson,
+        androidPerson,
+      } = useRequestCount();
     onMounted(async () => {
       const result = await getSignListList(currentPage.value, 10, 1);
-      studentList.value = computed(() => result.data.data.items).value;
-      total.value = result.data.data.total;
+      studentList.value = computed(() => result.data.items).value;
+      total.value = result.data.total;
+      // 显示报名图表生详情的图表
+      const chartDom = document.getElementById("student-detail-group");
+      const myChart = echarts.init(chartDom!);
+      
+      const option = {
+        title: {
+          text: "学员分布",
+          left: "center",
+        },
+        tooltip: {
+          trigger: "item",
+        },
+        legend: {
+          orient: "vertical",
+          left: "left",
+        },
+        series: [
+          {
+            name: "人数",
+            type: "pie",
+            radius: "50%",
+            data: [
+              { value: frontPerson.value, name: "前端" },
+              { value: endPerson.value, name: "后端" },
+              { value: pythonPerson.value, name: "移动" },
+              { value: androidPerson.value, name: "Python" },
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          },
+        ],
+      };
+      option && myChart.setOption(option);
     });
     return {
       courseId,
       total,
       studentList,
       handleTabsClick,
-      handlePaginationChange
+      handlePaginationChange,
     };
   },
 });
 </script>
 <style lang="scss">
+#student-detail-group {
+  width: 700px;
+  height: 600px;
+  margin: 0 auto;
+  text-align: center;
+  border: 1px solid #eef1ef;
+}
 .studnet-detail {
   .title {
     width: 80%;
@@ -132,17 +201,19 @@ export default defineComponent({
     flex-wrap: wrap;
     .item {
       border-bottom: 1px solid #cecece;
-      margin: 5px auto;
-      padding-bottom: 5px;
+      padding-bottom: 10px;
       width: 48%;
       height: 10vh;
       display: flex;
-      .img {
+      .img{
+        width: 6.5vw;
+        padding: 0 !important;
+      }
+      img {
         height: 100%;
-        width: 16%;
+        width: 75%;
         margin-left: 1vw;
-        background-color: red;
-        border: 1px solid #cecece;
+        border: 1px solid black;
         background-color: #eef1ef;
         border-radius: 50%;
       }
@@ -151,10 +222,11 @@ export default defineComponent({
           display: flex;
           line-height: 5vh;
           li {
-            width: 7vw;
+            width: 9vw;
           }
           .name {
             font-weight: 600;
+            margin-right: -4vw;
           }
         }
         .footer {
@@ -167,7 +239,7 @@ export default defineComponent({
 }
 .student-detail-pagnination {
   display: block;
-  margin: 13vh auto;
+  margin: 16vh auto;
   text-align: center;
   width: 20%;
 }

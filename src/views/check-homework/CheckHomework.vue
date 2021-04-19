@@ -30,49 +30,51 @@
       width="50%"
     >
       <!-- :before-close="handlePublishHomeworkClose" -->
-     <ul class="course-warp">
-      <li class="course">
-        <span style="fontWeight: 600; fontSize: 1rem; marginRight: 7vw"
-          >方向:</span
-        >
-        <el-radio v-model="courseRadio" label="1">前端</el-radio>
-        <el-radio v-model="courseRadio" label="2">后端</el-radio>
-        <el-radio v-model="courseRadio" label="3">移动</el-radio>
-        <el-radio v-model="courseRadio" label="4">Python</el-radio>
-      </li>
-      <li class="name">
-        <span style="fontWeight: 600; fontSize: 1rem; marginRight: 6.5vw"
-          >名称:</span
-        >
-        <el-input
-          class="input"
-          v-model="courseName"
-          placeholder="请输入作业名称"
-        ></el-input>
-      </li>
-      <li class="time">
-        <span style="fontWeight: 600; fontSize: 1rem; marginRight: 5vw"
-          >截止时间:</span
-        >
-        <el-date-picker
-          popper-class="pick-close-time"
-          v-model="submitCloseTime"
-          type="date"
-          placeholder="选择日期时间"
-        >
-        </el-date-picker>
-      </li>
-      <li class="submit">
-        <span style="fontWeight: 600; fontSize: 0.9rem; marginRight: 1vw"
-          >是否允许超时提交:</span
-        >
-        <el-radio v-model="allowSubmitClose" label="1">允许</el-radio>
-        <el-radio v-model="allowSubmitClose" label="2">不允许</el-radio>
-      </li>
-    </ul>
+      <ul class="course-warp">
+        <li class="course">
+          <span style="fontweight: 600; fontsize: 1rem; marginright: 7vw"
+            >方向:</span
+          >
+          <el-radio v-model="courseRadio" label="1">前端</el-radio>
+          <el-radio v-model="courseRadio" label="2">后端</el-radio>
+          <el-radio v-model="courseRadio" label="3">移动</el-radio>
+          <el-radio v-model="courseRadio" label="4">Python</el-radio>
+        </li>
+        <li class="name">
+          <span style="fontweight: 600; fontsize: 1rem; marginright: 6.5vw"
+            >名称:</span
+          >
+          <el-input
+            class="input"
+            v-model="courseName"
+            placeholder="请输入作业名称"
+          ></el-input>
+        </li>
+        <li class="time">
+          <span style="fontweight: 600; fontsize: 1rem; marginright: 5vw"
+            >截止时间:</span
+          >
+          <el-date-picker
+            popper-class="pick-close-time"
+            v-model="submitCloseTime"
+            type="date"
+            placeholder="选择日期时间"
+          >
+          </el-date-picker>
+        </li>
+        <li class="submit">
+          <span style="fontweight: 600; fontsize: 0.9rem; marginright: 1vw"
+            >是否允许超时提交:</span
+          >
+          <el-radio v-model="allowSubmitClose" label="1">允许</el-radio>
+          <el-radio v-model="allowSubmitClose" label="2">不允许</el-radio>
+        </li>
+      </ul>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="publishHomeworkDialogVisible = false">取 消</el-button>
+          <el-button @click="publishHomeworkDialogVisible = false"
+            >取 消</el-button
+          >
           <el-button type="primary" @click="handlePublishHomework"
             >确 定</el-button
           >
@@ -106,7 +108,7 @@ import {
   ElRadio,
   ElDatePicker,
 } from "element-plus";
-import { deleteTaskById } from "../../utils/shared";
+import { deleteTaskById, editTaskById, storage } from "../../utils/shared";
 export interface File {
   addTime: string;
   fileName: string;
@@ -157,10 +159,15 @@ export default defineComponent({
     const courseName = ref<string>("");
     const submitCloseTime = ref<Date>();
     const allowSubmitClose = ref<"1" | "0">("1");
+    const adminId = storage.get("adminId");
     provide<Ref<Homework<File>[]>>("homeworkData", homeworkList);
     provide<(homeworkList: any[], taskId: number) => any[]>(
       "deleteHomeworkById",
       deleteTaskById
+    );
+    provide<(homeworkList: any[], content: any) => any[]>(
+      "editTaskById",
+      editTaskById
     );
     function handleToHomeworkDetail(id: number, files: File[]) {
       Router.push("/taskDetail/" + id);
@@ -176,14 +183,36 @@ export default defineComponent({
       //    taskName --> courseName
       //    effectiveTime --> submitCloseTime
       //    commitLate --> allowSubmitClose
+      homeworkList.value.push({
+        ...{
+          addTime: "2021-04-19 00:29:04",
+          adminId: "2019211300",
+          closeTime: "2021-04-29 00:00:00",
+          commitLate: 1,
+          courseId: 1,
+          filePath: null,
+          id: 20,
+          isClosed: 0,
+          taskFileVOList: [],
+          taskName: "hello",
+          weight: 1,
+        },
+        ...{
+          courseId: Number.parseInt(courseRadio.value),
+          adminId,
+          taskName: courseName.value,
+          effectiveTime: submitCloseTime!.value!.getTime().toString(),
+          commitLate: Number.parseInt(allowSubmitClose.value) as 0 | 1,
+        },
+      });
       const result = await publishHomework({
         courseId: Number.parseInt(courseRadio.value),
-        adminId: "jifdo",
+        adminId,
         taskName: courseName.value,
         effectiveTime: submitCloseTime!.value!.getTime().toString(),
         commitLate: Number.parseInt(allowSubmitClose.value) as 0 | 1,
-      });
-      if (result.status === 200) {
+      })as any
+      if (result.error_code === 200) {
         ElMessage({
           type: "success",
           message: "发布成功！",
@@ -196,8 +225,8 @@ export default defineComponent({
       }
     }
     onMounted(async () => {
-      const result = await getHomework();
-      homeworkList.value = computed(() => result.data.data.taskPOList).value;
+      const result = await getHomework(adminId);
+      homeworkList.value = computed(() => result.data.taskPOList).value;
     });
     return {
       homeworkList,
@@ -220,18 +249,18 @@ export default defineComponent({
 .check-homework {
   @media screen and (min-width: 800px) {
     .course-warp {
-    line-height: 3rem;
-    .name{
-      display: flex;
-      span{
-        display: block;
-        width: 3vw;
-      }
-      .input{
-        width: 20vw;
+      line-height: 3rem;
+      .name {
+        display: flex;
+        span {
+          display: block;
+          width: 3vw;
+        }
+        .input {
+          width: 20vw;
+        }
       }
     }
-  }
     .virtual-list {
       margin-left: -20vh;
     }

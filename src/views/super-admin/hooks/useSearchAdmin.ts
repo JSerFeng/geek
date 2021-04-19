@@ -11,8 +11,6 @@ interface SearchAdmin {
 export function useSearchAdmin ():SearchAdmin {
     const Store = useStore()
     let searchInput = ref<string>("");
-
-
     async function search (name:string) {
         await Store.dispatch(`${ActionTypes.addAdminListAsycn}`, {adminName:name});
     }

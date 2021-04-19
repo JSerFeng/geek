@@ -1,6 +1,5 @@
 import {  onMounted, ref,  computed } from 'vue'
 import { getPersonCount, getSignListList } from '../../../api/index'
-import '../../../mock/admin/index'
 
 interface Person {
     "userId": string,
@@ -18,12 +17,12 @@ export const useRequestCount = () => {
     const androidPerson = ref<number>(0)
     const signPersonList = ref<Person[]>([])
     onMounted(async () => {
-        frontPerson.value = (await getPersonCount(1)).data.data
-        endPerson.value = (await getPersonCount(2)).data.data    
-        pythonPerson.value = (await getPersonCount(3)).data.data    
-        androidPerson.value = (await getPersonCount(4)).data.data    
+        frontPerson.value = (await getPersonCount(1)).data
+        endPerson.value = (await getPersonCount(2)).data    
+        pythonPerson.value = (await getPersonCount(3)).data    
+        androidPerson.value = (await getPersonCount(4)).data 
         const result = (await getSignListList()).data
-        signPersonList.value = computed(()=>result.data.items).value
+        signPersonList.value = computed(()=>result.items).value
     })
     return {
         frontPerson,

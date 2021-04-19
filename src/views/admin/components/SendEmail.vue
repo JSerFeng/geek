@@ -67,6 +67,7 @@ import { defineComponent, onMounted, ref, reactive, computed, Ref } from "vue";
 import { getSignListList, reqAdminSendEmail } from "../../../api/index";
 import { ElCheckboxGroup, ElMessage } from "element-plus";
 import useSendCheck from "../hooks/useCheckSend";
+import { storage } from "../../../utils/shared";
 interface option {
   value: "1" | "2" | "3" | "4";
   label: "前端" | "后端" | "移动" | "Python";
@@ -90,6 +91,8 @@ export default defineComponent({
     const total = ref<number>(0);
     const studentList = ref<Student[]>([]);
     const checkList = ref<string[]>([]);
+    const adminId:string = storage.get('adminId')
+    console.log(adminId)
     const options = reactive<option[]>([
       {
         value: "1",
@@ -142,20 +145,20 @@ export default defineComponent({
         const result = await reqAdminSendEmail(
           title.value,
           emailContent.value,
-          "adminId",
+          adminId,
           courseId.value,
           checkList.value
         );
-        if (result.data.error_code === 200) {
+        if (result.error_code === 200) {
           ElMessage({
             type: "success",
-            message: result.data.message,
+            message: result.message,
           });
           dialogVisible.value = false
         } else {
           ElMessage({
             type: "error",
-            message: result.data.message,
+            message: result.message,
           });
         }
       } else {
@@ -167,8 +170,8 @@ export default defineComponent({
     }
     onMounted(async () => {
       const result = await getSignListList(1, 10);
-      studentList.value = computed(() => result.data.data.items).value;
-      total.value = result.data.data.total;
+      studentList.value = computed(() => result.data.items).value;
+      total.value = result.data.total;
     });
     return {
       emailContent,

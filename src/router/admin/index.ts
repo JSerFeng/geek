@@ -4,7 +4,7 @@ import CheckHomework from '../../views/check-homework/CheckHomework.vue'
 import HomeworkDetail  from '../../views/homework-detail/HomeworkDetail.vue'
 import HowmworkStatus from '../../views/homework-status/HomeworkStatus.vue'
 import StudentDetail from '../../views/student-detail/StudentDetail.vue'
-
+import CourseIntroduce from '../../views/course-introduce/CourseIntorduce.vue'
 export default [{
   path: '/admin',
   component: Admin,
@@ -24,4 +24,7 @@ export default [{
 },{
   path:'/stuDetail',
   component:StudentDetail
+},{
+  path:'/couInduce',
+  component:CourseIntroduce
 }]

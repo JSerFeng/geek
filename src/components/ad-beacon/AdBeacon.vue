@@ -19,9 +19,6 @@ export default defineComponent({
       reqire:true
     }
   },
-  setup(props) {
-    console.log(toRaw(props));
-  },
 });
 </script>
 <style lang="scss">
