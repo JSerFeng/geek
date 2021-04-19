@@ -40,6 +40,9 @@ export default [
     component: ArticleDetailVue
   }, {
     path: "/homework",
+    meta: {
+      auth: Auth.STUDENT
+    },
     component: HomeWorkVue
   }
 ]

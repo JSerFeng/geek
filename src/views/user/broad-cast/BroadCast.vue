@@ -1,9 +1,8 @@
 <template lang="">
-  <div class="wrap">
+  <div class="wrap"
+  v-loading="flag === Flags.Pending"
+  >
     <GSelect :items="courses" @change="changeCourse"/>
-    <div v-if="flag === Flags.Pending">
-      <GLoadingIcon/>
-    </div>
     <ul>
       <li @click="open(item.id)" class="flex ac jb p" v-for="(item) in broadCasts.items" :key="item.id">
         <div class="title big-font">
@@ -24,9 +23,13 @@
         </div>
       </div>
     </Modal>
-    <GButton @click="goNext(-1)" :disabled="!prevAvailable">上一页</GButton>
-    第{{ currIdx }} / {{ broadCasts.total }}页
-    <GButton @click="goNext(1)" :disabled="!nextAvailable">下一页</GButton>
+    <div class="flex jc ac">
+      <GButton @click="goNext(-1)" :disabled="!prevAvailable">上一页</GButton>
+      <span class="curr-page">
+         <span class="curr">{{ currIdx }}</span> / <span class="total">{{ broadCasts.total }}</span>
+      </span>
+      <GButton @click="goNext(1)" :disabled="!nextAvailable">下一页</GButton>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -113,10 +116,27 @@ const open = (id: number) => {
   height: 100%;
   padding: 10px;
   box-sizing: border-box;
+  background-color: #fff;
+  backdrop-filter: blur(20px);
 
   ul {
     li {
       padding: 5px 0;
+    }
+  }
+
+  .curr-page {
+    font-size: 14px;
+    color: rgb(175, 175, 175);
+    padding: 0.2em 0.5em;
+
+    .curr {
+      color: black;
+      font-size: 1.5em;
+    }
+    .total {
+      font-size: 0.9em;
+      color: rgb(175, 175, 175);
     }
   }
 }

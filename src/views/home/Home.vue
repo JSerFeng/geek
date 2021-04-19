@@ -2,58 +2,67 @@
   <div class="home_menu">
     <div class="menu">
       <div class="item leftTop">
-        <div class="weather">
-          <h3 class="temp">
-            {{ temp }}
-            <span class="iconfont icon-sheshidu01"></span>
-          </h3>
-        
-          <p class="msg">{{ msg }}</p>
-        </div>
+        <WeatherVue />
       </div>
       <div class="item midTop">
         <Login />
       </div>
       <div class="item rightTop">
-        <BroadCastVue />
+        <ArticleMenuVue />
       </div>
 
       <div class="item leftBottomTop leftBottom">
-        <div class="zhihu">
-        </div>
+        <a class="zhihu" target="_blank" href="https://www.zhihu.com/people/evanyou">
+          知乎
+        </a>
       </div>
       <div class="item leftBottomMid leftBottom">
-        <div class="github">
-          <ElButton type="success">知乎</ElButton>
-        </div>
+        <a class="github p" target="_blank" href="https://github.com/JSerFeng/geek.git">
+          <img src="../../assets/imgs/github.png" />
+        </a>
       </div>
       <div class="item leftBottomBottom leftBottom">
-        <div class="juejin">掘金</div>
+        <a class="juejin p bg-bottom bg-q" target="_blank" href="https://juejin.cn/">
+          <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjQ1cHgiIGhlaWdodD0iMzhweCIgdmlld0JveD0iMCAwIDQ1IDM4IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogICAgPHRpdGxlPkp1ZWppbjwvdGl0bGU+CiAgICA8ZGVzYz5KdWVqaW4uY248L2Rlc2M+CiAgICA8ZGVmcz48L2RlZnM+CiAgICA8ZyBpZD0iMC4xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iR3JvdXAtMTQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEuMDAwMDAwLCA1LjAwMDAwMCkiIGZpbGw9IiMwMDZDRkYiPgogICAgICAgICAgICA8cGF0aCBkPSJNMjEuMjkzNDMyOCwyLjU4MzEzMDQ5IEwxOC4wMTczOTg0LDAgTDE0LjU5NDYyNCwyLjY5ODg3ODAxIEwxNC40MTcyMDc3LDIuODQxODIzMDQgTDE4LjAxNzM5ODQsNS43MTI0MjQ4MyBMMjEuNjI4NjU3OCwyLjg0MTgyMzA0IEwyMS4yOTM0MzI4LDIuNTgzMTMwNDkgWiBNMzMuNzA3ODI4OSwxMi42MDA2Njc0IEwxOC4wMDc5MTA5LDI0Ljk4MDI3NiBMMi4zMTc0ODA0NCwxMi42MDgyNTc0IEwwLDE0LjQ2OTcwNTIgTDE4LjAwNzkxMDksMjguNjY5MDE2NyBMMzYuMDI1NjI1NiwxNC40NjIxMTUyIEwzMy43MDc4Mjg5LDEyLjYwMDY2NzQgWiBNMTguMDA3OTEwOSwxMy42MDUwNzc2IEw5LjQ2NDQxNTU0LDYuODY4NjM1MDUgTDcuMTQ2NjE4ODUsOC43MzAwODI5IEwxOC4wMDc5MTA5LDE3LjI5NDEzNDUgTDI4Ljg3ODM3NDIsOC43MjI0OTI5IEwyNi41NjA1Nzc1LDYuODYxMDQ1MDUgTDE4LjAwNzkxMDksMTMuNjA1MDc3NiBaIiBpZD0iRmlsbC0xLUNvcHkiPjwvcGF0aD4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg=="/>
+          掘金
+        </a>
       </div>
 
       <div class="item midBottomLeft">
-        <router-link to="/articleList">精选文章</router-link>
+        <BroadCastVue />
       </div>
       
       <div class="item midBottomRight">
-        <router-link to="/homework">作业</router-link>
+        <HomeworkMenuVue />
       </div>
 
-      <div class="item rightBottomTop rightBottom link-to">经管实验室系统</div>
-      <div class="item rightBottomMid rightBottom link-to">成员管理系统</div>
-      <div class="item rightBottomBottom rightBottom link-to">
-        <router-link to="/admin" >教务在线</router-link>
+      <div class="item rightBottomTop rightBottom link-to">
+        <a 
+        href="http://172.22.4.2" 
+        target="_blank" 
+        class=" flex jc ac"
+        style="width: 100%;height: 100%;background-color: #126e82;color: #fff;">
+          成员管理系统
+        </a>
+      </div>
+      <div class="item rightBottomMid rightBottom link-to">
+        <a 
+        href="http://172.22.4.2" 
+        target="_blank" 
+        class=" flex jc ac"
+        style="width: 100%;height: 100%;background-color: #51c4d3;color: #fff;">
+          经管实验室系统
+        </a>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup="">
-import { useWeather } from './hooks';
-import { ElButton } from 'element-plus'
 import Login from './components/Login.vue'
 import BroadCastVue from '../user/broad-cast/BroadCast.vue';
-
-const { temp, msg } = useWeather()
+import ArticleMenuVue from './components/ArticleMenu.vue';
+import HomeworkMenuVue from './components/HomeworkMenu.vue'
+import WeatherVue from './components/Weather.vue'
 </script>
 
 <style lang="scss" scoped>
@@ -73,7 +82,7 @@ const { temp, msg } = useWeather()
       "leftTop midTop midTop rightTop"
       "leftBottomTop midBottomLeft midBottomRight rightBottomTop"
       "leftBottomMid midBottomLeft midBottomRight rightBottomMid"
-      "leftBottomBottom midBottomLeft midBottomRight rightBottomBottom"
+      "leftBottomBottom midBottomLeft midBottomRight ."
       ". midBottomLeft . .";
     @media screen and (max-width: 768px) {
       grid-template-columns: 1fr 1fr;
@@ -90,65 +99,37 @@ const { temp, msg } = useWeather()
     place-content: center;
     grid-auto-flow: column;
     grid-gap: 5px;
-    .weather {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      padding: 10px;
-      box-sizing: border-box;
-      overflow: hidden;
-      &::before {
-        content: "";
-        z-index: -1;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgb(134, 134, 134);
-        filter: opacity(0.8);
-      }
-      .temp {
-        margin: 0;
-        padding: 0;
-        color: #fff;
-        font-size: 40px;
-        text-align: center;
-        position: relative;
-        z-index: 1;
 
-        .icon-sheshidu01 {
-          z-index: 0;
-          color: #fff;
-          left: 0;
-          top: 0;
-          color: #fff;
-        }
-      }
-      .msg {
-        color: #fff;
-        font-size: 12px;
-      }
-    }
     .zhihu,
     .juejin,
     .github {
+      position: relative;
       width: 100%;
+      overflow: hidden;
       height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
       color: #fff;
+
+      img {
+        width: 40px;
+      }
     }
     .zhihu {
       background-color: rgb(57, 162, 253);
     }
     .juejin {
-      background-color: rgb(57, 162, 253);
+      color: rgb(57, 162, 253);
+      background-color: #fff;
     }
     .github {
       font-size: 40px;
-      background-color: rgb(95, 95, 95);
+      background-color: rgb(201, 201, 201);
+      img {
+        background-color: rgb(255, 255, 255);
+        border-radius: 50%;
+      }
     }
     .link-to {
       background-color: rgb(94, 94, 94) !important;
@@ -156,7 +137,6 @@ const { temp, msg } = useWeather()
       font-size: 16px;
     }
     .item {
-      border-radius: 5px;
       transition: 0.2s all;
       background-color: rgb(231, 231, 231);
       width: 100%;

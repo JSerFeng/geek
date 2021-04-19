@@ -1,75 +1,56 @@
 <template lang="">
   <div class="select">
-    <div class="show-curr" @click="openOrClose">
-      {{ curr || placeholder || "选择" }}
-      <i class="el-icon-caret-bottom"></i>
-    </div>
-    <ul :class="{ 'show': show }" class="list">
-      <li v-for="(item, idx) in items" @click="change(idx)">{{ item.k }}</li>
-    </ul>
+    <el-select  
+    class="out-look"
+    v-model="selected"
+    :value="selected || placeholder || '选择'"
+    >
+      <el-option
+      class="item shade"
+      v-for="(item) in items"
+      :label="item.k"
+      :value="item.v"
+      >
+      {{ item.k }}
+      </el-option>
+    </el-select>
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, defineEmit, defineProps } from "@vue/runtime-core";
+import { defineEmit, defineProps, watch } from "@vue/runtime-core";
 import { ref } from 'vue'
+import { ElSelect, ElOption } from 'element-plus'
 
 const props = defineProps<{
   items: { k: string, v: any }[],
   placeholder?: string
 }>()
-const currIdx = ref(0)
-const curr = computed(() => props.items[currIdx.value]?.k)
-const show = ref(false)
 const emits = defineEmit(['change'])
 
-const openOrClose = () => {
-  show.value = !show.value
-}
+const selected = ref(props.items[0].v)
+watch(selected, val => {
+  emits("change", val)
+})
 
-const change = (idx: number) => {
-  emits("change", props.items[idx]?.v)
-  currIdx.value = idx
-  openOrClose()
-}
 </script>
 <style lang="scss" scoped>
 .select {
   position: relative;
   cursor: pointer;
   border-radius: 10%;
-  .show-curr {
-    padding: 5px;
-    transition: 0.2s;
-    border: 1px solid grey;
-    color: grey;
-    background-color: #fff;
-    &::hover {
-      filter: brightness(0.9);
-    }
-  }
 
-  > .list {
-    position: absolute;
-    overflow: hidden;
-    transition: 0.2s;
-    top: 0;
-    left: 0;
+  .out-look {
+    padding: 0.2em;
+    display: block;
     width: 100%;
-    height: 0;
-    background-color: #fff;
-    box-shadow: 0 0 50px rgb(204, 204, 204);
+    position: relative;
+    cursor: pointer;
+    color: #fff;
 
-    &.show {
-      height: fit-content;
-    }
-
-    li {
-      padding: 5px;
-      cursor: pointer;
-      &:hover {
-        background-color: rgb(87, 86, 86);
-        color: #fff;
-      }
+    .item {
+      display: block;
+      padding: 0.2em;
+      background-color: #fff;
     }
   }
 }

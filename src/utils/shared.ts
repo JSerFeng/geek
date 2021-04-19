@@ -1,5 +1,5 @@
 import { BehaviorSubject } from "rxjs"
-import { onMounted,toRaw, onUnmounted, Ref, ref, watchEffect, onBeforeUnmount, UnwrapRef } from "vue"
+import { onMounted, toRaw, onUnmounted, Ref, ref, watchEffect, onBeforeUnmount, UnwrapRef } from "vue"
 import { ElMessage, ElNotification } from 'element-plus'
 import { ErrorCode } from "../api/request"
 import { Response } from "../api"
@@ -31,6 +31,10 @@ export const storage = {
     return localStorage.setItem(key, val)
   },
   store(target: Record<any, any>) {
+    if (typeof target !== "object" || target === null) {
+      console.warn(target, "is not object")
+      return
+    }
     forEach(target, (k, v) => {
       if (v) {
         if (typeof v === 'object') {
@@ -407,10 +411,10 @@ export const showFileSize = (size: number = 0) => {
 }
 
 // 根据taskId删除对应homeworkList中的任务
-export function deleteTaskById (homeworkList:Array<any>, taskId:number) {
+export function deleteTaskById(homeworkList: Array<any>, taskId: number) {
   console.log(toRaw(homeworkList[0]))
-  homeworkList.forEach((item, index)=>{
-    if(item.id === taskId){
+  homeworkList.forEach((item, index) => {
+    if (item.id === taskId) {
       console.log(index, homeworkList[index].id, taskId);
       homeworkList.splice(index, 1)
     }
@@ -464,6 +468,7 @@ const DAY = HOUR * 24
 const MONTH = DAY * 30
 const YEAR = MONTH * 12
 export const getTime = (time: string | Date | number) => {
+  if (!time) return "未知时间"
   const now = Date.now()
   if (typeof time === "string") {
     time = Date.parse(time)
@@ -478,7 +483,7 @@ export const getTime = (time: string | Date | number) => {
   } else if (duration > DAY) {
     return Math.floor(duration / DAY) + "天前"
   } else if (duration > HOUR) {
-    return Math.floor(duration / MONTH) + "小时前"
+    return Math.floor(duration / HOUR) + "小时前"
   } else if (duration > MIN) {
     return Math.floor(duration / MIN) + "分钟前"
   } else {
@@ -506,4 +511,16 @@ export const remainTime = (time: string | Date | number) => {
   } else {
     return "立刻"
   }
+}
+
+export const backToTop = () => {
+  while (document.querySelector(".view-main")?.scrollTop) {
+  }
+  const view = document.querySelector(".view-main")!
+  const frame = () => {
+    view.scrollTop -= Math.ceil(view.scrollTop / 2)
+    if (view.scrollTop <= 0) return
+    requestAnimationFrame(frame)
+  }
+  frame()
 }

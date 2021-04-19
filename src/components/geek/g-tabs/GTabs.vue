@@ -34,6 +34,7 @@ const change = (i: number, v: any) => {
   currIdx.value = i
   emits("change", v)
 }
+change(currIdx.value, props.items[currIdx.value].v)
 </script>
 <style lang="scss" scoped>
 .item {

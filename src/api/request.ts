@@ -4,7 +4,8 @@ import { storage } from '../utils/shared'
 
 type PendingQueue = ((...args: any) => void)[]
 
-const BASE_URL = 'http://localhost:3000/api'
+// const BASE_URL = 'http://localhost:3000/api'
+const BASE_URL = 'http://120.79.138.134/'
 
 const CONNECT_LIMIT = 6 // 最大网络连接数
 const TIMEOUT = 1000 * 30 //最大请求到期时间 10s
@@ -42,6 +43,9 @@ const whiteList = new Set([
   '/token',
   '/course/queryCourse',
   '/article/queryArticles',
+  '/article/queryOneArticle',
+  '/announce/queryAnnounce',
+  '/announce/queryOneAnnounce'
 ])
 
 

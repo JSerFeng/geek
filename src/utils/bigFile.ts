@@ -212,29 +212,29 @@ const read2buf = (file: Blob) => new Promise((resolve, reject) => {
 }) as Promise<ArrayBuffer>
 
 
-  // 测试性能用
-  ; (function () {
-    const div = document.createElement("div");
-    const styles = {
-      position: "fixed",
-      width: "50px",
-      height: "50px",
-      backgroundColor: "black",
-      top: "0"
-    }
-    for (const k in styles) {
-      /**@ts-ignore */
-      div.style[k] = styles[k]
-    }
-    let deg = 0
-    const rotate = () => {
-      div.style.transform = `rotate(${deg}deg)`
-      deg += 10
-      setTimeout(rotate, 30)
-    }
-    rotate()
-    document.body.appendChild(div)
-  })()
+  // // 测试性能用
+  // ; (function () {
+  //   const div = document.createElement("div");
+  //   const styles = {
+  //     position: "fixed",
+  //     width: "50px",
+  //     height: "50px",
+  //     backgroundColor: "black",
+  //     top: "0"
+  //   }
+  //   for (const k in styles) {
+  //     /**@ts-ignore */
+  //     div.style[k] = styles[k]
+  //   }
+  //   let deg = 0
+  //   const rotate = () => {
+  //     div.style.transform = `rotate(${deg}deg)`
+  //     deg += 10
+  //     setTimeout(rotate, 30)
+  //   }
+  //   rotate()
+  //   document.body.appendChild(div)
+  // })()
 
 
 // 单线程时间切片算文件切片和hash模型

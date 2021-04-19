@@ -2,9 +2,9 @@
   <div class="view-main flex jb">
     <div class="user-left shade">
       <div ref="avatarArea">
-        <ElAvatar :src="userInfo.image" class="avatar p">
-         <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
-        </ElAvatar>
+        <ElImage :src="userInfo.image" class="avatar p" fit="cover">
+          <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+        </ElImage>
       </div>
       <p style="font-weight: 100;">
         你好, <span style="font-weight: 300;">{{ userInfo.userName }}</span>
@@ -30,7 +30,7 @@
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { ElAvatar } from 'element-plus'
+import { ElImage } from 'element-plus'
 import { useStore } from '../../../store';
 import type { User } from '../../../store/modules/user/state'
 import type { Response } from '../../../api'
@@ -92,6 +92,7 @@ const changeActiveTab = (idx: number) => {
     height: 15vw;
     display: block;
     margin: 0 auto 3vw;
+    border-radius: 50%;
   }
 }
 
@@ -111,7 +112,7 @@ const changeActiveTab = (idx: number) => {
       font-weight: 100;
       color: rgb(167, 167, 167);
       transform: translateX(100%);
-      transition: .2s;
+      transition: 0.2s;
 
       &.active {
         font-size: 20px;
@@ -121,7 +122,5 @@ const changeActiveTab = (idx: number) => {
       }
     }
   }
-
-
 }
 </style>

@@ -10,8 +10,15 @@ import SendAuthCode from '../../../../sendAuthCode/SendAuthCode.vue'
 import { inject } from 'vue'
 import { sendActiveMail } from '../../../../../api/user';
 import { ErrorCode } from '../../../../../api/request';
+import type { Ref } from 'vue'
 
-const sendEmail = sendActiveMail(1).bind(null, "123", "1114550440@qq.com")
+const userId = inject<Ref<string>>("userId")
+const email = inject<Ref<string>>("email")
+
+const send = sendActiveMail(1)
+const sendEmail = () => {
+  send(userId?.value || "", email?.value || "")
+}
 
 const next = inject<() => any>("push")
 const register = inject<(auth: string) => any>("register")

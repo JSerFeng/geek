@@ -4,7 +4,7 @@
     <GTabs class="shade" :items="items" @change="change"/>
     <CheckApiVue :status="flag" err-msg="网络错误"/>
     <ul class="list">
-      <li 
+      <li
       v-for="(item) in homeworkList" 
       :key="item.id"
       class="item"
@@ -49,7 +49,7 @@
 </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, reactive, watchEffect } from "vue";
+import { ref, computed, watchEffect } from "vue";
 import { GTabs, GButton } from "../../../components/geek";
 import { useStore } from "../../../store";
 import type { ApiHomeworkRecord } from "../../../api/homework"
@@ -95,8 +95,9 @@ const currCourseId = ref(-1)
 const homeworkList = ref<ApiHomeworkRecord["taskPOList"]>([])
 const flag = ref(Flags.Normal)
 const query = async () => {
+  if (currCourseId.value < 0) return
   flag.value = Flags.Pending
-  const res = await apiQueryHomework(currCourseId.value >= 0 ? currCourseId.value : null)
+  const res = await apiQueryHomework(currCourseId.value)
   if (res.error_code === ErrorCode.Success) {
     homeworkList.value = res.data.taskPOList
     flag.value = Flags.Success
@@ -112,14 +113,6 @@ watchEffect(() => {
 const change = (courseId: number) => {
   currCourseId.value = courseId
 }
-
-const currFile = reactive<{
-  fileName: string,
-  path: string | null
-}>({
-  fileName: "",
-  path: null
-})
 
 
 const currDetailInfo = ref<Item | null>(null)

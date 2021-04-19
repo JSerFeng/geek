@@ -119,6 +119,8 @@ provide("register", (authCode: string) => {
   }
 })
 
+provide("userId", toRef(regOpt, "userId"))
+provide("email", toRef(regOpt, "email"))
 //防止误刷新
 useRefreshCheck()
 </script>

@@ -1,4 +1,5 @@
 import { MutationTree } from "vuex";
+import { useRoute, useRouter } from "_vue-router@4.0.6@vue-router";
 import { Article, Articles } from "../../../api/article";
 import { currentAuth } from "../../../router";
 import { Auth } from '../../../router'
@@ -26,8 +27,6 @@ export type Reset = M<MutationTypes.Reset, {
 }>
 export type Intro = M<MutationTypes.ChangeIntro, string>
 
-
-
 export const enum MutationTypes {
   Login = "login",
   Reset = "Reset",
@@ -37,7 +36,7 @@ export const enum MutationTypes {
   DelCourse = "DelCourse",
   AddCount = "AddCount",
   ChangeIntro = "ChangeIntro",
-  ChangeAvatar = "ChangeIntro",
+  ChangeAvatar = "ChangeAvatar",
 }
 
 function updateUserInfo(state: State, info: State["userInfo"]) {
@@ -69,9 +68,12 @@ export const mutations: MutationTree<State> = {
     updateUserInfo(state, info)
   },
   [MutationTypes.Reset](state, { payload }: Data<Reset>) {
-    if (state.isLogin) {
-      const { allCourses } = payload
+    const { allCourses } = payload
+    if (Array.isArray(allCourses)) {
+      storage.set("allCourses", allCourses)
       state.allCourses = allCourses
+    } else {
+      console.warn(allCourses, "is not array")
     }
   },
   [MutationTypes.Logout](state) {

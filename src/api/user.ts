@@ -4,7 +4,6 @@ import { Response } from './index'
 import { Course, State } from "../store/modules/user/state";
 import { ROW } from "../config/config";
 
-
 export interface ApiAnnounce {
   "total": number,
   "currentPage": number,
@@ -38,7 +37,7 @@ export const logout = () => request.post('/user/logout', {
 
 export const login = async (userId: string, password: string) => request.post("/user/login", { userId, password }) as any as Response<{ user: State['userInfo'] }>
 
-export const apiUpdateUserInfo = () => request.post("/user/updateInfo") as Promise<Response<State['userInfo']>>
+export const apiUpdateUserInfo = () => request.get("/user/updateInfo") as Promise<Response<State['userInfo']>>
 
 export const checkEmail = async (mail: string) => request.post("/user/checkEmail", { mail }) as any as Response
 
@@ -59,11 +58,11 @@ export const register = (
   activeCode: string
 ) => request.post("/user/register", { userId, userName, password, mail, major, activeCode }) as Promise<Response>
 
-export const chooseCourse = (courseId: number) => request.post("/user/chooseCourse", { courseId }) as Promise<Response>
+export const chooseCourse = (userId: string, courseId: number) => request.post("/user/chooseCourse", { userId, courseId }) as Promise<Response>
 
-export const delCourse = (courseId: number) => request.post("/user/delCourse", { courseId }) as Promise<Response>
+export const delCourse = (userId: string, courseId: number) => request.post("/user/delCourse", { userId, courseId }) as Promise<Response>
 
-export const queryCourse = () => request.post("/course/queryCourse") as Promise<Response<Course[]>>
+export const queryCourse = () => request.get("/course/queryCourse") as Promise<Response<Course[]>>
 
 export const queryMyCourse = () => request.post("/course/queryMyCourse") as Promise<Response<Course[]>>
 
@@ -86,5 +85,5 @@ export const apiGetAnnounce = (page?: number, courseId?: number, rows?: number) 
   }
 }) as Promise<Response<ApiAnnounce>>
 
-export const apiGetAnnounceDetail = (id: number) => request.get(`/announce/queryAnnounce/${id}`) as Promise<Response<ApiAnnounceDetail>>
+export const apiGetAnnounceDetail = (id: number) => request.get(`/announce/queryOneAnnounce/${id}`) as Promise<Response<ApiAnnounceDetail>>
 
