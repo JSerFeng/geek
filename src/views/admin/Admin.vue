@@ -58,8 +58,9 @@
         </span>
       </template>
     </el-dialog>
-    <router-link to='/checkTask' ><AdBeacon title="作业管理" boxStyle='right'/></router-link>
+    <router-link to='/checkTask' ><AdBeacon  title="作业管理" boxStyle='right'/></router-link>
     <router-link to='/stuDetail' ><AdBeacon title="招生详情" boxStyle='left'/></router-link>
+    <router-link to='/articleManage' ><AdBeacon :top="23" title="文章管理" boxStyle='right'/></router-link>
   </div>
 </div>
 </template>

@@ -45,8 +45,7 @@ export const register = (
 ) => request.post("/user/register", { userId, userName, password, mail, major, activeCode })
 
 export const getPersonCount = async (courseId?: number) => {
-  const result =await request.get('/admin/countAllUser', {params:{courseId}})as any as Promise<Response>
-  console.log(result)
+  const result = await request.get('/admin/countAllUser', { params: { courseId } }) as any as Promise<Response>
   return result
 }
 
@@ -58,14 +57,14 @@ export const getSignListList = (
   const params = { page, rows, courseId }
   console.log(params)
   // 测试的时候把params加进去
-  return request.get('/admin/queryUsersInfo', {params}) as Promise<Response>
+  return request.get('/admin/queryUsersInfo', { params }) as Promise<Response>
 }
 
-export const getAdminHomework = (adminId:string) => request.get('/admin/queryMyTasks', {params:{adminId}}) as Promise<Response>
+export const getAdminHomework = (adminId: string) => request.get('/admin/queryMyTasks', { params: { adminId } }) as Promise<Response>
 
 export const getDetailHomeworkInfo = (taskId: number, page?: number, rows?: number) => {
   console.log(taskId, page, rows)
-  return request.get('/admin/queryOneTask',{params:{taskId, page, rows}}) as Promise<Response>
+  return request.get('/admin/queryOneTask', { params: { taskId, page, rows } }) as Promise<Response>
 }
 
 export const markScore = (taskId: number, score?: number) => {
@@ -82,7 +81,7 @@ export const getHomeworkStatus = (courseId?: number) => {
 }
 // 这里要传入taskId
 export const getHomeworkSubmitStatus = (taskId: number) => {
-  return request.get('/admin/countStudent', {params:{taskId}})
+  return request.get('/admin/countStudent', { params: { taskId } })
 }
 // 后面把params传进去
 export const publishHomework = (params?: PublishHomework): Promise<AxiosResponse<any>> => {
@@ -105,7 +104,7 @@ export const closeHomeworkSubmit = (params?: any) => {
 // 删除作业  后面把params传进去
 export const deleteHomework = (params?: { id: number, adminId: string }) => {
   console.log(params)
-  return request.post('/task/deleteTask',params)
+  return request.post('/task/deleteTask', params)
 }
 export const reqAdminSendEmail = (
   title: string,
@@ -137,8 +136,31 @@ export const adminDeleteTaskById = (taskId: any, adminId: string) => {
   adminId = adminId.toString()
   const id = parseInt(taskId)
   console.log(taskId, adminId)
-  
-  return request.post('/file/delTaskFile', {id, adminId}) as Promise<Response>
+
+  return request.post('/file/delTaskFile', { id, adminId }) as Promise<Response>
+}
+
+// 分页查看自己发布的文章
+export const getMyPublishedArticle = (page?: number, rows?: number, userId?: string) => {
+  const params = { page, rows, userId }
+  return request.get('/article/queryMyArticles', { params })
+}
+
+// 管理员发布文章
+export const publishArticle = (
+  userId: number,
+  articleType: string,
+  title: string,
+  courseId?: 1 | 2 | 3 | 4,
+  content?: string
+) => {
+  const payload = {userId, articleType, title, courseId, content}
+  return request.post('/article/addArticle',payload) as Promise<Response>
+}
+
+// 管理员删除自己的文章
+export const deleteMyArticle = (id:number, userId:string)=>{
+  return request.post('/article/deleteArticle', {id, userId}) as Promise<Response>
 }
 
 export const getAdminInfoList = (

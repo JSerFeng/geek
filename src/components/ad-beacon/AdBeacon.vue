@@ -1,12 +1,12 @@
 <template>
-  <div :class="boxStyle === 'right' ? 'beacon-right' : 'beacon-left'">
-    {{title}}
+  <div :style="top ? `top:${top}vh;` : 'top:5vh;'" :class="boxStyle === 'right' ? 'beacon-right' : 'beacon-left'">
+    {{ title }}
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, toRaw } from "vue";
-interface Props{
-    boxStyle: 'right' | 'left'
+interface Props {
+  boxStyle: "right" | "left";
 }
 export default defineComponent({
   props: {
@@ -14,10 +14,13 @@ export default defineComponent({
       type: String,
       require: true,
     },
-    title:{
-      type:String,
-      reqire:true
-    }
+    title: {
+      type: String,
+      reqire: true,
+    },
+    top: {
+      type: Number,
+    },
   },
 });
 </script>
@@ -45,17 +48,15 @@ export default defineComponent({
 .beacon-right {
   @include common;
   left: 87%;
-  top: 5vh;
   border-radius: 7vh 0 0 7vh;
-
 }
 @media screen and(max-width: 800px) {
   .beacon-right {
     @include common;
     left: 87%;
     top: 3vh;
-  border-radius: 7vh 0 0 7vh;
-overflow: hidden
+    border-radius: 7vh 0 0 7vh;
+    overflow: hidden;
   }
 }
 
@@ -66,5 +67,4 @@ overflow: hidden
   border-radius: 0vh 7vh 7vh 0vh;
   overflow: hidden;
 }
-
 </style>

@@ -463,7 +463,26 @@ export const nextTick = (fn?: () => void) => new Promise(resolve => {
   port2.postMessage(null)
 })
 
+export interface Article {
+  addTime: string;
+  adminId: null | string;
+  adminName: null | string;
+  articleFileVOList: null | any[];
+  articleType: string;
+  content: string;
+  courseName: null | string;
+  favoriteStatus: number;
+  id: number;
+  image: null | string;
+  likeCount: number;
+  likeStatus: number;
+  title: string;
+}
 
-export const getStudentScore = ()=>{
-  
+export function deleteArticleById (id:number, articleList:Article[]){
+  articleList.forEach((item, index)=>{
+    if(item.id === id){
+      articleList.splice(index, 1)
+    }
+  })
 }
