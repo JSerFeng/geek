@@ -37,8 +37,8 @@
           >
           <el-radio v-model="courseRadio" label="1">前端</el-radio>
           <el-radio v-model="courseRadio" label="2">后端</el-radio>
-          <el-radio v-model="courseRadio" label="3">移动</el-radio>
-          <el-radio v-model="courseRadio" label="4">Python</el-radio>
+          <el-radio v-model="courseRadio" label="3">Python</el-radio>
+          <el-radio v-model="courseRadio" label="4">移动</el-radio>
         </li>
         <li class="name">
           <span style="fontweight: 600; fontsize: 1rem; marginright: 6.5vw"
@@ -109,6 +109,7 @@ import {
   ElDatePicker,
 } from "element-plus";
 import { deleteTaskById, editTaskById, storage } from "../../utils/shared";
+import usePublishTask from "./hooks/usePublishTask";
 export interface File {
   addTime: string;
   fileName: string;
@@ -177,51 +178,53 @@ export default defineComponent({
       });
     }
     async function handlePublishHomework() {
-      publishHomeworkDialogVisible.value = false;
-      // 传入courseId -> courseRadio
-      //    adminId -> 登录之后获取
-      //    taskName --> courseName
-      //    effectiveTime --> submitCloseTime
-      //    commitLate --> allowSubmitClose
-      homeworkList.value.push({
-        ...{
-          addTime: "2021-04-19 00:29:04",
-          adminId: "2019211300",
-          closeTime: "2021-04-29 00:00:00",
-          commitLate: 1,
-          courseId: 1,
-          filePath: null,
-          id: 20,
-          isClosed: 0,
-          taskFileVOList: [],
-          taskName: "hello",
-          weight: 1,
-        },
-        ...{
+      if (usePublishTask(courseName.value, submitCloseTime.value!)) {
+        publishHomeworkDialogVisible.value = false;
+        // 传入courseId -> courseRadio
+        //    adminId -> 登录之后获取
+        //    taskName --> courseName
+        //    effectiveTime --> submitCloseTime
+        //    commitLate --> allowSubmitClose
+        homeworkList.value.push({
+          ...{
+            addTime: "2021-04-19 00:29:04",
+            adminId: "2019211300",
+            closeTime: "2021-04-29 00:00:00",
+            commitLate: 1,
+            courseId: 1,
+            filePath: null,
+            id: 20,
+            isClosed: 0,
+            taskFileVOList: [],
+            taskName: "hello",
+            weight: 1,
+          },
+          ...{
+            courseId: Number.parseInt(courseRadio.value),
+            adminId,
+            taskName: courseName.value,
+            effectiveTime: submitCloseTime!.value!.getTime().toString(),
+            commitLate: Number.parseInt(allowSubmitClose.value) as 0 | 1,
+          },
+        });
+        const result = (await publishHomework({
           courseId: Number.parseInt(courseRadio.value),
           adminId,
           taskName: courseName.value,
           effectiveTime: submitCloseTime!.value!.getTime().toString(),
           commitLate: Number.parseInt(allowSubmitClose.value) as 0 | 1,
-        },
-      });
-      const result = await publishHomework({
-        courseId: Number.parseInt(courseRadio.value),
-        adminId,
-        taskName: courseName.value,
-        effectiveTime: submitCloseTime!.value!.getTime().toString(),
-        commitLate: Number.parseInt(allowSubmitClose.value) as 0 | 1,
-      })as any
-      if (result.error_code === 200) {
-        ElMessage({
-          type: "success",
-          message: "发布成功！",
-        });
-      } else {
-        ElMessage({
-          type: "error",
-          message: "网络错误！",
-        });
+        })) as any;
+        if (result.error_code === 200) {
+          ElMessage({
+            type: "success",
+            message: "发布成功！",
+          });
+        } else {
+          ElMessage({
+            type: "error",
+            message: "网络错误！",
+          });
+        }
       }
     }
     onMounted(async () => {
@@ -330,6 +333,7 @@ export default defineComponent({
     width: 80%;
     margin: 5vh auto;
     text-align: center;
+    color: white;
   }
 }
 </style>

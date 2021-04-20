@@ -69,7 +69,7 @@ export const getDetailHomeworkInfo = (taskId: number, page?: number, rows?: numb
 
 export const markScore = (taskId: number, score?: number) => {
   // console.log(taskId, score)
-  return request.post('/admin/giveScore', { taskId, score })
+  return request.post('/admin/giveScore', { id:taskId, score }) as Promise<Response>
 }
 
 export const downloadAllStudentsFiles = (taskId: number) => {
@@ -135,8 +135,7 @@ export const adminTaskFileUpload = (taskId: number, file: Blob) => {
 export const adminDeleteTaskById = (taskId: any, adminId: string) => {
   adminId = adminId.toString()
   const id = parseInt(taskId)
-  console.log(taskId, adminId)
-
+  
   return request.post('/file/delTaskFile', { id, adminId }) as Promise<Response>
 }
 

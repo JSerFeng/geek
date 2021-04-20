@@ -38,8 +38,8 @@
         <span style="fontweight: 600; fontsize: 1rem; marginright: 5vw"
           >截止时间:</span
         >
-        <el-time-picker v-model="submitCloseTime" placeholder="任意时间点">
-        </el-time-picker>
+        <el-date-picker v-model="submitCloseTime" placeholder="任意时间点">
+        </el-date-picker>
       </li>
       <li class="submit">
         <span style="fontweight: 600; fontsize: 0.9rem; marginright: 1vw"
@@ -66,7 +66,6 @@ import {
   inject,
   Ref,
   ref,
-  toRaw,
 } from "vue";
 import { computedCourse, storage } from "../../../utils/shared";
 import { updateHomeworkk, deleteHomework } from "../../../api/index";
@@ -74,7 +73,7 @@ import {
   ElMessage,
   ElMessageBox,
   ElDialog,
-  ElTimePicker,
+  ElDatePicker,
   ElInput,
   ElRadio,
   ElButton,
@@ -114,7 +113,7 @@ export interface Info<F> {
 export default defineComponent({
   components: {
     ElDialog,
-    ElTimePicker,
+    ElDatePicker,
     ElInput,
     ElRadio,
     ElButton,
@@ -145,7 +144,7 @@ export default defineComponent({
     const edithHomeworkDialogVisible = ref<Boolean>(false);
     const courseRadio = ref<string>(info.courseId.toString());
     const courseName = ref<string>(info.taskName);
-    const submitCloseTime = ref<Date>();
+    const submitCloseTime = ref<Date>(new Date(props.item.closeTime));
     const allowSubmitClose = ref<"1" | "2">("1");
     const adminId:string = storage.get('adminId')
     function editOpen(e: MouseEvent) {
@@ -167,10 +166,11 @@ export default defineComponent({
         commitLate: Number.parseInt(allowSubmitClose.value) as 0 | 1,
         id:taskId.value
       };
-      console.log(new Date(content.effectiveTime).toLocaleString());
+      // console.log(new Date(content.effectiveTime).toLocaleString());
       //@ts-ignore
       //未知类型错误
       const result = await updateHomeworkk(content);
+      console.log(submitCloseTime)
       console.log(result)
       if (result.error_code === 200) {
         // effectiveTime: 2021/4/18下午5:18:04

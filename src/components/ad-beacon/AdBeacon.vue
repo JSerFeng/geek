@@ -26,7 +26,7 @@ export default defineComponent({
 </script>
 <style lang="scss">
 @mixin common {
-  width: 13%;
+  width: 10%;
   border: 1px solid black;
   height: 14vh;
   position: absolute;
@@ -47,7 +47,7 @@ export default defineComponent({
 }
 .beacon-right {
   @include common;
-  left: 87%;
+  left: 90%;
   border-radius: 7vh 0 0 7vh;
 }
 @media screen and(max-width: 800px) {
