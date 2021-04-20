@@ -1,5 +1,6 @@
 <template>
 <div class="admin">
+  <h1 class="admin-title">~ Hello {{adminName}} ^O^ ~</h1>
     <ul class="person-count">
     <li class="font">
       <img src="../../assets/imgs/1.jpg" alt="" />
@@ -72,12 +73,14 @@ import useDialog from "./hooks/useDialog";
 import SignPersonItem from './components/SignPerson.vue'
 import AdBeacon from '../../components/ad-beacon/AdBeacon.vue'
 import SendEmail from './components/SendEmail.vue'
+import { storage } from "../../utils/shared";
 export default defineComponent({
   setup() {
     const { frontPerson, endPerson, pythonPerson, androidPerson, signPersonList } = useRequestCount();
     const { dialogVisible, handleClose, root } = useDialog();
     const virtualList = ref<null | HTMLDivElement>(null)
     const sendEmailRef = ref<any>(null)
+    const adminName = storage.get('adminName')
     function handleSendEmail (){
       sendEmailRef.value.sendEmail(dialogVisible)
     }
@@ -92,7 +95,8 @@ export default defineComponent({
       signPersonList,
       virtualList,
       sendEmailRef,
-      handleSendEmail
+      handleSendEmail,
+      adminName
     };
   },
   components: {
@@ -113,10 +117,16 @@ export default defineComponent({
   margin: 0;
 }
 .admin{
+  .admin-title{
+    width: 70%;
+    text-align: center;
+    color: white;
+    margin: 5vh auto -3vh auto;
+  }
 .person-count {
   display: flex;
   background-color: rgba($color: #fff, $alpha: 0.7);
-  width: 95%;
+  width: 75%;
   border-radius: 50px;
   min-height: 550px;
   margin: 10vh auto;
@@ -132,7 +142,7 @@ export default defineComponent({
     transition: all 0.5s;
     width: 10vw;
     margin-top: 10vh;
-    margin-left: 10vw;
+    margin-left: 7vw;
     border-radius: 75px;
     &:hover {
       transform: scale(1.1);

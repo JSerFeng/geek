@@ -20,25 +20,25 @@ export default function useMarkScore ():MarkScore {
             // 如果确认打分
             const score = Number.parseInt(value) as number
             const result = await handleMarkScoreConfirm(taskId,score)
+            console.log(result)
             // 如果打分成功
-            if(result.status === 200){
+            if(result.error_code === 200){
               // 修改当前用户分数
               props.score = score
               ElMessage({
                 type:'success',
-                message:`${result.data.message}`
+                message:'打分成功！'
               })
             }else{
               ElMessage({
                 type:'error',
-                message:`${result.data.message}`
+                message:'网络错误！'
               })
             }
         })
       }
       // 打分
       async function handleMarkScoreConfirm (taskId:number, score?:number) {
-        console.log(score)
         const result = await markScore(taskId, score)
         return result
       }

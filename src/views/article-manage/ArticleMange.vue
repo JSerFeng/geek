@@ -1,9 +1,23 @@
 <template >
   <div class="article">
-      <h1 class="title">我的发布</h1>
-      <router-link to='/admin'><ad-beacon title="招生管理" boxStyle="left"/></router-link>
-      <router-link to='/admin'><ad-beacon title="所有发布" boxStyle="right"/></router-link>
-      <router-link to='/admin'><ad-beacon title="我的收藏" :top="23" boxStyle="right"/></router-link>
+    <h1 class="title">我的发布</h1>
+    <router-link to="/admin"
+      ><ad-beacon title="招生管理" boxStyle="left"
+    /></router-link>
+    <div class="function-box">
+      <router-link to="/myCollect"
+        ><AdCollect content="icon-shoucang" title="我的收藏"
+      /></router-link>
+      <router-link to="/articleList"
+        ><AdCollect content="icon-sousuokuang" title="所有文章"
+      /></router-link>
+    </div>
+    <!-- <router-link to="/admin"
+      ><ad-beacon title="所有发布" boxStyle="right"
+    /></router-link>
+    <router-link to="/admin"
+      ><ad-beacon title="我的收藏" :top="23" boxStyle="right"
+    /></router-link> -->
     <div class="article-manage">
       <ul class="article-list">
         <div class="header">
@@ -13,15 +27,23 @@
           <div>收藏</div>
           <div>操作</div>
         </div>
+        <!-- <router-link to="/article">
+          </router-link> -->
         <li :key="item" v-for="(item, index) in myArticles">
-          <div class="index">{{ index }}</div>
+          <div class="index">{{ index + 1 }}</div>
           <div class="content">
-            <div>{{ item.title }}</div>
-            <div>{{ item.likeCount }}</div>
-            <div>{{ item.likeStatus }}</div>
-            <div>{{ item.favoriteStatus }}</div>
+            <div @click="handleToArticleDetail(index)">{{ item.title }}</div>
+            <div @click="handleToArticleDetail(index)">
+              {{ item.likeCount }}
+            </div>
+            <div @click="handleToArticleDetail(index)">
+              {{ item.likeStatus }}
+            </div>
+            <div @click="handleToArticleDetail(index)">
+              {{ item.favoriteStatus }}
+            </div>
             <div
-              @click="handleDeleteArticle(item.id)"
+              @click="handleDeleteArticle(item.id, $event)"
               class="el-icon-delete"
             ></div>
           </div>
@@ -73,7 +95,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, readonly, ref } from "vue";
+import { defineComponent, onMounted, readonly, ref, toRaw } from "vue";
 import {
   getMyPublishedArticle,
   publishArticle,
@@ -81,7 +103,9 @@ import {
 } from "../../api/index";
 import { storage, deleteArticleById } from "../../utils/shared";
 import { ElDialog, ElMessage, ElMessageBox } from "element-plus";
-import AdBeacon from '../../components/ad-beacon/AdBeacon.vue'
+import AdBeacon from "../../components/ad-beacon/AdBeacon.vue";
+import AdCollect from "../../components/ad-collect/AdCollect.vue";
+import { useRouter } from "vue-router";
 export interface Article {
   addTime: string;
   adminId: null | string;
@@ -100,7 +124,8 @@ export interface Article {
 export default defineComponent({
   components: {
     ElDialog,
-    AdBeacon
+    AdBeacon,
+    AdCollect,
   },
   setup() {
     const adminId = storage.get("adminId");
@@ -111,6 +136,16 @@ export default defineComponent({
     const content = ref<string>("");
     const courseRadio = ref<1 | 2 | 3 | 4>(1);
     const articleId = ref<number>();
+    const Router = useRouter();
+    function handleToArticleDetail(index: number) {
+      const id = myArticles.value[index].id;
+      Router.push({
+        path: "/article",
+        query: {
+          id,
+        },
+      });
+    }
     async function handlePaginationChange(index: number) {
       const result = await getMyPublishedArticle(index, 10, adminId);
       myArticles.value = result.data.items;
@@ -154,7 +189,7 @@ export default defineComponent({
         });
       }
     }
-    async function handleDeleteArticle(id: number) {
+    async function handleDeleteArticle(id: number, e: MouseEvent) {
       const result = await deleteMyArticle(id, adminId);
       if (result.error_code === 200) {
         ElMessageBox.confirm("此操作将永久删除该文章, 是否继续?", "提示", {
@@ -206,6 +241,7 @@ export default defineComponent({
       total.value = result.data.total;
     });
     return {
+      handleToArticleDetail,
       myArticles,
       total,
       handlePaginationChange,
@@ -222,12 +258,24 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .article {
-    .title{
-        width: 400px;
-        margin: 20px auto -35px auto;
-        text-align: center;
-        color: white;
-    }
+  .function-box {
+    position: absolute;
+    left: 90%;
+    top: 13%;
+    height: 250px;
+    width: 100px;
+    background-color: #eef1ef;
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+  .title {
+    width: 400px;
+    margin: 20px auto -35px auto;
+    text-align: center;
+    color: white;
+  }
   .course-select {
     margin-top: 10px;
     margin-bottom: -10px;
@@ -240,7 +288,7 @@ export default defineComponent({
     width: 60%;
     margin: 10vh auto;
     border: 1px solid #cecece;
-    height: 600px;
+    height: 700px;
     box-shadow: -1px -1px 3px #ffffff, 1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
     border-radius: 50px;
     .article-pagination {
@@ -249,8 +297,14 @@ export default defineComponent({
       text-align: center;
       position: absolute;
       left: 50%;
-      top: 82%;
+      top: 700px;
       transform: translate(-50%);
+      .btn-prev {
+        background-color: rgba($color: #fff, $alpha: 0);
+      }
+      .btn-next {
+        background-color: rgba($color: #fff, $alpha: 0);
+      }
     }
     .article-list {
       width: 90%;
@@ -259,6 +313,7 @@ export default defineComponent({
       padding-top: 20px;
       .header {
         margin-left: 2.5vw;
+
         display: flex;
         margin-bottom: 10px;
         div {
@@ -268,10 +323,12 @@ export default defineComponent({
       }
       li {
         line-height: 40px;
-        background-color: #CECECE;
+        height: 40px;
+        background-color: rgba($color: #fff, $alpha: 0.5);
         border-radius: 10px;
         display: flex;
         margin-bottom: 10px;
+        cursor: pointer;
         &:hover {
           background-color: #dddddd;
         }
@@ -279,7 +336,7 @@ export default defineComponent({
           width: 40px;
           color: white;
           height: 40px;
-          background-color: #404f60;
+          background-color: #cecece;
           text-align: center;
           border-radius: 10px 0 0 10px;
         }
