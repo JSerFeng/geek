@@ -1,4 +1,3 @@
-import Home from '../views/home/Home.vue'
 import userRoutes from './user'
 import adminRoutes from './admin'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -34,7 +33,7 @@ const routes = [
   {
     path: "/home",
     exact: true,
-    component: Home
+    component: import('../views/home/Home.vue')
   },
   ...userRoutes,
   ...adminRoutes,

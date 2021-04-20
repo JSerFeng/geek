@@ -19,7 +19,9 @@
 
     <p class="task-name">
       提交记录
-      <i class="del-btn el-icon-close" @click="deleteRecord(info?.id || null)"></i>
+      <template v-if="userRecord">
+        <i class="del-btn el-icon-close" @click="deleteRecord(info?.id || null)"></i>
+      </template>
     </p>
     <div v-if="!userRecord">
       <span style="font-size: 14px;">无记录</span>
@@ -95,6 +97,7 @@ const userRecord = ref<null | {
   }[]
 }>(null)
 const query = async () => {
+  currFile.value = []
   if (!props.info) return
   const res = await apiQueryOneWork(props.userId, props.info.id)
   if (res.error_code !== ErrorCode.Success) {
@@ -103,8 +106,6 @@ const query = async () => {
   }
   userRecord.value = res.data as any
 }
-
-
 
 const deleteOneFile = async (id: number) => {
   if (!id) return
@@ -117,6 +118,7 @@ const deleteOneFile = async (id: number) => {
         if (res.error_code === ErrorCode.Success) {
           const idx = userRecord.value!.workFileVOList.findIndex(item => item.id === id)
           userRecord.value!.workFileVOList.splice(idx, 1)
+          query()
         }
       }
     }
@@ -134,6 +136,7 @@ const deleteRecord = (id: number | null) => {
         const res = await apiDeleteRecord(props.userId, id)
         if (res.error_code === ErrorCode.Success) {
           userRecord.value = null
+          query()
         }
       }
     }
@@ -188,6 +191,7 @@ const uploadImpl = async () => {
 
   try {
     await Promise.all(uploadRequests)
+    query()
   } catch (res) {
     /**不用做处理，提示报错在request.ts中 */
   }
@@ -195,7 +199,6 @@ const uploadImpl = async () => {
 
 watchEffect(() => {
   query()
-  currFile.value = []
 })
 </script>
 <style lang="scss" scoped>
