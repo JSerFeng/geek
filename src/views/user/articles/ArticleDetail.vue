@@ -1,17 +1,23 @@
 <template lang="">
   <div class="view-main">
     <div class="header">
-      <span class="time">{{ getTime(detail.addTime) }}</span>
+      <span class="time">
+        <el-breadcrumb>
+          <el-breadcrumb-item>
+            {{ detail.adminName }}
+          </el-breadcrumb-item>
+          <el-breadcrumb-item>
+            {{ getTime(detail.addTime) }}
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+      </span>
       <h1>{{ detail.title }}</h1>
     </div>
     <div class="content" v-html="content"></div>
     <div class="side" ref="side$">
       <div class="item author flex jc ac" >
-        <img class="ava" :src="detail.image" :alt="detail.adminName"/>
-        <div class='info shade'>
-          <img class="info-ava" :alt="detail.adminName"/>
-          <p class="name">{{ detail.adminName }}</p>
-        </div>
+        <el-image
+        class="ava" :src="detail.image" :alt="detail.adminName"/>
       </div>
       <div @click="markLike" class="item thumb flex jc ac" :class="{ 'active': detail.likeStatus }">
         <i class="iconfont icon-dianzan"></i>
@@ -39,6 +45,7 @@ import { backToTop, getTime } from '../../../utils/shared';
 import { apiChangeLikeStatus } from '../../../api/article';
 import { useStore } from '../../../store';
 import { render } from './render'
+import {ElImage, ElBreadcrumb, ElBreadcrumbItem} from 'element-plus'
 
 const store = useStore()
 const route = useRoute()

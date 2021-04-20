@@ -1,5 +1,5 @@
 <template lang="">
-  <div class="search flex shade">
+  <div class="search flex">
     <input class="input" :placeholder="defaultValue"/>
     <div class="iconfont icon-sousuokuang p" @click="search"></div>
   </div>
@@ -24,7 +24,7 @@ const search = () => {
 .search {
   border-radius: 15px;
   position: relative;
-  background-color: rgb(177, 179, 255);
+  background-color: rgb(209, 210, 248);
   padding: 5px 5%;
   box-sizing: border-box;
 

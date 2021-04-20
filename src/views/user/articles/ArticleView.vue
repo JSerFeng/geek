@@ -1,6 +1,6 @@
 <template lang="">
   <div class="view-main">
-    <div class="search-bar shade">
+    <div class="search-bar">
       <span class="placeholder">想看谁的文章?</span>
       <SearchInput @search="search"/>
     </div>
@@ -19,7 +19,9 @@
         {{ item.courseName }}
       </li>
     </ul>
-    <Article :adminName="adminName" :courseName="selectedCourseId" />
+    <div class="_article">
+      <Article :adminName="adminName" :courseName="selectedCourseId" />
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -50,8 +52,11 @@ const selectCourse = (id: string | null) => {
 
 </script>
 <style lang="scss" scoped>
+.view-main {
+  background-color: transparent;
+}
 .search-bar {
-  padding: 15px;
+  padding: 5% 10%;
   box-sizing: border-box;
   background-color: #fff;
 
@@ -77,5 +82,8 @@ const selectCourse = (id: string | null) => {
       color: blue;
     }
   }
+}
+._article {
+  margin: 3% 10%;
 }
 </style>
