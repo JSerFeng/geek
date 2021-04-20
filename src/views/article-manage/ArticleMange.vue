@@ -226,7 +226,7 @@ export default defineComponent({
         width: 400px;
         margin: 20px auto -35px auto;
         text-align: center;
-
+        color: white;
     }
   .course-select {
     margin-top: 10px;
@@ -236,6 +236,7 @@ export default defineComponent({
     margin-top: 10px;
   }
   .article-manage {
+    background-color: rgba($color: #fff, $alpha: 0.5);
     width: 60%;
     margin: 10vh auto;
     border: 1px solid #cecece;
@@ -267,7 +268,7 @@ export default defineComponent({
       }
       li {
         line-height: 40px;
-        background-color: #edeeee;
+        background-color: #CECECE;
         border-radius: 10px;
         display: flex;
         margin-bottom: 10px;

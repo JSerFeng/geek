@@ -1,24 +1,36 @@
 <template>
   <div class="article">
     <CheckApi :status="status" errMsg="网络错误"></CheckApi>
+
     <ul class="list shade">
       <li class="flex" v-for="(item, i) in data.items" :key="item.id">
         <div class="article-avatar">
           <ElAvatar :src="item.image" />
         </div>
         <div class="article-info">
-          <div class="name">{{ item.adminName }}</div>
-          <div class="title p" @click="findDetailArticle(item.id, item.articleType)">{{ item.title }}</div>
+          <div class="name">
+            <span>{{ item.adminName }}</span>
+            <LogoVue :course-name="item.courseName" />
+          </div>
+          <div class="title p" @click="findDetailArticle(item.id)">{{ item.title }}</div>
           <div class="footer flex">
             <!-- 点赞图标 -->
-            <div class="footer-icon" :class="{ active: item.likeStatus, }">
+            <div
+              @click="markLike(i, item.id)"
+              class="footer-icon"
+              :class="{ active: item.likeStatus, }"
+            >
               <span class="p">
                 <span class="icon-thumb-up iconfont"></span>
                 {{ item.likeCount }}
               </span>
             </div>
             <!-- 收藏图标 -->
-            <div class="footer-icon" :class="{ active: item.favoriteStatus }">
+            <div
+              @click="markFavorite(i, item.id)"
+              class="footer-icon"
+              :class="{ active: item.favoriteStatus }"
+            >
               <span class="p">
                 <span class="icon-shoucang iconfont"></span>
               </span>
@@ -27,28 +39,41 @@
         </div>
       </li>
     </ul>
+
+    <div class="pagination shade flex jc ac">
+      <GButton :disabled="page === 1" @click="goPrev">prev</GButton>
+      <div class="cur-page">{{ page }} / {{ data.totalPage }}</div>
+      <GButton :disabled="page === data.totalPage" @click="goNext">next</GButton>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { defineProps, ref, watchEffect } from "@vue/runtime-core";
-import { ElAvatar } from 'element-plus'
+import { defineProps, ref, watchEffect } from "vue";
+import { ElAvatar, ElNotification } from 'element-plus'
 import { Flags } from "../../utils/shared";
 import CheckApi from '../checkApi/CheckApi.vue'
-import { apiQueryArticles } from "../../api/article";
+import { apiChangeFavoriteState, apiQueryArticles, apiQueryFavorites } from "../../api/article";
 import type { Articles } from '../../api/article'
 import { useStore } from "../../store";
 import { ErrorCode } from "../../api/request";
+import { apiChangeLikeStatus } from '../../api/article'
 import { useRouter } from "vue-router";
+import LogoVue from "../Logo.vue";
+import { ROW } from "../../config/config";
+import { GButton } from '../geek'
+
 
 const store = useStore()
 const router = useRouter()
 
 const props = defineProps<{
   currentPage?: number,
-  courseName?: string,
-  adminName?: string,
   rows?: number
+  courseName?: string | null,
+  adminName?: string | null,
+  myFavorites?: boolean
 }>()
+
 
 const status = ref(Flags.Normal)
 const data = ref<Articles>({
@@ -59,13 +84,48 @@ const data = ref<Articles>({
   items: []
 })
 
+const page = ref(props.currentPage || 1)
+
+/**点击收藏 */
+const markFavorite = async (idx: number, articleId: number) => {
+  if (store.state.user.isLogin) {
+    const res = await apiChangeFavoriteState(store.state.user.userInfo.userId!, articleId)
+    if (res.error_code === ErrorCode.Success) {
+      data.value.items[idx].favoriteStatus ^= 1
+    }
+  } else {
+    ElNotification({
+      message: "请先登陆"
+    })
+  }
+}
+
+/**点击点赞 */
+const markLike = async (idx: number, articleId: number) => {
+  if (store.state.user.isLogin) {
+    const res = await apiChangeLikeStatus(store.state.user.userInfo.userId!, articleId)
+    if (res.error_code === ErrorCode.Success) {
+      data.value.items[idx].likeCount += (data.value.items[idx].likeStatus ^= 1) ? 1 : -1
+    }
+  } else {
+    ElNotification({
+      message: "请先登陆"
+    })
+  }
+}
+
+/**分页请求 */
 const query = async () => {
   status.value = Flags.Pending
-  const res = await apiQueryArticles(props.currentPage || 1, props.rows, {
-    userId: store.state.user.userInfo.userId,
-    courseName: props.courseName || null,
-    adminName: props.adminName || null
-  })
+  const res = props.myFavorites
+    ? await apiQueryFavorites(store.state.user.userInfo.userId!, page.value, props.rows || ROW)
+    : await apiQueryArticles(
+      page.value,
+      props.rows || ROW,
+      store.state.user.userInfo.userId,
+      props.courseName || null,
+      props.adminName || null
+    )
   if (res.error_code === ErrorCode.Success) {
     data.value = res.data
     status.value = Flags.Success
@@ -74,11 +134,30 @@ const query = async () => {
   }
 }
 
-query()
+watchEffect(() => {
+  query()
+})
 
-const findDetailArticle = (id: number, articleType: string) => {
-  router.push({path: "/article", query: {id, articleType}})
+const goNext = () => {
+  if (page.value + 1 <= data.value.total) {
+    page.value += 1
+    query()
+  }
 }
+
+const goPrev = () => {
+  if (page.value - 1 >= 1) {
+    page.value -= 1
+    query()
+  }
+}
+
+
+/**点击后跳转去详情页 */
+const findDetailArticle = (id: number) => {
+  router.push({ path: "/article", query: { id } })
+}
+
 </script>
 <style lang="scss" scoped>
 .article {
@@ -92,7 +171,7 @@ const findDetailArticle = (id: number, articleType: string) => {
     li {
       margin: 10px 0;
       padding: 15px;
-      transition: .2s;
+      transition: 0.2s;
       box-sizing: border-box;
       font-weight: 100;
 
@@ -141,6 +220,23 @@ const findDetailArticle = (id: number, articleType: string) => {
           }
         }
       }
+    }
+  }
+
+  .pagination {
+    background-color: #fff;
+    padding: 5px 15px;
+    box-sizing: border-box;
+
+    .disabled {
+      background-color: rgb(226, 226, 226);
+      color: rgb(189, 189, 189);
+    }
+
+    .cur-page {
+      padding: 10px 5px;
+      box-sizing: border-box;
+      font-size: 12px;
     }
   }
 }

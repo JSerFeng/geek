@@ -1,3 +1,5 @@
+import type { Article } from '../../../api/article'
+
 export type Course = {
   "id": number,
   "courseId": number,
@@ -23,8 +25,8 @@ export interface User {
   "mail": string,
   "password": string,
   "major": string,
-  "sex": null | string,
-  "image": null | string,
+  "sex": string,
+  "image": string,
   "introduce": string,
   "grade": string,
   "registerTime": string,
@@ -46,7 +48,8 @@ export interface SuperAdmin {
 export type State = {
   userInfo: Admin | SuperAdmin | User,
   isLogin: boolean,
-  allCourses: Course[]
+  allCourses: Course[],
+  favorites: Article[], //收藏文章集
 }
 
 export const state: State = {
@@ -57,8 +60,8 @@ export const state: State = {
     "mail": '',
     "password": '',
     "major": '',
-    "sex": null,
-    "image": null,
+    "sex": '',
+    "image": "",
     "introduce": '',
     "grade": '',
     "registerTime": '',
@@ -67,5 +70,6 @@ export const state: State = {
     "directionVOList": [],
   },
   isLogin: false,
-  allCourses: []
+  allCourses: [],
+  favorites: []
 }

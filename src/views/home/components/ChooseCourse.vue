@@ -74,10 +74,12 @@ const open = () => {
 const memo = ref(new Set<number>())
 watchEffect(() => {
   memo.value.clear()
-  for (const course of userInfo.directionVOList) {
-    memo.value.add(course.id)
+  
+  for (const course of (store.state.user.userInfo as User).directionVOList) {
+    memo.value.add(course.courseId)
   }
 })
+
 const unselectedList = computed(() => store.state.user.allCourses.filter(course => {
   return !memo.value.has(course.id)
 }))

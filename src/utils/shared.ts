@@ -1,9 +1,10 @@
 import { BehaviorSubject } from "rxjs"
-import { onMounted,toRaw, onUnmounted, Ref, ref, watchEffect, onBeforeUnmount, UnwrapRef } from "vue"
+import { onMounted, toRaw, onUnmounted, Ref, ref, watchEffect, onBeforeUnmount, UnwrapRef } from "vue"
 import { ElMessage, ElNotification } from 'element-plus'
 import { ErrorCode } from "../api/request"
 import { Response } from "../api"
 import "./shared.scss"
+import { useStore } from "../store"
 
 export enum Flags {
   Fail = 0,
@@ -30,6 +31,10 @@ export const storage = {
     return localStorage.setItem(key, val)
   },
   store(target: Record<any, any>) {
+    if (typeof target !== "object" || target === null) {
+      console.warn(target, "is not object")
+      return
+    }
     forEach(target, (k, v) => {
       if (v) {
         if (typeof v === 'object') {
@@ -248,17 +253,17 @@ const openFileSelection = (): Promise<File | null> => new Promise((resolve) => {
 
 export function useDropUpload(
   checkFile: (file: File) => ([boolean, string] | Promise<[boolean, string]>),
-  uploadFn: (file: File) => any
+  uploadFn?: (file: File) => any
 ): Ref<HTMLElement | undefined>;
 
 export function useDropUpload(
   checkFile: (file: File) => (boolean | Promise<boolean>),
-  uploadFn: (file: File) => any
+  uploadFn?: (file: File) => any
 ): Ref<HTMLElement | undefined>;
 
 export function useDropUpload(
   checkFile: (file: File) => (boolean | Promise<boolean> | [boolean, string] | Promise<[boolean, string]>),
-  uploadFn: (file: File) => any
+  uploadFn?: (file: File) => any
 ): Ref<HTMLElement | undefined> {
   checkFile = typeof checkFile === "function" ? checkFile : (file) => !!file
   const domRef = ref<HTMLElement>()
@@ -290,7 +295,7 @@ export function useDropUpload(
       })
       return
     }
-    uploadFn(file)
+    uploadFn && uploadFn(file)
     resetStyle()
   }
   const handleClick = async () => {
@@ -317,7 +322,7 @@ export function useDropUpload(
       })
       return
     }
-    uploadFn(file)
+    uploadFn && uploadFn(file)
   }
   const handleDragstart = (e: Event) => {
     e.preventDefault();
@@ -406,9 +411,9 @@ export const showFileSize = (size: number = 0) => {
 }
 
 // 根据taskId删除对应homeworkList中的任务
-export function deleteTaskById (homeworkList:Array<any>, taskId:number) {
-  homeworkList.forEach((item, index)=>{
-    if(item.id === taskId){
+export function deleteTaskById(homeworkList: Array<any>, taskId: number) {
+  homeworkList.forEach((item, index) => {
+    if (item.id === taskId) {
       console.log(index, homeworkList[index].id, taskId);
       homeworkList.splice(index, 1)
     }
@@ -416,9 +421,9 @@ export function deleteTaskById (homeworkList:Array<any>, taskId:number) {
   return homeworkList
 }
 
-export function editTaskById (homeworkList:Array<any>, content:any){
-  homeworkList.forEach(item=>{
-    if(item.id === content.id){
+export function editTaskById(homeworkList: Array<any>, content: any) {
+  homeworkList.forEach(item => {
+    if (item.id === content.id) {
       item.taskName = content.taskName
       item.commitLate = content.commitLate
       item.courseId = content.courseId
@@ -484,5 +489,77 @@ export function deleteArticleById (id:number, articleList:Article[]){
     if(item.id === id){
       articleList.splice(index, 1)
     }
-  })
+  })}
+export const checkIfLogin = (cb: (isLogin: boolean) => void) => {
+  const store = useStore()
+  cb(store.state.user.isLogin)
+}
+
+
+const SEC = 1000
+const MIN = SEC * 60
+const HOUR = MIN * 60
+const DAY = HOUR * 24
+const MONTH = DAY * 30
+const YEAR = MONTH * 12
+export const getTime = (time: string | Date | number) => {
+  if (!time) return "未知时间"
+  const now = Date.now()
+  if (typeof time === "string") {
+    time = Date.parse(time)
+  } else if (typeof time === "object") {
+    time = time.getTime()
+  }
+  const duration = now - time
+  if (duration > YEAR) {
+    return Math.floor(duration / YEAR) + "年前"
+  } else if (duration > MONTH) {
+    return Math.floor(duration / MONTH) + "月前"
+  } else if (duration > DAY) {
+    return Math.floor(duration / DAY) + "天前"
+  } else if (duration > HOUR) {
+    return Math.floor(duration / HOUR) + "小时前"
+  } else if (duration > MIN) {
+    return Math.floor(duration / MIN) + "分钟前"
+  } else {
+    return "刚刚"
+  }
+}
+export const remainTime = (time: string | Date | number) => {
+  const now = Date.now()
+  if (typeof time === "string") {
+    time = Date.parse(time)
+  } else if (typeof time === "object") {
+    time = time.getTime()
+  }
+  const duration = time - now
+  if (duration > YEAR) {
+    return Math.floor(duration / YEAR) + "年后"
+  } else if (duration > MONTH) {
+    return Math.floor(duration / MONTH) + "月后"
+  } else if (duration > DAY) {
+    return Math.floor(duration / DAY) + "天后"
+  } else if (duration > HOUR) {
+    return Math.floor(duration / MONTH) + "小时后"
+  } else if (duration > MIN) {
+    return Math.floor(duration / MIN) + "分钟后"
+  } else {
+    return "立刻"
+  }
+}
+
+export const backToTop = () => {
+  while (document.querySelector(".view-main")?.scrollTop) {
+  }
+  const view = document.querySelector(".view-main")!
+  const frame = () => {
+    view.scrollTop -= Math.ceil(view.scrollTop / 2)
+    if (view.scrollTop <= 0) return
+    requestAnimationFrame(frame)
+  }
+  frame()
+}
+
+export const getStudentScore = () => {
+
 }

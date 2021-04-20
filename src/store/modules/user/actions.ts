@@ -6,12 +6,13 @@ import {
   MutationTypes,
   Login as MLogin,
   Reset,
-  UpdateInfo
+  UpdateInfo,
 } from './mutations'
 import { ErrorCode } from "../../../api/request";
-import { logout, login, queryMyCourse, chooseCourse, delCourse, queryCourse, changeUserIntro, apiUpdateUserInfo } from "../../../api/user";
+import { logout, login, chooseCourse, delCourse, queryCourse, changeUserIntro, apiUpdateUserInfo } from "../../../api/user";
 import { apiUploadAvatar } from "../../../api/file";
 import { storage } from "../../../utils/shared";
+import { ROW } from "../../../config/config";
 
 type A<T, P> = {
   type: T,
@@ -21,7 +22,6 @@ type Data<Act extends { payload: any }> = {
   payload: Pick<Act, "payload">["payload"]
 }
 
-
 export enum ActionTypes {
   Login = "login-user",
   Logout = "logout",
@@ -30,7 +30,7 @@ export enum ActionTypes {
   ChooseCourse = "ChooseCourse",
   DelCourse = "DelCourse",
   ChangeIntro = "ChangeIntro",
-  ChangeAvatar = "ChangeIntro",
+  ChangeAvatar = "ChangeAvatar",
 }
 
 type Login = A<ActionTypes.Login, {
@@ -44,16 +44,20 @@ export type Actions =
 export const actions: ActionTree<State, RootState> = {
   async [ActionTypes.UpdateUserInfo]({ state, commit }) {
     let token = storage.get("token")
+
     if (!token) {
-      return
+      return ErrorCode.No_Token
     }
     const res = await apiUpdateUserInfo()
+
     if (res.error_code === ErrorCode.Success) {
       commit<UpdateInfo>({
         type: MutationTypes.UpdateUserInfo,
         payload: res.data
       })
+      return res.data.type
     }
+    return ErrorCode.Connect_Fail
   },
   async [ActionTypes.Login]({ commit }, { payload }: Data<Login>) {
     const { userId, password } = payload
@@ -78,30 +82,42 @@ export const actions: ActionTree<State, RootState> = {
     }
   },
   async [ActionTypes.Reset]({ commit, state }) {
+    let allCourses
+    if (allCourses = storage.get("allCourses")) {
+      commit({
+        type: MutationTypes.Reset,
+        payload: {
+          allCourses: allCourses
+        }
+      })
+    }
     if (state.isLogin) {
       /**每次登陆都请求一下某些可能会变的数据，重新存储下来 */
-      const allCourses = await queryCourse()
-      if (allCourses.error_code !== ErrorCode.Success) {
-        allCourses.data = []
+      const res = await queryCourse()
+
+      if (res.error_code !== ErrorCode.Success) {
+        res.data = []
       }
       commit<Reset>({
         type: MutationTypes.Reset,
         payload: {
-          allCourses: allCourses.data
+          allCourses: res.data
         }
       })
     }
   },
   async [ActionTypes.ChooseCourse]({ commit, state }, courseId: number) {
-    const res = await chooseCourse(courseId)
+    if (!state.userInfo.userId) return
+    const res = await chooseCourse(state.userInfo.userId, courseId)
     if (res.error_code !== ErrorCode.Success) {
       return res
     }
     const addCourse = state.allCourses.find(item => item.courseId === courseId)
     commit({ type: MutationTypes.ChooseCourse, payload: addCourse })
   },
-  async [ActionTypes.DelCourse]({ commit }, courseId: number) {
-    const res = await delCourse(courseId)
+  async [ActionTypes.DelCourse]({ state, commit }, courseId: number) {
+    if (!state.userInfo.userId) return
+    const res = await delCourse(state.userInfo.userId, courseId)
     if (res.error_code !== ErrorCode.Success) {
       return res
     }
@@ -129,5 +145,5 @@ export const actions: ActionTree<State, RootState> = {
         payload: file
       })
     }
-  }
+  },
 }

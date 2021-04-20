@@ -1,4 +1,6 @@
 import { MutationTree } from "vuex";
+import { useRoute, useRouter } from "_vue-router@4.0.6@vue-router";
+import { Article, Articles } from "../../../api/article";
 import { currentAuth } from "../../../router";
 import { Auth } from '../../../router'
 import { storage } from "../../../utils/shared";
@@ -8,7 +10,7 @@ type Mutation = { "type": MutationTypes, "payload": any }
 
 type M<T, P> = {
   type: T,
-  payload: P
+  payload: P,
 }
 
 export type Data<Mut extends Mutation> = Pick<Mut, "payload">
@@ -34,7 +36,7 @@ export const enum MutationTypes {
   DelCourse = "DelCourse",
   AddCount = "AddCount",
   ChangeIntro = "ChangeIntro",
-  ChangeAvatar = "ChangeIntro"
+  ChangeAvatar = "ChangeAvatar",
 }
 
 function updateUserInfo(state: State, info: State["userInfo"]) {
@@ -66,9 +68,12 @@ export const mutations: MutationTree<State> = {
     updateUserInfo(state, info)
   },
   [MutationTypes.Reset](state, { payload }: Data<Reset>) {
-    if (state.isLogin) {
-      const { allCourses } = payload
+    const { allCourses } = payload
+    if (Array.isArray(allCourses)) {
+      storage.set("allCourses", allCourses)
       state.allCourses = allCourses
+    } else {
+      console.warn(allCourses, "is not array")
     }
   },
   [MutationTypes.Logout](state) {
@@ -88,10 +93,9 @@ export const mutations: MutationTree<State> = {
   [MutationTypes.ChangeIntro](state, { payload }: Data<Intro>) {
     (state.userInfo as User).introduce = payload
   },
-  [MutationTypes.ChangeAvatar](state, { payload: file }: Data<M<MutationTypes.ChangeAvatar, File>>) {
+  [MutationTypes.ChangeAvatar](state, { payload: file }: { payload: Blob }) {
     /**@TODO */
     const url = URL.createObjectURL(file);
     (state.userInfo as User).image = url
-    // URL.revokeObjectURL(url)
-  }
+  },
 };

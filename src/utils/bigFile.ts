@@ -1,16 +1,12 @@
-import { ElNotification } from 'element-plus'
-import { createMD5 } from 'hash-wasm'
-import { IHasher } from 'hash-wasm/dist/lib/WASMInterface'
 import { ref, Ref } from 'vue'
 import { apiBigFileCheck, apiBigFileMerge, apiBigFileUpload } from '../api/file'
 import request, { ErrorCode, providePort } from '../api/request'
-import { Flags, isUndef, nextTick } from './shared'
+import { CHUNK_SIZE } from '../config/config'
+import { isUndef, nextTick } from './shared'
 import FileWorker from './worker2hash?worker'
-
 
 const worker = new FileWorker()
 
-const CHUNK_SIZE = 1024 * 1024 * 1
 const FRAME_TIME = 12 /**一帧16毫秒，12毫秒是算切片的最大耗时，留4毫秒让js去跑其它的逻辑 */
 const CONCURRENT_LIMIT = 4 /**并发请求数 */
 
@@ -112,6 +108,8 @@ export const useBigFileUpload = (courseId: number, id: number): [
 
     _upload = upload
     async function upload() {
+      console.log("slice total:", total);
+
       status.value = UploadMsg.Upload
 
       /**检查有没有上传过，如果已经上传过，data是当前须要上传的分片下标 */
@@ -123,7 +121,7 @@ export const useBigFileUpload = (courseId: number, id: number): [
             res.data as number / (chunks?.length || 0),
             progressUpload.value
           )
-          nextPosition = res.data
+          nextPosition = res.data - 1
         } else {
           /**已经全部上传 */
           progressUpload.value = 1
@@ -146,6 +144,7 @@ export const useBigFileUpload = (courseId: number, id: number): [
         nextRound = resolve
       })
 
+      let progressArray = new Array(CONCURRENT_LIMIT).fill(0)
       while (nextPosition < len) {
         await nextTick()
         if (pause) {
@@ -153,6 +152,7 @@ export const useBigFileUpload = (courseId: number, id: number): [
         }
         if (requestNum >= CONCURRENT_LIMIT) {
           await block()
+          progressArray = new Array(CONCURRENT_LIMIT).fill(0)
         }
         requestNum++
         apiBigFileUpload(
@@ -164,10 +164,14 @@ export const useBigFileUpload = (courseId: number, id: number): [
           courseId,
           hash,
           (e) => {
-            progressUpload.value += e.loaded / e.total / total
+            const target = e.loaded / e.total
+            let idx = nextPosition % 4
+            progressUpload.value += (target - progressArray[idx]) / total
+            progressArray[idx] = target
           }
         ).then(res => {
           if (res.error_code !== ErrorCode.Success) {
+            progressUpload.value += 1 / total
             status.value = UploadMsg.NetError
             pauseFn()
           }
@@ -208,28 +212,29 @@ const read2buf = (file: Blob) => new Promise((resolve, reject) => {
 }) as Promise<ArrayBuffer>
 
 
-  ; (function () {
-    const div = document.createElement("div");
-    const styles = {
-      position: "fixed",
-      width: "50px",
-      height: "50px",
-      backgroundColor: "black",
-      top: "0"
-    }
-    for (const k in styles) {
-      /**@ts-ignore */
-      div.style[k] = styles[k]
-    }
-    let deg = 0
-    const rotate = () => {
-      div.style.transform = `rotate(${deg}deg)`
-      deg += 10
-      setTimeout(rotate, 30)
-    }
-    rotate()
-    document.body.appendChild(div)
-  })()
+  // // 测试性能用
+  // ; (function () {
+  //   const div = document.createElement("div");
+  //   const styles = {
+  //     position: "fixed",
+  //     width: "50px",
+  //     height: "50px",
+  //     backgroundColor: "black",
+  //     top: "0"
+  //   }
+  //   for (const k in styles) {
+  //     /**@ts-ignore */
+  //     div.style[k] = styles[k]
+  //   }
+  //   let deg = 0
+  //   const rotate = () => {
+  //     div.style.transform = `rotate(${deg}deg)`
+  //     deg += 10
+  //     setTimeout(rotate, 30)
+  //   }
+  //   rotate()
+  //   document.body.appendChild(div)
+  // })()
 
 
 // 单线程时间切片算文件切片和hash模型

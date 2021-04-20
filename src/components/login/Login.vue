@@ -1,19 +1,17 @@
 <template lang="">
-  <div class="main">
-    <div class="login-modal">
-      <div class="router-link">
-        <RouterLink to="/login/" exact-active-class="active">登陆</RouterLink>
-        <RouterLink to="/login/register" exact-active-class="active">注册</RouterLink>
-      </div>
-      <div class="model">
-        <router-view v-slot="{ Component }">
-          <transition mode="out-in">
-            <keep-alive>
-              <component :is="Component"/>
-            </keep-alive>
-          </transition>
-        </router-view>
-      </div>
+  <div class="login-modal">
+    <div class="router-link">
+      <RouterLink to="/login/" exact-active-class="active">登陆</RouterLink>
+      <RouterLink to="/login/register" exact-active-class="active">注册</RouterLink>
+    </div>
+    <div class="model">
+      <router-view v-slot="{ Component }">
+        <transition mode="out-in">
+          <keep-alive>
+            <component :is="Component"/>
+          </keep-alive>
+        </transition>
+      </router-view>
     </div>
   </div>
 </template>
@@ -23,19 +21,16 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <style lang="scss" scoped>
-.main {
+.login-modal {
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  margin: 0 auto;
   padding: 15px;
+  background-color: #fff;
   box-sizing: border-box;
-
-  .login-modal {
-    width: 50%;
-    margin: 0 auto;
-  }
   .router-link {
     position: relative;
+    box-sizing: border-box;
     padding: 40px;
     a {
       position: absolute;
@@ -53,11 +48,12 @@ import { RouterLink, RouterView } from 'vue-router'
       transform: translate(0, -50%);
     }
   }
+  .model {
+    width: 70%;
+    margin: 0 auto;
+  }
 }
-.model {
-  width: 100%;
-  height: 100%;
-}
+
 .v-enter-active {
   transition: 0.2s;
   transform: translateX(0);

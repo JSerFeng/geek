@@ -4,7 +4,6 @@ import { RootState } from '../../index'
 import { getAdminInfoList } from '../../../api/index'
 import { MutationTypes } from './mutations'
 import { ElMessage } from 'element-plus'
-import '../../../mock/super-admin/index'
 interface Params {
   page?: number,
   rows?: number,

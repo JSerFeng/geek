@@ -2,9 +2,9 @@
   <div class="view-main flex jb">
     <div class="user-left shade">
       <div ref="avatarArea">
-        <ElAvatar :src="userInfo.image" class="avatar p">
-         <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
-        </ElAvatar>
+        <ElImage :src="userInfo.image" class="avatar p" fit="cover">
+          <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+        </ElImage>
       </div>
       <p style="font-weight: 100;">
         你好, <span style="font-weight: 300;">{{ userInfo.userName }}</span>
@@ -21,12 +21,16 @@
       </div>
     </div>
     <div class="user-right">
+      <div class="header flex ac">
+        收藏文章
+      </div>
+      <ArticlesVue :my-favorites="true"/>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { ElAvatar } from 'element-plus'
+import { ElImage } from 'element-plus'
 import { useStore } from '../../../store';
 import type { User } from '../../../store/modules/user/state'
 import type { Response } from '../../../api'
@@ -37,6 +41,8 @@ import { GButton, GInput } from '../../../components/geek'
 import { useImgUpload } from './hook';
 import Modal from '../../../components/modal/Modal.vue'
 import ChooseCourse from '../../home/components/ChooseCourse.vue'
+import ArticlesVue from '../../../components/articles/Articles.vue';
+
 
 const store = useStore()
 const userInfo = store.state.user.userInfo as unknown as User
@@ -62,6 +68,11 @@ const changeIntroduction = async () => {
 
 /**头像上传功能 */
 const avatarArea = useImgUpload()
+
+const activeTab = ref(0)
+const changeActiveTab = (idx: number) => {
+  activeTab.value = idx
+}
 </script>
 <style lang="scss" scoped>
 .user-left {
@@ -81,11 +92,35 @@ const avatarArea = useImgUpload()
     height: 15vw;
     display: block;
     margin: 0 auto 3vw;
+    border-radius: 50%;
   }
 }
 
 .user-right {
   width: 77%;
   background-color: #fff;
+
+  .header {
+    position: relative;
+    padding: 15px;
+    overflow: hidden;
+    height: 30px;
+    .tab {
+      width: 20%;
+      position: absolute;
+      font-size: 14px;
+      font-weight: 100;
+      color: rgb(167, 167, 167);
+      transform: translateX(100%);
+      transition: 0.2s;
+
+      &.active {
+        font-size: 20px;
+        font-weight: 500;
+        color: #000;
+        transform: translateX(0);
+      }
+    }
+  }
 }
 </style>

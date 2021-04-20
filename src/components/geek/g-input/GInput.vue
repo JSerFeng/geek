@@ -1,6 +1,12 @@
 <template>
   <div class="g-input">
-    <input class="props.class" @input="onInput" :value="props.modelValue" ref="input" />
+    <input
+      :type="type || 'text'"
+      class="props.class"
+      @input="onInput"
+      :value="props.modelValue"
+      ref="input"
+    />
     <span class="placeholder" ref="placeholder">{{ props.placeholder }}</span>
   </div>
 </template>
@@ -12,6 +18,7 @@ const props = defineProps<{
   value?: string,
   modelValue?: string
   placeholder?: string,
+  type?: string
 }>()
 const emits = defineEmit(["update:modelValue"])
 const onInput = (e: Event) => {

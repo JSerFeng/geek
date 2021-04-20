@@ -13,6 +13,12 @@
     </div>
   </teleport>
 </template>
+<script lang="ts">
+export interface ModalMethods {
+  close(): void
+  open(): void
+}
+</script>
 <script lang="ts" setup>
 import { defineProps, useContext, ref } from 'vue';
 const { expose } = useContext()
@@ -42,12 +48,7 @@ expose({
   open
 })
 </script>
-<script lang="ts">
-export interface ModalMethods {
-  close(): void
-  open(): void
-}
-</script>
+
 <style lang="scss" scoped>
 .fy-mask {
   cursor: pointer;
