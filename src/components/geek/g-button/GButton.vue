@@ -60,6 +60,10 @@ const handler = (e: Event) => {
   &:active {
     transform: scale(1) !important;
   }
+
+  &:hover.broke::after {
+    animation: none !important;
+  }
 }
 .g-button.reverse {
   color: black;

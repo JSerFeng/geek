@@ -41,7 +41,7 @@
         href="http://172.22.4.2" 
         target="_blank" 
         class=" flex jc ac"
-        style="width: 100%;height: 100%;background-color: #126e82;color: #fff;">
+        style="width: 100%;height: 100%;background-color: #31326f;color: #fff;">
           成员管理系统
         </a>
       </div>
@@ -50,7 +50,7 @@
         href="http://172.22.4.2" 
         target="_blank" 
         class=" flex jc ac"
-        style="width: 100%;height: 100%;background-color: #51c4d3;color: #fff;">
+        style="width: 100%;height: 100%;background-color: #51adcf;color: #fff;">
           经管实验室系统
         </a>
       </div>

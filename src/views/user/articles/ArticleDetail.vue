@@ -21,7 +21,7 @@
         <i class="iconfont icon-shoucang"></i>
       </div>
       <div class="item">
-        <GButton class="to-top flex jc ac" type="broke" @click="backToTop()">
+        <GButton class="to-top flex jc ac" type="broke" @click="backToTop">
           <i class="el-icon-caret-top"></i>
         </GButton>
       </div>

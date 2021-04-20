@@ -8,7 +8,7 @@
         </div>
         <div class="intro">
           <h3 class="username">
-            <router-link class="username" to="/userinfo">{{ userInfo.userName }}</router-link>
+            <router-link class="username" to="/userinfo">{{ name }}</router-link>
           </h3>
           <p class="introduction" @click="openSetIntro">{{ userInfo.introduce }}</p>
           <Modal ref="modalCtx" width="70%">
@@ -28,7 +28,7 @@
             </div>
           </div>
           <template #reference>
-            <div>
+            <div style="height: fit-content;">
               <ElTooltip content="退出登陆">
                 <i class="logout el-icon-close" @click="logoutVisible = true"></i>
               </ElTooltip>

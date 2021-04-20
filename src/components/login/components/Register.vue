@@ -20,13 +20,13 @@
     </div>
     <div class="row">
       <div class="input">
-        <g-input v-model="regOpt.password" placeholder="密码" />
+        <g-input type="password" v-model="regOpt.password" placeholder="密码" />
       </div>
       <CheckMsg :flag="passwordFlag" :msg="passwordMsg" />
     </div>
     <div class="row">
       <div class="input">
-        <g-input v-model="regOpt.passwordConfirm" placeholder="确认密码" />
+        <g-input type="password" v-model="regOpt.passwordConfirm" placeholder="确认密码" />
       </div>
       <CheckMsg :flag="passwordConfirmFlag" :msg="passwordConfirmMsg" />
     </div>

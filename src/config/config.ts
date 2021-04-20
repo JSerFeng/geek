@@ -1,6 +1,6 @@
 export const EmailRegex = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
 export const NotNullRegex = /.+/
-export const UserIdLocalRegex = /\d\d\d\d\d\d\d\d\d\d/
+export const UserIdLocalRegex = /\d\d\d\d\d+/
 
 export const CHUNK_SIZE = 1024 * 1024 * 2 //分片大小
 

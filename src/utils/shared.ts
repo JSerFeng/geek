@@ -349,7 +349,6 @@ export function useDropUpload(
   }
   onMounted(() => {
     if (domRef.value) {
-      console.log("监听drag");
       domRef.value!.addEventListener("click", handleClick)
       domRef.value!.addEventListener("drop", handler)
       document.addEventListener("dragstart", handleDragstart)
@@ -527,13 +526,15 @@ export const remainTime = (time: string | Date | number) => {
 }
 
 export const backToTop = () => {
-  while (document.querySelector(".view-main")?.scrollTop) {
-  }
   const view = document.querySelector(".view-main")!
+  let prev = Infinity
   const frame = () => {
-    view.scrollTop -= Math.ceil(view.scrollTop / 2)
-    if (view.scrollTop <= 0) return
-    requestAnimationFrame(frame)
+    if (view.scrollTop > prev) return
+    prev = view.scrollTop
+    view.scrollTop -= Math.ceil(view.scrollTop / 10)
+    if (view.scrollTop > 0) {
+      requestAnimationFrame(frame)
+    }
   }
   frame()
 }

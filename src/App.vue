@@ -25,24 +25,11 @@ import { useStore } from './store'
 import { ActionTypes } from './store/modules/user/actions'
 import WithTransition from './components/withTransition/WithTransition.vue'
 import { onMounted } from 'vue';
-import { useRouter } from 'vue-router'
-import { getTime } from './utils/shared';
 
 const store = useStore()
-const router = useRouter()
 onMounted(async () => {
-  const res = await store.dispatch(ActionTypes.UpdateUserInfo)
+  await store.dispatch(ActionTypes.UpdateUserInfo)
   store.dispatch(ActionTypes.Reset)
-  if (typeof res === "string") {
-    switch (res) {
-      case "admin":
-        router.push("/admin")
-        break
-      case "super":
-        router.push("/superAdmin")
-        break
-    }
-  }
 })
 </script>
 
@@ -88,6 +75,12 @@ ul {
   top: 0;
   right: 0;
   bottom: 0;
+}
+.absolute {
+  position: absolute;
+}
+.relative {
+  position: relative;
 }
 .main {
   perspective: 1000;
@@ -141,7 +134,8 @@ ul {
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
+  max-height: 100%;
+  overflow-y: auto;
   background-color: rgb(241, 241, 241);
 }
 .icon {
