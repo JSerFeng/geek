@@ -34,7 +34,7 @@ import { RouterLink, RouterView } from 'vue-router'
     padding: 40px;
     a {
       position: absolute;
-      left: 0;
+      left: 15%;
       top: 50%;
       transition: 0.2s;
       display: inline-block;

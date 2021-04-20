@@ -1,9 +1,11 @@
 <template>
   <div class="article">
-    <CheckApi :status="status" errMsg="网络错误"></CheckApi>
-
-    <ul class="list shade">
-      <li class="flex" v-for="(item, i) in data.items" :key="item.id">
+    <ul class="list shade" v-loading="status===Flags.Pending">
+      <li
+      class="flex" 
+      v-for="(item, i) in data.items" 
+      :key="item.id"
+      >
         <div class="article-avatar">
           <ElAvatar :src="item.image" />
         </div>
@@ -41,9 +43,9 @@
     </ul>
 
     <div class="pagination shade flex jc ac">
-      <GButton :disabled="page === 1" @click="goPrev">prev</GButton>
-      <div class="cur-page">{{ page }} / {{ data.totalPage }}</div>
-      <GButton :disabled="page === data.totalPage" @click="goNext">next</GButton>
+      <GButton :disabled="page <= 1" @click="goPrev">prev</GButton>
+      <div class="cur-page">{{ Math.min(data.totalPage, page) }} / {{ data.totalPage }}</div>
+      <GButton :disabled="page >= data.totalPage" @click="goNext">next</GButton>
     </div>
   </div>
 </template>
@@ -51,7 +53,6 @@
 import { defineProps, ref, watchEffect } from "vue";
 import { ElAvatar, ElNotification } from 'element-plus'
 import { Flags } from "../../utils/shared";
-import CheckApi from '../checkApi/CheckApi.vue'
 import { apiChangeFavoriteState, apiQueryArticles, apiQueryFavorites } from "../../api/article";
 import type { Articles } from '../../api/article'
 import { useStore } from "../../store";

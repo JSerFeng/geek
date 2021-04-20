@@ -2,7 +2,7 @@
   <ul class="g-tabs flex">
     <li 
     v-for="(item, i) in items" 
-    @click="change(i, item.v)" 
+    @click="change(i, item.v, item.k)" 
     :class="{ active: currIdx === i }"
     class="item flex ac jc p"
     :key="item.k"
@@ -12,7 +12,7 @@
   </ul>
 </template>
 <script lang="ts" setup>
-import { defineEmit, defineProps } from "@vue/runtime-core";
+import { defineEmit, defineProps, watchEffect } from "@vue/runtime-core";
 import { ref } from 'vue'
 
 const props = defineProps<{
@@ -30,21 +30,30 @@ const currIdx = ref(
       : 0
     : 0
 )
-const change = (i: number, v: any) => {
+const change = (i: number, v: any, k: string) => {
   currIdx.value = i
-  emits("change", v)
+  emits("change", v, k)
 }
-change(currIdx.value, props.items[currIdx.value].v)
+watchEffect(() => {
+  if (props.items[currIdx.value]) {
+    change(currIdx.value, props.items[currIdx.value].v, props.items[currIdx.value].k)
+  }
+})
 </script>
 <style lang="scss" scoped>
-.item {
-  padding: 5px 15px;
-  border-bottom: 3px solid transparent;
-  transition: 0.2s;
-  color: rgb(92, 92, 92);
-  &.active {
-    color: rgb(92, 92, 92);
-    border-bottom: 3px solid rgb(92, 92, 92);
+.g-tabs {
+  padding: 0 5%;
+  .item {
+    padding: 15px;
+    box-sizing: border-box;
+    border-bottom: 3px solid transparent;
+    transition: 0.2s;
+    color: rgb(192, 192, 192);
+    font-size: 15px;
+    &.active {
+      color: rgb(92, 92, 92);
+      border-bottom: 3px solid rgb(92, 92, 92);
+    }
   }
 }
 </style>

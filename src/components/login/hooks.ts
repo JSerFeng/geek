@@ -53,7 +53,7 @@ export const useCheckFactory = (
   return [flag, msg]
 }
 
-export const useUserIdLocalCheck = useCheckFactory((val) => [userIdCheck(val), "学号长度为10位"])
+export const useUserIdLocalCheck = useCheckFactory((val) => [userIdCheck(val), "学号长度不少于5位"])
 
 export const useNullCheck = useCheckFactory(val => [notNull(val), "输入不能为空"])
 

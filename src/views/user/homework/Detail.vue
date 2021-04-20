@@ -45,7 +45,10 @@
           </div>
         </li>
       </ul>
-      <GButton type="broke" @click="uploadImpl">新提交</GButton>
+      <GButton 
+      type="broke" @click="uploadImpl"
+      :disabled="!!info?.isClosed"
+      >新提交</GButton>
     </div>
   </div>
 </template>

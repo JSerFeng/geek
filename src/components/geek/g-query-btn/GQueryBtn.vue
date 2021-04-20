@@ -11,7 +11,7 @@ const loading = ref(false)
 
 const props = defineProps<{
   request: () => Promise<any>
-  type: string
+  type?: "reverse" | "broke" | "normal" | "warn"
 }>()
 
 const query = async () => {

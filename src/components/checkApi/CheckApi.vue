@@ -5,7 +5,7 @@
     <span v-else-if="status === Flags.Pending">
       <g-loading-icon />
     </span>
-    <span v-else>
+    <span v-else-if="status === Flags.Fail">
       {{ errMsg }}
     </span>
   </span>
