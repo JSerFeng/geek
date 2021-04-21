@@ -37,6 +37,7 @@ export const enum MutationTypes {
   AddCount = "AddCount",
   ChangeIntro = "ChangeIntro",
   ChangeAvatar = "ChangeAvatar",
+  ChangeMailRecvStatus = "ChangeMailRecvStatus"
 }
 
 function updateUserInfo(state: State, info: State["userInfo"]) {
@@ -98,4 +99,8 @@ export const mutations: MutationTree<State> = {
     const url = URL.createObjectURL(file);
     (state.userInfo as User).image = url
   },
+  [MutationTypes.ChangeMailRecvStatus](state) {
+    (state.userInfo as User).receiveMail ^= 1
+    storage.set("receiveMail", (state.userInfo as User).receiveMail)
+  }
 };

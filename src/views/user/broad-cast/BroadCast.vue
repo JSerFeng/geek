@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap" v-loading="flag === Flags.Pending">
+  <div class="wrap bg-bottom" v-loading="flag === Flags.Pending">
     <GSelect :items="courses" @change="changeCourse" />
     <ul>
       <li
@@ -110,6 +110,7 @@ const open = (id: number) => {
 </script>
 <style lang="scss" scoped="">
 .wrap {
+  z-index: 1;
   font-size: 14px;
   position: relative;
   width: 100%;

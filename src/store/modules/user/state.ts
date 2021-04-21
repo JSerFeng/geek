@@ -30,7 +30,7 @@ export interface User {
   "introduce": string,
   "grade": string,
   "registerTime": string,
-  "receiveMail": boolean,
+  "receiveMail": 0 | 1,
   "type": null,
   "directionVOList": Course[],
 }
@@ -65,7 +65,7 @@ export const state: State = {
     "introduce": '',
     "grade": '',
     "registerTime": '',
-    "receiveMail": false,
+    "receiveMail": 1,
     "type": null,
     "directionVOList": [],
   },

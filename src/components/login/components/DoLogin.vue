@@ -63,7 +63,12 @@ const login = async () => {
           router.push("/superadmin")
           break
         default:
-          router.push("/home")
+          if (res.data.user.firstLogin) {
+            /**第一次登陆新用户，跳到选择课程页面 */
+            router.push("/copinduce")
+          } else {
+            router.push("/home")
+          }
       }
     }
   } else {

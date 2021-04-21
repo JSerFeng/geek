@@ -27,9 +27,18 @@
       </div>
       <div>
         <ul>
-          <li class="p dark" @click="openChangePassword">
-            <i class="font14 el-icon-edit"></i>
+          <li class="item p dark font16" @click="openChangePassword">
             修改密码
+            <i class="el-icon-edit"></i>
+          </li>
+          <li class="item p dark font16">
+            接收消息推送
+            <el-switch
+              v-model="recvEmail"
+              @change="recvMailChange"
+              active-color="#13ce66"
+              inactive-color="#e7e7e7"
+            ></el-switch>
           </li>
           <Modal width="70%" ref="changePasswordModal">
             <div style="padding: 30px 15px;">
@@ -57,7 +66,7 @@
 </template>
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { ElImage, ElNotification } from 'element-plus'
+import { ElImage, ElNotification, ElSwitch } from 'element-plus'
 import { useStore } from '../../../store';
 import type { User } from '../../../store/modules/user/state'
 import type { Response } from '../../../api'
@@ -72,13 +81,12 @@ import ChooseCourse from '../../home/components/ChooseCourse.vue'
 import ArticlesVue from '../../../components/articles/Articles.vue';
 import { useNullCheck, useSameCheck } from '../../../components/login/hooks';
 import CheckMsgVue from '../../../components/login/components/CheckMsg.vue';
-import { useRouter } from '_vue-router@4.0.6@vue-router';
-
+import { useRouter } from 'vue-router';
 
 const store = useStore()
 const router = useRouter()
 const userInfo = store.state.user.userInfo as unknown as User
-
+const recvEmail = computed(() => !!userInfo.receiveMail)
 const modalCtx = ref<ModalMethods>()
 
 const open = () => {
@@ -95,6 +103,10 @@ const changeIntroduction = async () => {
   introduceFlag.value = Flags.Success
 }
 
+/**接收日常邮件 */
+const recvMailChange = () => {
+  store.dispatch(ActionTypes.ChangeMailRecvStatus)
+}
 
 const changePasswordModal = ref<ModalMethods>()
 const [
@@ -127,6 +139,7 @@ const changePasswordImpl = async () => {
 
 /**头像上传功能 */
 const avatarArea = useImgUpload()
+
 </script>
 <style lang="scss" scoped>
 .user-left {
@@ -157,7 +170,14 @@ const avatarArea = useImgUpload()
     border-radius: 50%;
   }
 }
-
+.item {
+  margin: 10px 0;
+  transition: 0.2s;
+  padding: 10px 0;
+  &:hover {
+    background-color: rgb(226, 226, 226);
+  }
+}
 .user-right {
   width: 77%;
   background-color: #fff;

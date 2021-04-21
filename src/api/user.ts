@@ -92,3 +92,7 @@ export const apiChangePassword = (userId: string, password: string, newPassword:
 }) as Promise<Response>
 
 export const apiDelAnnounce = (id: number) => request.get("/announce/delAnnounce/" + id) as Promise<Response>
+
+export const apiChangeMailStatus = (userId: string) => request.post("/user/changeReceiveMailStatus", {
+  userId
+}) as Promise<Response>

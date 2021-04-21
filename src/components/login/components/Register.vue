@@ -38,7 +38,7 @@
     </div>
     <g-button class="btn" @click="open" :disabled="!allValid">注册</g-button>
     <Modal ref="modal" :width="'80%'" :height="'80%'" :onClose="reset">
-      <SendEmail :address="regOpt.email" ref="resetStack" />
+      <SendEmail ref="resetStack" />
     </Modal>
   </div>
 </template>

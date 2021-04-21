@@ -78,9 +78,10 @@ export const apiQueryArticles = (
   })
 }
 
-export const apiQueryDetail = (articleId: number) => request.get("/article/queryOneArticle", {
+export const apiQueryDetail = (articleId: number, userId?: string) => request.get("/article/queryOneArticle", {
   params: {
-    articleId
+    articleId,
+    userId
   }
 }) as Promise<Response<ArticleDetail>>
 

@@ -54,7 +54,7 @@ export default [
     path: '/myCollect',
     component: () => import('../../components/ad-my-collect/AdMyCollect.vue')
   }, {
-    path: "/sendAnnounce",
+    path: "/publish",
     component: () => import('../../views/sendAnnounce/SendAnnounce.vue')
   }
 ]

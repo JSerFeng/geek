@@ -17,23 +17,52 @@
     <el-button @click="openFileModal" type="primary">上传文件（可选）</el-button>
     <el-button @click="send" :disabled="!canSend" type="primary">发布</el-button>
   </div>
-  <ModalVue ref="fileModal" width="80%">
-    <template v-if="id">
-      <h5 class="lighter">
-        <div
-          style="padding: 20px;background-color: rgb(255, 228, 228);color: red;border-radius: 5px;"
-        >不要上传大于3G的文件</div>
-      </h5>
-      <BigFileUploaderVue @finish="onFileFinish" :id="id" :course-id="courseId" />
-    </template>
-    <template v-else>
-      <div v-loading="true" style="height: 100%;"></div>
-    </template>
-  </ModalVue>
+  <el-divider />
+  <div>
+    <el-select v-model="courseId" placeholder="选择方向">
+      <el-option
+        v-for="item in store.state.user.allCourses"
+        :key="item.id"
+        :label="item.courseName"
+        :value="item.courseId"
+      ></el-option>
+    </el-select>
+    <el-table style="width: 100%" :data="announce?.items">
+      <el-table-column prop="title" label="标题"></el-table-column>
+      <el-table-column prop="addTime" label="发布时间"></el-table-column>
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button type="primary" @click="appendFile(scope.row.id, scope.row.courseId)">添加附件</el-button>
+          <el-button type="primary" @click="delAnnounce(scope.row.id)">删除公告</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      @current-change="switchPage"
+      hide-on-single-page
+      :page-size="ROW"
+      :total="announce?.total"
+    />
+    <ModalVue ref="fileModal" width="80%">
+      <template v-if="id">
+        <h5 class="lighter">
+          <div
+            style="padding: 20px;background-color: rgb(255, 228, 228);color: red;border-radius: 5px;"
+          >不要上传大于3G的文件</div>
+        </h5>
+        <BigFileUploaderVue @finish="onFileFinish" :id="id" :course-id="courseId" />
+      </template>
+      <template v-else>
+        <div v-loading="true" style="height: 100%;"></div>
+      </template>
+    </ModalVue>
+  </div>
 </template>
 <script lang="ts" setup>
-import { ElInput, ElRadioGroup, ElRadio, ElButton, ElNotification, ElDivider } from "_element-plus@1.0.2-beta.40@element-plus";
-import { computed, ref } from 'vue'
+import {
+  ElInput, ElRadioGroup, ElRadio, ElButton, ElNotification, ElDivider, ElPagination, ElSelect, ElOption, ElMessageBox
+} from "element-plus";
+import { computed, ref, watchEffect } from 'vue'
 import BigFileUploaderVue from "../bigFileUploader/BigFileUploader.vue";
 import { useStore } from "../../store";
 import ModalVue from "../modal/Modal.vue";
@@ -41,7 +70,9 @@ import type { ModalMethods } from '../modal/Modal.vue'
 import { apiAddAnnounce } from "../../api/admin";
 import type { Admin } from '../../store/modules/user/state'
 import { ErrorCode } from "../../api/request";
-
+import type { ApiAnnounce } from '../../api/user'
+import { apiGetAnnounce, apiDelAnnounce } from "../../api/user";
+import { ROW } from "../../config/config";
 
 const store = useStore()
 
@@ -60,6 +91,7 @@ const query = async () => {
   )
   if (res.error_code === ErrorCode.Success) {
     id.value = res.data
+    queryPage()
     return true
   }
   return false
@@ -89,6 +121,52 @@ const onFileFinish = () => {
   })
 }
 
+const currPage = ref(1)
+const announce = ref<ApiAnnounce>()
+const queryPage = async () => {
+  if (!courseId.value) return
+  const res = await apiGetAnnounce(currPage.value, courseId.value, ROW)
+  if (res.error_code === ErrorCode.Success) {
+    announce.value = res.data
+  }
+}
+
+const switchPage = (page: number) => {
+  currPage.value = page
+}
+watchEffect(() => {
+  courseId.value = store.state.user.allCourses[0]?.courseId || null
+})
+
+watchEffect(() => {
+  queryPage()
+})
+const currCourseId = ref(0)
+const appendFile = async (_id: number, courseId: number) => {
+  id.value = _id
+  currCourseId.value = courseId
+  fileModal.value!.open()
+}
+
+const delAnnounce = async (id: number) => {
+  if (!id) return
+  ElMessageBox.confirm("确认删除吗", {
+    cancelButtonText: "取消",
+    confirmButtonText: "确定",
+    async callback(action: string) {
+      if (action === "confirm") {
+        const res = await apiDelAnnounce(id)
+        if (res.error_code === ErrorCode.Success) {
+          ElNotification({
+            message: "删除成功"
+          })
+          queryPage()
+        }
+      }
+      return true
+    }
+  })
+}
 </script>
 <style lang="scss" scoped>
 .announce {
