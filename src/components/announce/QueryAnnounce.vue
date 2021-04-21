@@ -11,14 +11,10 @@
     <el-table style="width: 100%" :data="announce?.items">
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="addTime" label="发布时间"></el-table-column>
-      <el-table-column label="添加附件">
+      <el-table-column label="操作">
         <template #default="scope">
-          <el-button type="primary" @click="appendFile(scope.id, scope.courseId)">添加附件</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column label="删除公告">
-        <template #default="scope">
-          <el-button type="primary" @click="delAnnounce(scope.id)">删除公告</el-button>
+          <el-button type="primary" @click="appendFile(scope.row.id, scope.row.courseId)">添加附件</el-button>
+          <el-button type="primary" @click="delAnnounce(scope.row.id)">删除公告</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -84,7 +80,9 @@ const appendFile = async (id: number, courseId: number) => {
   query()
 }
 const delAnnounce = async (id: number) => {
-  apiDelAnnounce(id)
+  if (!id) return
+
+  await apiDelAnnounce(id)
   query()
 }
 const onFileFinish = () => {
