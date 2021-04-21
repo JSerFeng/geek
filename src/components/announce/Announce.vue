@@ -30,10 +30,37 @@
       <div v-loading="true" style="height: 100%;"></div>
     </template>
   </ModalVue>
+  <div>
+    <el-select v-model="courseId" placeholder="选择方向">
+      <el-option
+        v-for="item in store.state.user.allCourses"
+        :key="item.id"
+        :label="item.courseName"
+        :value="item.courseId"
+      ></el-option>
+    </el-select>
+    <el-table style="width: 100%" :data="announce?.items">
+      <el-table-column prop="title" label="标题"></el-table-column>
+      <el-table-column prop="addTime" label="发布时间"></el-table-column>
+      <el-table-column label="添加附件">
+        <template #default="scope">
+          <el-button type="primary" @click="appendFile(scope.id, scope.courseId)">添加附件</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      @current-change="switchPage"
+      hide-on-single-page
+      :page-size="ROW"
+      :total="announce?.total"
+    />
+  </div>
 </template>
 <script lang="ts" setup>
-import { ElInput, ElRadioGroup, ElRadio, ElButton, ElNotification, ElDivider } from "_element-plus@1.0.2-beta.40@element-plus";
-import { computed, ref } from 'vue'
+import {
+  ElInput, ElRadioGroup, ElRadio, ElButton, ElNotification, ElDivider, ElPagination, ElSelect, ElOption
+} from "element-plus";
+import { computed, ref, watchEffect } from 'vue'
 import BigFileUploaderVue from "../bigFileUploader/BigFileUploader.vue";
 import { useStore } from "../../store";
 import ModalVue from "../modal/Modal.vue";
@@ -41,7 +68,9 @@ import type { ModalMethods } from '../modal/Modal.vue'
 import { apiAddAnnounce } from "../../api/admin";
 import type { Admin } from '../../store/modules/user/state'
 import { ErrorCode } from "../../api/request";
-
+import type { ApiAnnounce } from '../../api/user'
+import { apiGetAnnounce } from "../../api/user";
+import { ROW } from "../../config/config";
 
 const store = useStore()
 
@@ -89,6 +118,33 @@ const onFileFinish = () => {
   })
 }
 
+
+const currPage = ref(1)
+const announce = ref<ApiAnnounce>()
+const queryPage = async () => {
+  if (!courseId.value) return
+  const res = await apiGetAnnounce(currPage.value, courseId.value, ROW)
+  if (res.error_code === ErrorCode.Success) {
+    announce.value = res.data
+  }
+}
+
+const switchPage = (page: number) => {
+  currPage.value = page
+}
+watchEffect(() => {
+  courseId.value = store.state.user.allCourses[0]?.courseId || null
+})
+watchEffect(() => {
+  queryPage()
+})
+const currId = ref(0)
+const currCourseId = ref(0)
+const appendFile = async (id: number, courseId: number) => {
+  currId.value = id
+  currCourseId.value = courseId
+  fileModal.value!.open()
+}
 </script>
 <style lang="scss" scoped>
 .announce {
