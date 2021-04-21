@@ -21,8 +21,6 @@ async function calcHash(chunks: ArrayBuffer[], e: any) {
   }
 
   const len = chunks.length
-  console.log("worker开始计算");
-  console.time("hash")
   while (hashIdx < len) {
     if (pause) return
     hasher.update(new Uint8Array(chunks[hashIdx]))
@@ -31,7 +29,6 @@ async function calcHash(chunks: ArrayBuffer[], e: any) {
     hashIdx++
   }
   const hash = hasher.digest()
-  console.timeEnd("hash")
   hasher = null
   hashIdx = 0
   /**@ts-ignore */

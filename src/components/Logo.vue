@@ -1,4 +1,4 @@
-<template lang="">
+<template>
   <!--选择方向logo-->
   <svg class="icon" aria-hidden="true">
     <use :xlink:href="logoMap[courseName]" />

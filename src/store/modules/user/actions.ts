@@ -61,13 +61,13 @@ export const actions: ActionTree<State, RootState> = {
   },
   async [ActionTypes.Login]({ commit }, { payload }: Data<Login>) {
     const { userId, password } = payload
-    
+
     const res = await login(userId, password) as Response<{
       token: string,
       refreshToken: string,
       user: State["userInfo"]
     }>
-    
+
     if (res.error_code === ErrorCode.Success) {
       commit<MLogin>({ type: MutationTypes.Login, payload: res.data })
     }
@@ -89,20 +89,18 @@ export const actions: ActionTree<State, RootState> = {
         }
       })
     }
-    if (state.isLogin) {
-      /**每次登陆都请求一下某些可能会变的数据，重新存储下来 */
-      const res = await queryCourse()
+    /**每次登陆都请求一下某些可能会变的数据，重新存储下来 */
+    const res = await queryCourse()
 
-      if (res.error_code !== ErrorCode.Success) {
-        res.data = []
-      }
-      commit<Reset>({
-        type: MutationTypes.Reset,
-        payload: {
-          allCourses: res.data
-        }
-      })
+    if (res.error_code !== ErrorCode.Success) {
+      res.data = []
     }
+    commit<Reset>({
+      type: MutationTypes.Reset,
+      payload: {
+        allCourses: res.data
+      }
+    })
   },
   async [ActionTypes.ChooseCourse]({ commit, state }, courseId: number) {
     if (!state.userInfo.userId) return

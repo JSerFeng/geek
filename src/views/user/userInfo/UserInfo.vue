@@ -1,56 +1,85 @@
-<template lang="">
+<template>
   <div class="view-main flex jb">
     <div class="user-left shade">
-      <div ref="avatarArea">
-        <ElImage :src="userInfo.image" class="avatar p" fit="cover">
-          <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
-        </ElImage>
-      </div>
-      <p style="font-weight: 100;">
-        你好, <span style="font-weight: 300;">{{ userInfo.userName }}</span>
-      </p>
-      <div class="intro p" @click="open">{{ userInfo.introduce }}</div>
-      <Modal ref="modalCtx" width="70%">
-        <div style="padding: 30px 15px;">
-          <GInput v-model="introduction" placeholder="简介" />
-          <GButton :loading="introduceFlag === Flags.Pending" @click="changeIntroduction">确定</GButton>
+      <div>
+        <div ref="avatarArea">
+          <ElImage :src="userInfo.image" class="avatar p" fit="cover">
+            <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
+          </ElImage>
         </div>
-      </Modal>
-      <div class="flex jc">
-        <ChooseCourse />
+        <p style="font-weight: 100;">
+          <span class="font20">你好</span>,
+          <span class="font20">{{ userInfo.userName }}</span>
+        </p>
+        <div class="intro p" @click="open">
+          {{ userInfo.introduce }}
+          <i class="font14 el-icon-edit"></i>
+        </div>
+        <div class="flex jc">
+          <ChooseCourse />
+        </div>
+        <Modal ref="modalCtx" width="70%">
+          <div style="padding: 30px 15px;">
+            <GInput v-model="introduction" placeholder="简介" />
+            <GButton :loading="introduceFlag === Flags.Pending" @click="changeIntroduction">确定</GButton>
+          </div>
+        </Modal>
+      </div>
+      <div>
+        <ul>
+          <li class="p dark" @click="openChangePassword">
+            <i class="font14 el-icon-edit"></i>
+            修改密码
+          </li>
+          <Modal width="70%" ref="changePasswordModal">
+            <div style="padding: 30px 15px;">
+              <GInput placeholder="旧密码" type="password" v-model="oldPassword" />
+              <CheckMsgVue :flag="oldPwdFlag" :msg="oldPwdMsg" />
+              <GInput placeholder="新密码" type="password" v-model="newPassword" />
+              <CheckMsgVue :flag="newPwdFlag" :msg="newPwdMsg" />
+              <GInput placeholder="确认新密码" type="password" v-model="newPasswordConfirm" />
+              <CheckMsgVue :flag="newPwdConfirmFlag" :msg="newPwdConfirmMsg" />
+              <GQueryBtn :request="changePasswordImpl" :disabled="!pass">确认</GQueryBtn>
+            </div>
+          </Modal>
+        </ul>
+      </div>
+      <div class="footer">
+        <span class="font14 light">{{ userInfo.grade }}级的小同志</span>
+        <div class="font14 light">注册于 {{ userInfo.registerTime }}</div>
       </div>
     </div>
     <div class="user-right">
-      <div class="header flex ac">
-        收藏文章
-      </div>
-      <ArticlesVue :my-favorites="true"/>
+      <div class="header flex ac">收藏文章</div>
+      <ArticlesVue :my-favorites="true" />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { ElImage } from 'element-plus'
+import { computed, ref } from 'vue'
+import { ElImage, ElNotification } from 'element-plus'
 import { useStore } from '../../../store';
 import type { User } from '../../../store/modules/user/state'
 import type { Response } from '../../../api'
 import { ErrorCode } from '../../../api/request';
 import { ActionTypes } from '../../../store/modules/user/actions';
 import { useWithLoadingRef, Flags } from '../../../utils/shared';
-import { GButton, GInput } from '../../../components/geek'
-import { useImgUpload } from './hook';
+import { GButton, GInput, GQueryBtn } from '../../../components/geek'
+import { useImgUpload, useChangePassword } from './hook';
 import Modal from '../../../components/modal/Modal.vue'
+import type { ModalMethods } from '../../../components/modal/Modal.vue'
 import ChooseCourse from '../../home/components/ChooseCourse.vue'
 import ArticlesVue from '../../../components/articles/Articles.vue';
+import { useNullCheck, useSameCheck } from '../../../components/login/hooks';
+import CheckMsgVue from '../../../components/login/components/CheckMsg.vue';
+import { useRouter } from '_vue-router@4.0.6@vue-router';
 
 
 const store = useStore()
+const router = useRouter()
 const userInfo = store.state.user.userInfo as unknown as User
 
-const modalCtx = ref<{
-  open(): void
-  close(): void
-}>()
+const modalCtx = ref<ModalMethods>()
 
 const open = () => {
   modalCtx.value?.open()
@@ -66,13 +95,38 @@ const changeIntroduction = async () => {
   introduceFlag.value = Flags.Success
 }
 
+
+const changePasswordModal = ref<ModalMethods>()
+const [
+  oldPassword, //旧密码ref
+  newPassword, //新密码ref
+  newPasswordConfirm, //新密码确认密码ref
+  changePassword, //改变密码的方法
+  openChangePassword //打开弹框
+] = useChangePassword(changePasswordModal)
+const [oldPwdFlag, oldPwdMsg] = useNullCheck(oldPassword)
+const [newPwdFlag, newPwdMsg] = useNullCheck(newPassword)
+const [newPwdConfirmFlag, newPwdConfirmMsg] = useSameCheck(newPassword)(newPasswordConfirm)
+const pass = computed(() => [oldPwdFlag, newPwdFlag, newPwdConfirmFlag].every(item => item.value === Flags.Success))
+//按钮按下调用
+const changePasswordImpl = async () => {
+  const result = await changePassword()
+  if (result) {
+    ElNotification({
+      message: "请重新登陆"
+    })
+    store.dispatch(ActionTypes.Logout)
+    router.push({
+      path: "/login",
+      query: {
+        userId: store.state.user.userInfo.userId
+      }
+    })
+  }
+}
+
 /**头像上传功能 */
 const avatarArea = useImgUpload()
-
-const activeTab = ref(0)
-const changeActiveTab = (idx: number) => {
-  activeTab.value = idx
-}
 </script>
 <style lang="scss" scoped>
 .user-left {
@@ -81,9 +135,17 @@ const changeActiveTab = (idx: number) => {
   box-sizing: border-box;
   background-color: #fff;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .sm-font {
+    font-weight: 300;
+    font-size: 12px;
+  }
 
   .intro {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 100;
   }
 

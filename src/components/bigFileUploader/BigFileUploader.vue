@@ -32,14 +32,16 @@
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { computed, defineProps } from "@vue/runtime-core";
+import { computed, defineEmit, defineProps } from "@vue/runtime-core";
 import { useBigFileUpload } from "../../utils/bigFile";
 import { useDropUpload, showFileSize } from "../../utils/shared";
 import { GButton } from "../geek"
+import { ElNotification } from '_element-plus@1.0.2-beta.40@element-plus';
 const props = defineProps<{
-  courseId: number,
+  courseId?: number | null,
   id: number
 }>()
+const emits = defineEmit(["finish"])
 
 const enum PauseState {
   Pause,
@@ -75,7 +77,12 @@ const clickPause = () => {
 const FILE_LIMIT = Math.pow(1024, 3) * 3
 
 let currentFile = ref<File>()
-const [errMsg, progressSlice, progress, readyUpload, pause, resume] = useBigFileUpload(props.courseId, props.id)
+const [errMsg, progressSlice, progress, readyUpload, pause, resume] = useBigFileUpload(
+  props.id, props.courseId || undefined,
+  (finish) => {
+    emits("finish", finish)
+  }
+)
 const ready = computed(() => progressSlice.value >= 1)
 
 /**拖动后准备上传*/

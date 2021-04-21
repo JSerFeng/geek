@@ -1,21 +1,18 @@
-<template lang="">
+<template>
   <div class="view-main">
     <div class="search-bar">
       <span class="placeholder">想看谁的文章?</span>
-      <SearchInput @search="search"/>
+      <SearchInput @search="search" />
     </div>
     <ul class="courses flex">
-      <li 
-        :class="{ 'p': true, 'active': selectedCourseId === null }"
-        @click="selectCourse(null)"
-      >全部</li>
+      <li :class="{ 'p': true, 'active': selectedCourseId === null }" @click="selectCourse(null)">全部</li>
       <li
-        :class="{ 'p': true, 'active': selectedCourseId === item.courseName }" 
-        v-for="(item) in store.state.user.allCourses" 
+        :class="{ 'p': true, 'active': selectedCourseId === item.courseName }"
+        v-for="(item) in store.state.user.allCourses"
         @click="selectCourse(item.courseName)"
         :key="item.id"
       >
-        <Logo :course-name="item.courseName"/>
+        <Logo :course-name="item.courseName" />
         {{ item.courseName }}
       </li>
     </ul>

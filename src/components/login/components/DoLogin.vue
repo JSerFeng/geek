@@ -30,7 +30,8 @@ import { Flags } from '../../../utils/shared';
 
 const { dispatch } = useStore()
 const router = useRouter()
-const userId = ref("")
+
+const userId = ref(router.currentRoute.value.query.userId as string || "")
 const password = ref("")
 
 const [userFlag, userMsg] = useUserIdLocalCheck(userId)

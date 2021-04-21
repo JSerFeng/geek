@@ -55,7 +55,10 @@ export default [{
   meta: {
     auth: Auth.ADMIN
   }
-},{
-  path:'/myCollect',
-  component:MyCollectAtricle
+}, {
+  path: '/myCollect',
+  component: MyCollectAtricle
+}, {
+  path: "/sendAnnounce",
+  component: () => import("../../views/sendAnnounce/SendAnnounce.vue")
 }]

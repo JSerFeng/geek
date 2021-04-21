@@ -205,4 +205,37 @@ ul {
     background-color: $q-theme;
   }
 }
+.font-sm {
+  font-weight: 100;
+}
+.font12 {
+  font-size: 12px;
+}
+.font14 {
+  font-size: 14px;
+}
+.font16 {
+  font-size: 16px;
+}
+.font18 {
+  font-size: 18px;
+}
+.font20 {
+  font-size: 20px;
+}
+.font22 {
+  font-size: 22px;
+}
+.black {
+  color: black;
+}
+.dark {
+  color: #525252;
+}
+.light {
+  color: #a8a8a8;
+}
+.lighter {
+  color: #cccccc;
+}
 </style>

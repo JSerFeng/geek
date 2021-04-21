@@ -1,75 +1,70 @@
-<template lang="">
-<div class="view-main">
-  <div class="wrap">
-    <div class="info flex jc ac">
-      <LogoVue class="logo" :courseName="currCourseName"/>
-    </div>
-    <GTabs class="shade" :items="items" @change="change"/>
-    <template v-if="homeworkList.length">
-      <div class="list shade">
-        <el-collapse
-        accordion
-        >
-          <el-collapse-item
-          v-for="(item) in homeworkList" 
-          :key="item.id"
-          class="item"
-          :class="{ done: item.isClosed }"
-          >
-            <template #title>
-              <el-row class="header">
-                <el-col :span="12">
-                  {{ item.taskName }}
-                </el-col>
-                <el-col :span="4">
-                  <Tag style="font-size: 12px;" :type="item.isClosed ? 'error' : 'normal'">
-                    {{ item.isClosed ? '已结束' : '进行中' }}
-                  </Tag>
-                </el-col>
-                <el-col :span="8">
-                  <span class="time" style="margin-left: 5px;">
-                    {{ getTime(item.addTime) }}发布, 
-                    截至时间{{ item.closeTime }}
-                  </span>
-                </el-col>
-              </el-row>
-            </template>
-            <div class="collapse">
-              <p>作业详情</p>
-              <ul class="flex ac">
-                <li 
-                class="p file" 
-                v-for="(file, idx) in item.taskFileVOList" 
-                :key="idx"
-                @click="download(file.filePath, file.fileName)"
-                >
-                  {{ file.fileName }}
-                  <div class="el-icon-download"></div>
-                </li>
-              </ul>
-              <GButton @click="open(item)">
-                提交
-              </GButton>
-            </div>
-          </el-collapse-item>
-        </el-collapse>
+<template>
+  <div class="view-main">
+    <div class="wrap">
+      <div class="info flex jc ac">
+        <LogoVue class="logo" :courseName="currCourseName" />
       </div>
-    </template>
-    <template v-else-if="flag === Flags.Success">
-      <Empty />
-    </template>
-    <template v-else-if="flag === Flags.Fail">
-      <Fatal />
-    </template>
-    <Modal ref="modalCtx" width="80%">
-      <DetailVue 
-      :userId="store.state.user.userInfo.userId || ''"
-      :info="currDetailInfo || undefined"
-      :courseId="currCourseId"
-      />
-    </Modal>
+      <GTabs class="shade" :items="items" @change="change" />
+      <template v-if="homeworkList.length">
+        <div class="list shade">
+          <el-collapse accordion>
+            <el-collapse-item
+              v-for="(item) in homeworkList"
+              :key="item.id"
+              class="item"
+              :class="{ done: item.isClosed }"
+            >
+              <template #title>
+                <el-row class="header">
+                  <el-col :span="12">{{ item.taskName }}</el-col>
+                  <el-col :span="4">
+                    <Tag
+                      style="font-size: 12px;"
+                      :type="item.isClosed ? 'error' : 'normal'"
+                    >{{ item.isClosed ? '已结束' : '进行中' }}</Tag>
+                  </el-col>
+                  <el-col :span="8">
+                    <span class="time" style="margin-left: 5px;">
+                      {{ getTime(item.addTime) }}发布,
+                      截至时间{{ item.closeTime }}
+                    </span>
+                  </el-col>
+                </el-row>
+              </template>
+              <div class="collapse">
+                <p>作业详情</p>
+                <ul class="flex ac">
+                  <li
+                    class="p file"
+                    v-for="(file, idx) in item.taskFileVOList"
+                    :key="idx"
+                    @click="download(file.filePath, file.fileName)"
+                  >
+                    {{ file.fileName }}
+                    <div class="el-icon-download"></div>
+                  </li>
+                </ul>
+                <GButton @click="open(item)">提交</GButton>
+              </div>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
+      </template>
+      <template v-else-if="flag === Flags.Success">
+        <Empty />
+      </template>
+      <template v-else-if="flag === Flags.Fail">
+        <Fatal />
+      </template>
+      <Modal ref="modalCtx" width="80%">
+        <DetailVue
+          :userId="store.state.user.userInfo.userId || ''"
+          :info="currDetailInfo || undefined"
+          :courseId="currCourseId"
+        />
+      </Modal>
+    </div>
   </div>
-</div>
 </template>
 <script lang="ts" setup>
 import { ref, computed, watchEffect } from "vue";

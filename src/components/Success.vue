@@ -1,21 +1,28 @@
 <template>
   <div class="wrapper">
     <div class="_icon">
-      <i class="el-icon-success"></i>
+      <i class="el-icon-success" style="color: rgb(127, 255, 144);"></i>
     </div>
     <h3>
       <slot>
         成功
         <br />
-        <span @click="close" class="to-login">返回</span>
+        <span @click="toLogin" class="to-login">去登陆</span>
       </slot>
     </h3>
   </div>
 </template>
 <script lang="ts" setup>
 import { inject } from 'vue';
+import { useRouter } from '_vue-router@4.0.6@vue-router';
+const router = useRouter()
 
-const close = inject<() => any>("close")
+const close = inject<() => any>("close")!
+const toLogin = () => {
+  close()
+  router.push("/login")
+}
+
 </script>
 <style lang="scss" scopde>
 .wrapper {

@@ -1,6 +1,6 @@
-<template lang="">
+<template>
   <div class="search flex">
-    <input class="input" :placeholder="defaultValue"/>
+    <input class="input" :placeholder="defaultValue" />
     <div class="iconfont icon-sousuokuang p" @click="search"></div>
   </div>
 </template>

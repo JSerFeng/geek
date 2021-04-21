@@ -1,15 +1,26 @@
-<template lang="">
+<template>
   <div class="info">
-   <div class="header flex ac">
+    <div class="header flex ac">
       <div class="flex user ac">
-        <img class="ava" :src="(detail && detail.image) || ''" :alt="(detail && detail.adminName) || ''"/>
+        <img
+          class="ava"
+          :src="(detail && detail.image) || ''"
+          :alt="(detail && detail.adminName) || ''"
+        />
         <div>{{ detail && detail.adminName }}</div>
       </div>
       <p class="time">发布于{{ detail && getTime(detail.addTime) }}</p>
     </div>
     <p class="title">{{ detail && detail.title }}</p>
-    <div class="content">
-      {{ detail && detail.content }}
+    <div class="content">{{ detail && detail.content }}</div>
+    <el-divider />
+    <div>
+      <template v-if="detail && detail.filePath">
+        <span class="font12 p" @click="download(detail.filePath)">
+          {{ detail.fileName }}
+          <i class="el-icon-download"></i>
+        </span>
+      </template>
     </div>
   </div>
 </template>
@@ -17,6 +28,8 @@
 import { defineProps } from "@vue/runtime-core";
 import type { ApiAnnounceDetail } from '../../../api/user'
 import { getTime } from "../../../utils/shared";
+import { ElDivider } from 'element-plus'
+import { download } from "../../../api/file";
 
 const props = defineProps<{
   detail: (ApiAnnounceDetail | undefined | null)

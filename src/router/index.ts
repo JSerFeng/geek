@@ -47,7 +47,7 @@ export const router = createRouter({
 router.beforeEach((to, from, next) => {
   const requireAuth = to.meta.auth as number
   if (requireAuth) {
-    if (currentAuth.current & requireAuth) {
+    if ((currentAuth.current & requireAuth) === requireAuth) {
       next()
     } else {
       ElNotification({
