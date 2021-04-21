@@ -32,7 +32,9 @@
         <li :key="item" v-for="(item, index) in myArticles">
           <div class="index">{{ index + 1 }}</div>
           <div class="content">
-            <div @click="handleToArticleDetail(index)" class="content-title">{{ item.title }}</div>
+            <div @click="handleToArticleDetail(index)" class="content-title">
+              {{ item.title }}
+            </div>
             <div @click="handleToArticleDetail(index)">
               {{ item.likeCount }}
             </div>
@@ -218,7 +220,7 @@ export default defineComponent({
     }
     async function handlePublishArticle() {
       const { useWordCheck, useMdCheck } = useCheck();
-      let result:any
+      let result: any;
       if (articleType.value === "word") {
         if (useWordCheck(title.value, content.value)) {
           result = await publishArticle(
@@ -229,13 +231,13 @@ export default defineComponent({
             content.value
           );
         }
-      }else{
-        if(useMdCheck(title.value)){
-           result = await publishArticle(
+      } else {
+        if (useMdCheck(title.value)) {
+          result = await publishArticle(
             adminId,
             articleType.value,
             title.value,
-            courseRadio.value,
+            courseRadio.value
           );
         }
       }
@@ -269,32 +271,32 @@ export default defineComponent({
       }
     }
     async function handleDeleteArticle(id: number, e: MouseEvent) {
-      const result = await deleteMyArticle(id, adminId);
-      if (result.error_code === 200) {
-        ElMessageBox.confirm("此操作将永久删除该文章, 是否继续?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        })
-          .then(() => {
+      ElMessageBox.confirm("此操作将永久删除该文章, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          const result = await deleteMyArticle(id, adminId);
+          if (result.error_code === 200) {
             deleteArticleById(id, myArticles.value);
             ElMessage({
               type: "success",
               message: "删除成功!",
             });
-          })
-          .catch(() => {
+          } else {
             ElMessage({
-              type: "info",
-              message: "已取消删除",
+              type: "error",
+              message: "网络错误！",
             });
+          }
+        })
+        .catch(() => {
+          ElMessage({
+            type: "info",
+            message: "已取消删除",
           });
-      } else {
-        ElMessage({
-          type: "error",
-          message: "网络错误！",
         });
-      }
     }
     const options = readonly([
       {
@@ -438,16 +440,16 @@ export default defineComponent({
         }
         .content {
           display: flex;
-          .content-title{
-             overflow: hidden;
+          .content-title {
+            overflow: hidden;
 
-                text-overflow: ellipsis;
+            text-overflow: ellipsis;
 
-                white-space: nowrap;
+            white-space: nowrap;
           }
           div {
             width: 10vw;
-           
+
             text-align: center;
           }
           .el-icon-delete {

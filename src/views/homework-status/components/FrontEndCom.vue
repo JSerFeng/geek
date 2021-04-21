@@ -41,6 +41,7 @@ export default defineComponent({
     onMounted(async () => {
       // 这里要传入方向的ID，也就是 1
       const result = await getHomeworkStatus(1);
+      console.log(result)
       frontPersonList.value = computed(() => result.data.users).value;
       const arr = calculateAverageScore(frontPersonList.value);
       const [

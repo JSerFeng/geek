@@ -29,6 +29,7 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .ad-collect {
+  color: black;
   width: 70px;
   height: 70px;
   border-radius: 50%;

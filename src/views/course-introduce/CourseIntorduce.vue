@@ -199,6 +199,7 @@ export default defineComponent({
   }
   .wait {
     width: 10vw;
+    color: black;
     text-align: center;
     line-height: 8vh;
     position: absolute;
