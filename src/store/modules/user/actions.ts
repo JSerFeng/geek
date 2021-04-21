@@ -9,7 +9,7 @@ import {
   UpdateInfo,
 } from './mutations'
 import { ErrorCode } from "../../../api/request";
-import { logout, login, chooseCourse, delCourse, queryCourse, changeUserIntro, apiUpdateUserInfo } from "../../../api/user";
+import { logout, login, chooseCourse, delCourse, queryCourse, changeUserIntro, apiUpdateUserInfo, apiChangeMailStatus } from "../../../api/user";
 import { apiUploadAvatar } from "../../../api/file";
 import { storage } from "../../../utils/shared";
 import { ROW } from "../../../config/config";
@@ -31,6 +31,7 @@ export enum ActionTypes {
   DelCourse = "DelCourse",
   ChangeIntro = "ChangeIntro",
   ChangeAvatar = "ChangeAvatar",
+  ChangeMailRecvStatus = "ChangeMailRecvStatus"
 }
 
 type Login = A<ActionTypes.Login, {
@@ -142,4 +143,12 @@ export const actions: ActionTree<State, RootState> = {
       })
     }
   },
+  async [ActionTypes.ChangeMailRecvStatus]({ state, commit }) {
+    const res = await apiChangeMailStatus(state.userInfo.userId!)
+    if (res.error_code === ErrorCode.Success) {
+      commit({
+        type: MutationTypes.ChangeMailRecvStatus
+      })
+    }
+  }
 }

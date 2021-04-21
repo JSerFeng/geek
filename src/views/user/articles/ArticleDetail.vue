@@ -105,7 +105,7 @@ const onMousemove = (e: Event) => {
 onMounted(async () => {
   document.addEventListener("mousemove", onMousemove)
 
-  const res = await apiQueryDetail(parseInt(id as string))
+  const res = await apiQueryDetail(parseInt(id as string), store.state.user.userInfo.userId!)
   if (res.error_code === ErrorCode.Success) {
     detail.value = res.data
   }

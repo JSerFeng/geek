@@ -4,7 +4,7 @@
       <ul class="list" v-loading="status === Flags.Pending">
         <li class="flex" v-for="(item, i) in data.items" :key="item.id">
           <div class="article-avatar">
-            <ElAvatar :src="item.image" />
+            <ElImage class="ava" fit="cover" :src="item.image" :alt="item.adminName"/>
           </div>
           <div class="article-info">
             <div class="name">
@@ -54,7 +54,7 @@
 </template>
 <script lang="ts" setup>
 import { defineProps, ref, watchEffect } from "vue";
-import { ElAvatar, ElNotification } from 'element-plus'
+import { ElImage, ElNotification } from 'element-plus'
 import { Flags } from "../../utils/shared";
 import { apiChangeFavoriteState, apiQueryArticles, apiQueryFavorites } from "../../api/article";
 import type { Articles } from '../../api/article'
@@ -186,8 +186,13 @@ const findDetailArticle = (id: number) => {
       }
 
       .article-avatar {
-        width: fit-content;
         padding-right: 10px;
+
+        .ava {
+          width: 5vw;
+          height: 5vw;
+          border-radius: 50%;
+        }
       }
 
       .article-info {

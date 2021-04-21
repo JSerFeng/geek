@@ -11,6 +11,12 @@
             <router-link class="username" to="/userinfo">{{ name }}</router-link>
           </h3>
           <p class="introduction dark" @click="openSetIntro">{{ userInfo.introduce }}</p>
+          <div v-if="userInfo.type === 'admin'">
+            <router-link to="/admin">管理端</router-link>
+          </div>
+          <div v-else-if="userInfo.type === 'super'">
+            <router-link to="/superadmin">超级管理端</router-link>
+          </div>
           <Modal ref="modalCtx" width="70%">
             <div style="padding: 30px 15px;">
               <GInput v-model="introduction" placeholder="简介" />

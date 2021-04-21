@@ -1,5 +1,10 @@
 <template>
   <div class="main">
+    <div class="nav dark">
+      <div class="flex jc ac nav-item p shadow" @click="goBack">
+        <i class="el-icon-back"></i>
+      </div>
+    </div>
     <router-view v-slot="{ Component, route }">
       <WithTransition :path="route.path">
         <component :is="Component" />
@@ -25,8 +30,14 @@ import { useStore } from './store'
 import { ActionTypes } from './store/modules/user/actions'
 import WithTransition from './components/withTransition/WithTransition.vue'
 import { onMounted } from 'vue';
+import { useRouter } from '_vue-router@4.0.6@vue-router';
 
 const store = useStore()
+const router = useRouter()
+const goBack = () => {
+  router.back()
+}
+
 onMounted(async () => {
   await store.dispatch(ActionTypes.UpdateUserInfo)
   store.dispatch(ActionTypes.Reset)
@@ -41,7 +52,7 @@ body {
   margin: 0;
   font-family: poppin, Tahoma, Arial, \5fae\8f6f\96c5\9ed1, sans-serif;
 }
-a{
+a {
   text-decoration: none;
 }
 .p {
@@ -193,9 +204,10 @@ ul {
     width: 50%;
     height: 200%;
     right: -50%;
-    bottom: -180%;
+    bottom: -170%;
     transform-origin: 0 0;
     transform: rotate(80deg) translate(0, 0);
+    background-color: rgb(224, 224, 224);
   }
 }
 .bg-g {
@@ -240,5 +252,18 @@ ul {
 }
 .lighter {
   color: #cccccc;
+}
+.nav {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+
+  .nav-item {
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    background-color: #fff;
+    font-size: 100%;
+  }
 }
 </style>

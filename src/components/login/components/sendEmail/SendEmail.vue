@@ -2,7 +2,7 @@
   <StackWindows ref="stackWindows" :stack="stack"></StackWindows>
 </template>
 <script setup lang="ts">
-import { ref, useContext } from 'vue'
+import { defineProps, ref, useContext } from 'vue'
 import StackWindows from '../../../stackWindows/StackWindows.vue'
 import SendEmailImpl from './components/SendEmailImpl.vue'
 import Success from '../../../Success.vue'

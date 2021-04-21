@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <SendAuthCode address="1114550440@qq.com" :request="sendEmail" :confirm="confirm">
+    <SendAuthCode :address="email" :request="sendEmail" :confirm="confirm">
       <template v-slot:header>我们需要验证你的邮箱</template>
     </SendAuthCode>
   </div>
@@ -13,7 +13,7 @@ import { ErrorCode } from '../../../../../api/request';
 import type { Ref } from 'vue'
 
 const userId = inject<Ref<string>>("userId")
-const email = inject<Ref<string>>("email")
+const email = inject<Ref<string>>("email")!
 
 const send = sendActiveMail(1)
 const sendEmail = () => {
