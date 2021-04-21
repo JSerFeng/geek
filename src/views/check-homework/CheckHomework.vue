@@ -245,10 +245,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-* {
-  text-decoration: none;
-  color: black;
-}
+
 .check-homework {
   @media screen and (min-width: 800px) {
     .course-warp {
@@ -285,8 +282,9 @@ export default defineComponent({
       transition: all 0.3s;
       background-image: repeating-radial-gradient(white, #dbe6f3);
       &:hover {
-        color: #cecece;
         transform: scale(1.1);
+  color: black;
+
       }
     }
   }

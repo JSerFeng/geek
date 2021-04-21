@@ -143,7 +143,6 @@ const change = (courseId: number, courseName: string) => {
 
 
 const currDetailInfo = ref<Item | null>(null)
-
 const modalCtx = ref<ModalMethods>()
 const open = (item: Item) => {
   const isClose = item.isClosed
@@ -158,6 +157,10 @@ const open = (item: Item) => {
         ? store.state.user.allCourses[0].id
         : currCourseId.value
       modalCtx.value?.open()
+    } else {
+      ElNotification({
+        message: "请重新登陆"
+      })
     }
   }
 }

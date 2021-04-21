@@ -1,10 +1,10 @@
 <template>
   <div class="course-introduce">
     <div class="swiper">
-      <div @click="handleItemClick(1, $event)" class="item iconfont left">
+      <div @click="handleItemClick(2, $event)" class="item iconfont left">
         &#xe662;
       </div>
-      <div @click="handleItemClick(2, $event)" class="item iconfont middle">
+      <div @click="handleItemClick(1, $event)" class="item iconfont middle">
         &#xe639;
       </div>
       <div @click="handleItemClick(3, $event)" class="item iconfont right">
@@ -42,14 +42,20 @@
         Python可以应用于众多领域，如：数据分析、组件集成、网络服务、图像处理、数值计算和科学计算等众多领域。目前业内几乎所有大中型互联网企业都在使用Python，如：Youtube、Dropbox、BT、Quora（中国知乎）、豆瓣、知乎、Google、Yahoo!、Facebook、NASA、百度、腾讯、汽车之家、美团等。
       </div>
     </div>
-    <div class="confirm">选好了</div>
+    <div @click="handleConfirm" class="confirm">选好了</div>
+    <router-link to='home'><div class="wait">再看看</div></router-link>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { customRef, defineComponent, ref } from "vue";
+import { storage } from "../../utils/shared";
+import { chooseCourse } from '../../api/user'
+import { useRouter } from 'vue-router'
 export default defineComponent({
   setup() {
+    const Router = useRouter()
     const currentCourse = ref<number>(1);
+    const userId = storage.get('userId')
     function judgeClassList(classList: string[], className: string): boolean {
       let flag = false;
       classList.forEach((name) => {
@@ -59,19 +65,26 @@ export default defineComponent({
       });
       return flag;
     }
+    async function handleConfirm (){
+       const result = await chooseCourse(userId, currentCourse.value)
+       if(result.error_code === 200){
+         Router.replace('/home')
+       }
+      }
     function handleItemClick(index: number, e: any) {
       currentCourse.value = index;
       const items = document.querySelectorAll(
         ".course-introduce .swiper .item"
       );
+     
       const removeClassList: string[] = ["left", "right", "middle", "behind"];
-      const left = e.target.previousElementSibling || items[items.length - 1];
-      const right = e.target.nextElementSibling || items[0];
+      const left = e.target.previousElementSibling || items[items.length - 1] as HTMLDivElement
+      const right = e.target.nextElementSibling || items[0] as HTMLDivElement
       const behind =
         right.nextElementSibling ||
         items[0] ||
         left.previousElementSibling ||
-        items[items.length - 1];
+        items[items.length - 1] as HTMLDivElement
       removeClassList.forEach((name: string) => {
         if (judgeClassList(e.target.classList, name)) {
           e.target.classList.remove(name);
@@ -100,6 +113,7 @@ export default defineComponent({
     return {
       handleItemClick,
       currentCourse,
+      handleConfirm
     };
   },
 });
@@ -112,7 +126,7 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     .item {
-      font-size: 25rem;
+      font-size: 20rem;
       position: absolute;
       transition: all 0.5s;
       &:hover {
@@ -121,7 +135,7 @@ export default defineComponent({
       }
     }
     .left {
-      left: -1vw;
+      left: 10vw;
       transform: scale(0.6);
       filter: blur(10px);
     }
@@ -165,6 +179,7 @@ export default defineComponent({
       margin-top: 10px;
       line-height: 30px;
     color: #CECECE;
+    font-size: 20px;
     }
   }
   .confirm {
@@ -173,8 +188,22 @@ export default defineComponent({
     line-height: 8vh;
     position: absolute;
     top: 90vh;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 35%;
+    cursor: pointer;
+    background-color: #8F8F8F;
+    border-radius: 40px;
+    box-shadow: 0 0 10px white;
+    &:hover{
+    box-shadow: 0 0 40px white;
+    }
+  }
+  .wait {
+    width: 10vw;
+    text-align: center;
+    line-height: 8vh;
+    position: absolute;
+    top: 90vh;
+    left: 57%;
     cursor: pointer;
     background-color: #8F8F8F;
     border-radius: 40px;

@@ -18,7 +18,7 @@
         <span v-show="isPasShow">密码为3~30为字符</span>
       </transition>
     </div>
-    <input ref="dirRef" type="text" placeholder="意愿(编程语言)" />
+    <input ref="dirRef" type="text" placeholder="方向" />
     <div class="msg">
       <transition name="dir">
         <span v-show="isDirShow">意愿不能为空</span>

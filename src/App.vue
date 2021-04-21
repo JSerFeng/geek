@@ -41,6 +41,9 @@ body {
   margin: 0;
   font-family: poppin, Tahoma, Arial, \5fae\8f6f\96c5\9ed1, sans-serif;
 }
+a{
+  text-decoration: none;
+}
 .p {
   cursor: pointer;
 }

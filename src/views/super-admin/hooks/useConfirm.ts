@@ -14,7 +14,7 @@ export function useConfirmHook() {
   async function handleConfirm() {
     if (useConfirm(adForm.value.infoObj)) {
       const res = await addAdmin(adForm.value.infoObj);
-      if (res.data.error_code === 200) {
+      if (res.error_code === 200) {
         Store.commit({
           type: `${MutationTypes.addAdmin}`,
           payload: { ...adForm.value.infoObj }
@@ -27,8 +27,6 @@ export function useConfirmHook() {
     } else {
       ElMessage.error("请核实一下信息！");
     }
-    console.log(toRaw(Store.state.superAdmin))
-    console.log(adForm.value.infoObj);
   }
 
   return {

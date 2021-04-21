@@ -32,7 +32,7 @@
         <li :key="item" v-for="(item, index) in myArticles">
           <div class="index">{{ index + 1 }}</div>
           <div class="content">
-            <div @click="handleToArticleDetail(index)">{{ item.title }}</div>
+            <div @click="handleToArticleDetail(index)" class="content-title">{{ item.title }}</div>
             <div @click="handleToArticleDetail(index)">
               {{ item.likeCount }}
             </div>
@@ -42,10 +42,40 @@
             <div @click="handleToArticleDetail(index)">
               {{ item.favoriteStatus }}
             </div>
-            <div
-              @click="handleDeleteArticle(item.id, $event)"
-              class="el-icon-delete"
-            ></div>
+            <el-tooltip
+              class="item"
+              effect="light"
+              content="删除该文章"
+              placement="top"
+            >
+              <div
+                @click="handleDeleteArticle(item.id, $event)"
+                class="el-icon-delete"
+              ></div>
+            </el-tooltip>
+
+            <el-upload
+              action="http://120.79.138.134/file/articleFileUpload"
+              class="upload-demo"
+              multiple
+              :limit="1"
+              name="file"
+              :headers="{
+                token: token,
+              }"
+              :data="{
+                articleId: item.id,
+              }"
+            >
+              <el-tooltip
+                class="item"
+                effect="light"
+                content="上传md文件"
+                placement="top"
+              >
+                <div class="el-icon-upload2"></div>
+              </el-tooltip>
+            </el-upload>
           </div>
         </li>
       </ul>
@@ -69,40 +99,67 @@
           >
         </span>
       </template>
-      <el-input v-model="title" placeholder="请输入内容"></el-input>
-      <el-input
-        type="textarea"
-        class="course-input"
-        :rows="10"
-        placeholder="请输入文章内容"
-        v-model="content"
-      >
-      </el-input>
-      <el-select
-        class="course-select"
-        v-model="courseRadio"
-        placeholder="请选择"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        >
-        </el-option>
-      </el-select>
+      <el-tabs v-model="articleType">
+        <el-tab-pane label="word 格式" name="word">
+          <el-input v-model="title" placeholder="请输入标题"></el-input>
+          <el-input
+            type="textarea"
+            class="course-input"
+            :rows="10"
+            placeholder="请输入文章内容"
+            v-model="content"
+          >
+          </el-input>
+          <el-select
+            class="course-select"
+            v-model="courseRadio"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-tab-pane>
+        <el-tab-pane label="md 格式" name="md">
+          <el-input v-model="title" placeholder="请输入标题"></el-input>
+          <el-select
+            class="course-select"
+            v-model="courseRadio"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-tab-pane>
+      </el-tabs>
     </el-dialog>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, readonly, ref, toRaw } from "vue";
+import useCheck from "./hooks/useCheck";
 import {
   getMyPublishedArticle,
   publishArticle,
   deleteMyArticle,
 } from "../../api/index";
 import { storage, deleteArticleById } from "../../utils/shared";
-import { ElDialog, ElMessage, ElMessageBox } from "element-plus";
+import {
+  ElDialog,
+  ElMessage,
+  ElMessageBox,
+  ElTooltip,
+  ElUpload,
+} from "element-plus";
 import AdBeacon from "../../components/ad-beacon/AdBeacon.vue";
 import AdCollect from "../../components/ad-collect/AdCollect.vue";
 import { useRouter } from "vue-router";
@@ -126,8 +183,11 @@ export default defineComponent({
     ElDialog,
     AdBeacon,
     AdCollect,
+    ElTooltip,
+    ElUpload,
   },
   setup() {
+    const token = storage.get("token");
     const adminId = storage.get("adminId");
     const myArticles = ref<Article[]>([]);
     const total = ref<number>(0);
@@ -137,6 +197,11 @@ export default defineComponent({
     const courseRadio = ref<1 | 2 | 3 | 4>(1);
     const articleId = ref<number>();
     const Router = useRouter();
+    const fileContainer = ref<Blob>();
+    const articleType = ref<"word" | "md">("word");
+    function handlePreview(file: Blob) {
+      fileContainer.value = file;
+    }
     function handleToArticleDetail(index: number) {
       const id = myArticles.value[index].id;
       Router.push({
@@ -152,14 +217,28 @@ export default defineComponent({
       total.value = result.data.total;
     }
     async function handlePublishArticle() {
-      const result = await publishArticle(
-        adminId,
-        "word",
-        title.value,
-        courseRadio.value,
-        content.value
-      );
-      console.log(result);
+      const { useWordCheck, useMdCheck } = useCheck();
+      let result:any
+      if (articleType.value === "word") {
+        if (useWordCheck(title.value, content.value)) {
+          result = await publishArticle(
+            adminId,
+            articleType.value,
+            title.value,
+            courseRadio.value,
+            content.value
+          );
+        }
+      }else{
+        if(useMdCheck(title.value)){
+           result = await publishArticle(
+            adminId,
+            articleType.value,
+            title.value,
+            courseRadio.value,
+          );
+        }
+      }
       if (result.error_code === 200) {
         articleId.value = result.data;
         myArticles.value.push({
@@ -241,6 +320,9 @@ export default defineComponent({
       total.value = result.data.total;
     });
     return {
+      token,
+      articleType,
+      handlePreview,
       handleToArticleDetail,
       myArticles,
       total,
@@ -258,6 +340,9 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .article {
+  .upload-demo {
+    width: 3vw !important;
+  }
   .function-box {
     position: absolute;
     left: 90%;
@@ -278,7 +363,7 @@ export default defineComponent({
   }
   .course-select {
     margin-top: 10px;
-    margin-bottom: -10px;
+    margin-bottom: 0px;
   }
   .course-input {
     margin-top: 10px;
@@ -311,9 +396,20 @@ export default defineComponent({
       margin: 0 auto;
       padding: 0;
       padding-top: 20px;
+      .el-icon-delete {
+        width: 3vw !important;
+        text-align: center;
+        transform: translate(2vw);
+      }
+      .el-icon-upload2 {
+        width: 3vw !important;
+        text-align: center;
+        transform: translate(2vw);
+        font-size: 20px;
+        line-height: 40px;
+      }
       .header {
         margin-left: 2.5vw;
-
         display: flex;
         margin-bottom: 10px;
         div {
@@ -342,8 +438,16 @@ export default defineComponent({
         }
         .content {
           display: flex;
+          .content-title{
+             overflow: hidden;
+
+                text-overflow: ellipsis;
+
+                white-space: nowrap;
+          }
           div {
             width: 10vw;
+           
             text-align: center;
           }
           .el-icon-delete {

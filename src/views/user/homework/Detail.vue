@@ -1,5 +1,5 @@
 <template>
-  <div class="detail">
+  <div class="detail" v-loading="!info || !courseId || !userId || flag === Flags.Pending">
     <h4 class="title">{{ (info && info.taskName) || "" }}</h4>
     <p class="task-name">作业文件</p>
     <ul class="flex ac list">
@@ -28,7 +28,8 @@
     <ul class="flex ac list">
       <li class="file flex ac" v-for="(item) in userRecord?.workFileVOList || []">
         <div class="file-item">
-          <span @click="download(item.filePath, item.fileName)">{{ item.fileName }}</span>
+          <a :href="item.filePath" :download="item.fileName">{{ item.fileName }}</a>
+          <!-- <span @click="download(item.filePath, item.fileName)">{{ item.fileName }}</span> -->
         </div>
         <i class="del-btn el-icon-close" @click="deleteOneFile(info?.id)"></i>
       </li>
@@ -54,8 +55,9 @@ import { apiDeleteRecord, apiUploadHomeworkRecord } from "../../../api/homework"
 import { apiQueryOneWork } from "../../../api/homework";
 import { ErrorCode } from "../../../api/request";
 import { ElMessageBox, ElNotification } from "element-plus"
-import { showFileSize, useDropUpload } from "../../../utils/shared";
+import { Flags, showFileSize, useDropUpload } from "../../../utils/shared";
 import { GButton } from '../../../components/geek'
+import type { Response } from '../../../api'
 
 const props = defineProps<{
   userId: string,
@@ -89,14 +91,18 @@ const userRecord = ref<null | {
     "addTime": string
   }[]
 }>(null)
+const flag = ref(Flags.Normal)
 const query = async () => {
   currFile.value = []
+  flag.value = Flags.Pending
   if (!props.info) return
   const res = await apiQueryOneWork(props.userId, props.info.id)
   if (res.error_code !== ErrorCode.Success) {
     userRecord.value = null
+    flag.value = Flags.Fail
     return
   }
+  flag.value = Flags.Success
   userRecord.value = res.data as any
 }
 
@@ -126,10 +132,14 @@ const deleteRecord = (id: number | null) => {
     confirmButtonText: "确定",
     async callback(action: string) {
       if (action === "confirm") {
+        flag.value = Flags.Pending
         const res = await apiDeleteRecord(props.userId, id)
         if (res.error_code === ErrorCode.Success) {
           userRecord.value = null
           query()
+          flag.value = Flags.Success
+        } else {
+          flag.value = Flags.Fail
         }
       }
     }
@@ -155,22 +165,25 @@ const uploadBtn = useDropUpload(
 const uploadImpl = async () => {
   if (!currFile.value.length) {
     ElNotification({
-      message: "请稍等"
+      message: "亲太心急了，等几秒后点击"
     })
     return
   }
   if (!props.info) {
     ElNotification({
-      message: "请稍等"
+      message: "亲太心急了，等几秒后点击"
     })
     return
   }
-  let res = await apiUploadHomeworkRecord(props.info.id, props.courseId, props.userId)
-  if (res.error_code !== ErrorCode.Success) {
-    return
+  let res: Response | null = null
+  if (!userRecord.value) {
+    res = await apiUploadHomeworkRecord(props.info.id, props.courseId, props.userId)
+    if (res.error_code !== ErrorCode.Success) {
+      return
+    }
   }
   const uploadRequests = currFile.value.map(item => apiUploadHomework(
-    res.data.toString(),
+    (res && res.data.toString()) || userRecord.value!.id,
     item.file,
     e => {
       item.progress = e.loaded / e.total

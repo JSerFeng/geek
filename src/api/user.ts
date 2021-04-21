@@ -90,3 +90,5 @@ export const apiGetAnnounceDetail = (id: number) => request.get(`/announce/query
 export const apiChangePassword = (userId: string, password: string, newPassword: string, refreshToken: string) => request.post("/user/resetPassword", {
   userId, password, newPassword, refreshToken
 }) as Promise<Response>
+
+export const apiDelAnnounce = (id: number) => request.get("/announce/delAnnounce/" + id) as Promise<Response>

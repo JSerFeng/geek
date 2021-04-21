@@ -1,16 +1,15 @@
-<template lang="">
-  <div class="wrap"
-  v-loading="flag === Flags.Pending"
-  >
-    <GSelect :items="courses" @change="changeCourse"/>
+<template>
+  <div class="wrap" v-loading="flag === Flags.Pending">
+    <GSelect :items="courses" @change="changeCourse" />
     <ul>
-      <li @click="open(item.id)" class="flex ac jb p" v-for="(item) in broadCasts.items" :key="item.id">
-        <div class="title big-font">
-          {{ item.title }}
-        </div>
-        <div class="small-font">
-          {{ getTime(item.addTime) }}
-        </div>
+      <li
+        @click="open(item.id)"
+        class="flex ac jb p"
+        v-for="(item) in broadCasts.items"
+        :key="item.id"
+      >
+        <div class="title big-font">{{ item.title }}</div>
+        <div class="small-font">{{ getTime(item.addTime) }}</div>
       </li>
     </ul>
     <Modal width="80%" ref="detailModal">
@@ -19,14 +18,15 @@
           <GLoadingIcon />
         </div>
         <div v-else>
-          <DetailVue :detail="detail"/>
+          <DetailVue :detail="detail" />
         </div>
       </div>
     </Modal>
     <div class="flex jc ac">
       <GButton @click="goNext(-1)" :disabled="!prevAvailable">上一页</GButton>
       <span class="curr-page">
-         <span class="curr">{{ currIdx }}</span> / <span class="total">{{ broadCasts.total }}</span>
+        <span class="curr">{{ currIdx }}</span> /
+        <span class="total">{{ broadCasts.totalPage }}</span>
       </span>
       <GButton @click="goNext(1)" :disabled="!nextAvailable">下一页</GButton>
     </div>
@@ -118,6 +118,8 @@ const open = (id: number) => {
   box-sizing: border-box;
   background-color: #fff;
   backdrop-filter: blur(20px);
+  max-height: 100%;
+  overflow-y: hidden;
 
   ul {
     li {

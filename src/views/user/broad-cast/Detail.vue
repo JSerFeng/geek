@@ -16,10 +16,14 @@
     <el-divider />
     <div>
       <template v-if="detail && detail.filePath">
-        <span class="font12 p" @click="download(detail.filePath)">
+        <!-- <span class="font12 p" @click="download(detail.filePath)">
           {{ detail.fileName }}
           <i class="el-icon-download"></i>
-        </span>
+        </span>-->
+        <a class="light font16" :href="detail.filePath" :download="detail.fileName">
+          {{ detail.fileName }}
+          <i class="el-icon-download"></i>
+        </a>
       </template>
     </div>
   </div>
@@ -36,6 +40,9 @@ const props = defineProps<{
 }>()
 </script>
 <style lang="scss" scoped>
+a {
+  color: rgb(120, 192, 255);
+}
 .info {
   .header {
     font-size: 14px;
