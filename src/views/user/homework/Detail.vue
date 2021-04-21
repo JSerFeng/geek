@@ -28,7 +28,8 @@
     <ul class="flex ac list">
       <li class="file flex ac" v-for="(item) in userRecord?.workFileVOList || []">
         <div class="file-item">
-          <span @click="download(item.filePath, item.fileName)">{{ item.fileName }}</span>
+          <a :href="item.filePath" :download="item.fileName">{{ item.fileName }}</a>
+          <!-- <span @click="download(item.filePath, item.fileName)">{{ item.fileName }}</span> -->
         </div>
         <i class="del-btn el-icon-close" @click="deleteOneFile(info?.id)"></i>
       </li>
@@ -155,19 +156,22 @@ const uploadBtn = useDropUpload(
 const uploadImpl = async () => {
   if (!currFile.value.length) {
     ElNotification({
-      message: "请稍等"
+      message: "亲太心急了，等几秒后点击"
     })
     return
   }
   if (!props.info) {
     ElNotification({
-      message: "请稍等"
+      message: "亲太心急了，等几秒后点击"
     })
     return
   }
-  let res = await apiUploadHomeworkRecord(props.info.id, props.courseId, props.userId)
-  if (res.error_code !== ErrorCode.Success) {
-    return
+  let res: any
+  if (!userRecord.value) {
+    res = await apiUploadHomeworkRecord(props.info.id, props.courseId, props.userId)
+    if (res.error_code !== ErrorCode.Success) {
+      return
+    }
   }
   const uploadRequests = currFile.value.map(item => apiUploadHomework(
     res.data.toString(),

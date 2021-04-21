@@ -109,15 +109,13 @@ export const apiBigFileMerge = (
 
 const inst = axios.create()
 
-export const download = async (url: string, name?: string) => {
-  const res = await inst.post(url)
-  const blobUrl = URL.createObjectURL(res)
-  const aTag = document.createElement("a")
-  aTag.setAttribute("href", blobUrl)
-  aTag.setAttribute("download", name || "")
-  document.body.appendChild(aTag)
-  aTag.click()
-  document.body.removeChild(aTag)
-  URL.revokeObjectURL(blobUrl)
-}
+export const download = async (url: string, name?: string) => new Promise(async (resolve) => {
+  const iframe = document.createElement("iframe")
+  iframe.src = url
+  iframe.style.display = "none"
+  iframe.onload = () => {
+    document.body.removeAttribute("iframe")
+  }
+  document.body.appendChild(iframe)
+})
 

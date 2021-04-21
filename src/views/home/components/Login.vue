@@ -10,7 +10,7 @@
           <h3 class="username">
             <router-link class="username" to="/userinfo">{{ name }}</router-link>
           </h3>
-          <p class="introduction" @click="openSetIntro">{{ userInfo.introduce }}</p>
+          <p class="introduction dark" @click="openSetIntro">{{ userInfo.introduce }}</p>
           <Modal ref="modalCtx" width="70%">
             <div style="padding: 30px 15px;">
               <GInput v-model="introduction" placeholder="简介" />
@@ -127,7 +127,6 @@ const logout = () => {
 .wrap {
   width: 100%;
   height: 100%;
-  color: #fff;
   .userInfo {
     display: flex;
     flex-direction: column;

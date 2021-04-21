@@ -16,6 +16,11 @@
           <el-button type="primary" @click="appendFile(scope.id, scope.courseId)">添加附件</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="删除公告">
+        <template #default="scope">
+          <el-button type="primary" @click="delAnnounce(scope.id)">删除公告</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       @current-change="switchPage"
@@ -39,7 +44,7 @@
 import { ElPagination, ElSelect, ElOption, ElButton } from "_element-plus@1.0.2-beta.40@element-plus";
 import { ROW } from "../../config/config";
 import { ref, watchEffect } from 'vue'
-import { apiGetAnnounce } from "../../api/user";
+import { apiDelAnnounce, apiGetAnnounce } from "../../api/user";
 import type { ApiAnnounce } from '../../api/user'
 import { ErrorCode } from "../../api/request";
 import { useStore } from "../../store";
@@ -76,6 +81,11 @@ const appendFile = async (id: number, courseId: number) => {
   currId.value = id
   currCourseId.value = courseId
   fileModal.value!.open()
+  query()
+}
+const delAnnounce = async (id: number) => {
+  apiDelAnnounce(id)
+  query()
 }
 const onFileFinish = () => {
   fileModal.value!.close()
