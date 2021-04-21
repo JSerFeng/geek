@@ -1,52 +1,55 @@
 <template>
-  <div class="article">
-    <ul class="list shade" v-loading="status===Flags.Pending">
-      <li
-      class="flex" 
-      v-for="(item, i) in data.items" 
-      :key="item.id"
-      >
-        <div class="article-avatar">
-          <ElAvatar :src="item.image" />
-        </div>
-        <div class="article-info">
-          <div class="name">
-            <span>{{ item.adminName }}</span>
-            <LogoVue :course-name="item.courseName" />
+  <div class="article" v-loading="status === Flags.Pending">
+    <template v-if="data.items.length">
+      <ul class="list" v-loading="status === Flags.Pending">
+        <li class="flex" v-for="(item, i) in data.items" :key="item.id">
+          <div class="article-avatar">
+            <ElAvatar :src="item.image" />
           </div>
-          <div class="title p" @click="findDetailArticle(item.id)">{{ item.title }}</div>
-          <div class="footer flex">
-            <!-- 点赞图标 -->
-            <div
-              @click="markLike(i, item.id)"
-              class="footer-icon"
-              :class="{ active: item.likeStatus, }"
-            >
-              <span class="p">
-                <span class="icon-thumb-up iconfont"></span>
-                {{ item.likeCount }}
-              </span>
+          <div class="article-info">
+            <div class="name">
+              <span>{{ item.adminName }}</span>
+              <LogoVue :course-name="item.courseName" />
             </div>
-            <!-- 收藏图标 -->
-            <div
-              @click="markFavorite(i, item.id)"
-              class="footer-icon"
-              :class="{ active: item.favoriteStatus }"
-            >
-              <span class="p">
-                <span class="icon-shoucang iconfont"></span>
-              </span>
+            <div class="title p" @click="findDetailArticle(item.id)">{{ item.title }}</div>
+            <div class="footer flex">
+              <!-- 点赞图标 -->
+              <div
+                @click="markLike(i, item.id)"
+                class="footer-icon"
+                :class="{ active: item.likeStatus, }"
+              >
+                <span class="p">
+                  <span class="icon-thumb-up iconfont"></span>
+                  {{ item.likeCount }}
+                </span>
+              </div>
+              <!-- 收藏图标 -->
+              <div
+                @click="markFavorite(i, item.id)"
+                class="footer-icon"
+                :class="{ active: item.favoriteStatus }"
+              >
+                <span class="p">
+                  <span class="icon-shoucang iconfont"></span>
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      </li>
-    </ul>
-
-    <div class="pagination shade flex jc ac">
-      <GButton :disabled="page <= 1" @click="goPrev">prev</GButton>
-      <div class="cur-page">{{ Math.min(data.totalPage, page) }} / {{ data.totalPage }}</div>
-      <GButton :disabled="page >= data.totalPage" @click="goNext">next</GButton>
-    </div>
+        </li>
+      </ul>
+      <div class="pagination flex jc ac">
+        <GButton :disabled="page <= 1" @click="goPrev">prev</GButton>
+        <div class="cur-page">{{ Math.min(data.totalPage, page) }} / {{ data.totalPage }}</div>
+        <GButton :disabled="page >= data.totalPage" @click="goNext">next</GButton>
+      </div>
+    </template>
+    <template v-else-if="status === Flags.Fail">
+      <FatalVue style="width: 50%;margin: 0 auto;" />
+    </template>
+    <template v-else-if="status === Flags.Success">
+      <EmptyVue style="width: 50%;margin: 0 auto;" />
+    </template>
   </div>
 </template>
 <script lang="ts" setup>
@@ -62,6 +65,8 @@ import { useRouter } from "vue-router";
 import LogoVue from "../Logo.vue";
 import { ROW } from "../../config/config";
 import { GButton } from '../geek'
+import EmptyVue from "../Empty.vue";
+import FatalVue from "../Fatal.vue";
 
 
 const store = useStore()
@@ -192,7 +197,7 @@ const findDetailArticle = (id: number) => {
           color: rgb(126, 126, 126);
         }
 
-        .title {
+        > .title {
           font-size: 18px;
           overflow: hidden;
           white-space: nowrap;
@@ -213,10 +218,10 @@ const findDetailArticle = (id: number) => {
 
           .active {
             font-weight: bolder;
-            color: rgba(218, 116, 0, 0.664);
+            color: rgb(22, 37, 150);
             span {
               font-size: 16px;
-              color: rgba(255, 152, 34, 0.664);
+              color: rgb(93, 104, 185);
             }
           }
         }

@@ -1,10 +1,10 @@
-import Login from '../../components/login/Login.vue'
-import DoLogin from '../../components/login/components/DoLogin.vue'
-import Register from '../../components/login/components/Register.vue'
-import UserInfoVue from '../../views/user/userInfo/UserInfo.vue'
-import ArticleView from '../../views/user/articles/ArticleView.vue'
-import ArticleDetailVue from '../../views/user/articles/ArticleDetail.vue'
-import HomeWorkVue from '../../views/user/homework/HomeWork.vue'
+const DoLogin = () => import('../../components/login/components/DoLogin.vue')
+const Register = () => import('../../components/login/components/Register.vue')
+const UserInfoVue = () => import('../../views/user/userInfo/UserInfo.vue')
+const ArticleView = () => import('../../views/user/articles/ArticleView.vue')
+const ArticleDetailVue = () => import('../../views/user/articles/ArticleDetail.vue')
+const HomeWorkVue = () => import('../../views/user/homework/HomeWork.vue')
+const Login = () => import('../../components/login/Login.vue')
 
 export enum Auth {
   NONE = /*         */ 0b00000000,

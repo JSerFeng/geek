@@ -8,7 +8,7 @@
       <i class="el-icon-close close-icon" @click="close"></i>
       <slot></slot>
       <div class="footer">
-        <slot name="footer">Geek</slot>
+        <slot name="footer">Geek&#x2764;勤奋蜂</slot>
       </div>
     </div>
   </teleport>

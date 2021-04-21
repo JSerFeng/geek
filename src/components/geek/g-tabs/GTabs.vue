@@ -1,14 +1,12 @@
-<template lang="">
+<template>
   <ul class="g-tabs flex">
-    <li 
-    v-for="(item, i) in items" 
-    @click="change(i, item.v, item.k)" 
-    :class="{ active: currIdx === i }"
-    class="item flex ac jc p"
-    :key="item.k"
-    >
-      {{ item.k }}
-    </li>
+    <li
+      v-for="(item, i) in items"
+      @click="change(i, item.v, item.k)"
+      :class="{ active: currIdx === i }"
+      class="item flex ac jc p"
+      :key="item.k"
+    >{{ item.k }}</li>
   </ul>
 </template>
 <script lang="ts" setup>

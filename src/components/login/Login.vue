@@ -1,14 +1,14 @@
-<template lang="">
+<template>
   <div class="login-modal">
     <div class="router-link">
-      <RouterLink to="/login/" exact-active-class="active">登陆</RouterLink>
+      <RouterLink to="/login" exact-active-class="active">登陆</RouterLink>
       <RouterLink to="/login/register" exact-active-class="active">注册</RouterLink>
     </div>
     <div class="model">
       <router-view v-slot="{ Component }">
         <transition mode="out-in">
           <keep-alive>
-            <component :is="Component"/>
+            <component :is="Component" />
           </keep-alive>
         </transition>
       </router-view>

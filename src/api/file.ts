@@ -1,6 +1,7 @@
 import request, { ErrorCode } from "./request";
 import { Response } from '.'
 import axios from "axios";
+import { isUndef } from "../utils/shared";
 
 const plainCb = () => { }
 
@@ -68,8 +69,8 @@ export const apiBigFileUpload = (
   shardTotal: number,
   shardSize: number,
   fileSize: number,
-  courseId: number,
   hash: string,
+  courseId?: number,
   onUploadProgress?: (e: ProgressEvent) => void
 ): Promise<Response> => {
   const fd = new FormData()
@@ -78,7 +79,7 @@ export const apiBigFileUpload = (
   fd.set("shardTotal", shardTotal.toString())
   fd.set("shardSize", shardSize.toString())
   fd.set("fileSize", fileSize.toString())
-  fd.set("courseId", courseId.toString())
+  !isUndef(courseId) && fd.set("courseId", courseId.toString())
   fd.set("fileKey", hash.toString())
 
   /**@TODO */

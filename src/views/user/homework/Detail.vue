@@ -1,38 +1,36 @@
-<template lang="">
+<template>
   <div class="detail">
     <h4 class="title">{{ (info && info.taskName) || "" }}</h4>
     <p class="task-name">作业文件</p>
     <ul class="flex ac list">
       <li
-      class="p file" 
-      v-for="(file, idx) in (info && info.taskFileVOList) || []" 
-      :key="idx"
-      @click="download(file.filePath, file.fileName)"
+        class="p file"
+        v-for="(file, idx) in (info && info.taskFileVOList) || []"
+        :key="idx"
+        @click="download(file.filePath, file.fileName)"
       >
         <div class="file-item">
           {{ file.fileName }}
-          <div class="el-icon-download">
-        </div>
+          <div class="el-icon-download"></div>
         </div>
       </li>
     </ul>
 
     <p class="task-name">
       提交记录
-      <i class="del-btn el-icon-close" @click="deleteRecord(info?.id || null)"></i>
+      <template v-if="userRecord">
+        <i class="del-btn el-icon-close" @click="deleteRecord(userRecord?.id || null)"></i>
+      </template>
     </p>
     <div v-if="!userRecord">
       <span style="font-size: 14px;">无记录</span>
     </div>
     <ul class="flex ac list">
-      <li
-        class="file flex ac" 
-        v-for="(item) in userRecord?.workFileVOList || []"
-      >
+      <li class="file flex ac" v-for="(item) in userRecord?.workFileVOList || []">
         <div class="file-item">
           <span @click="download(item.filePath, item.fileName)">{{ item.fileName }}</span>
         </div>
-        <i class="del-btn el-icon-close" @click="deleteOneFile(item.id)"></i>
+        <i class="del-btn el-icon-close" @click="deleteOneFile(info?.id)"></i>
       </li>
     </ul>
     <div>
@@ -45,10 +43,7 @@
           </div>
         </li>
       </ul>
-      <GButton 
-      type="broke" @click="uploadImpl"
-      :disabled="!!info?.isClosed"
-      >新提交</GButton>
+      <GButton type="broke" @click="uploadImpl" :disabled="!!info?.isClosed">新提交</GButton>
     </div>
   </div>
 </template>
@@ -95,6 +90,7 @@ const userRecord = ref<null | {
   }[]
 }>(null)
 const query = async () => {
+  currFile.value = []
   if (!props.info) return
   const res = await apiQueryOneWork(props.userId, props.info.id)
   if (res.error_code !== ErrorCode.Success) {
@@ -104,9 +100,7 @@ const query = async () => {
   userRecord.value = res.data as any
 }
 
-
-
-const deleteOneFile = async (id: number) => {
+const deleteOneFile = async (id?: number) => {
   if (!id) return
   ElMessageBox.confirm("删除不可逆，确认删除吗?", {
     cancelButtonText: "取消",
@@ -117,6 +111,7 @@ const deleteOneFile = async (id: number) => {
         if (res.error_code === ErrorCode.Success) {
           const idx = userRecord.value!.workFileVOList.findIndex(item => item.id === id)
           userRecord.value!.workFileVOList.splice(idx, 1)
+          query()
         }
       }
     }
@@ -134,6 +129,7 @@ const deleteRecord = (id: number | null) => {
         const res = await apiDeleteRecord(props.userId, id)
         if (res.error_code === ErrorCode.Success) {
           userRecord.value = null
+          query()
         }
       }
     }
@@ -188,6 +184,7 @@ const uploadImpl = async () => {
 
   try {
     await Promise.all(uploadRequests)
+    query()
   } catch (res) {
     /**不用做处理，提示报错在request.ts中 */
   }
@@ -195,7 +192,6 @@ const uploadImpl = async () => {
 
 watchEffect(() => {
   query()
-  currFile.value = []
 })
 </script>
 <style lang="scss" scoped>

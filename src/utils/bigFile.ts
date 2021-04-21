@@ -1,6 +1,6 @@
 import { ref, Ref } from 'vue'
 import { apiBigFileCheck, apiBigFileMerge, apiBigFileUpload } from '../api/file'
-import request, { ErrorCode, providePort } from '../api/request'
+import { ErrorCode, providePort } from '../api/request'
 import { CHUNK_SIZE } from '../config/config'
 import { isUndef, nextTick } from './shared'
 import FileWorker from './worker2hash?worker'
@@ -22,7 +22,7 @@ export enum UploadMsg {
 }
 
 
-export const useBigFileUpload = (courseId: number, id: number): [
+export const useBigFileUpload = (id: number, courseId?: number, onFinish?: (result: boolean) =>void): [
   Ref<string>, Ref<number>, Ref<number>, (file: File) => Promise<() => void>, () => void, () => void
 ] => {
   let nextPosition = 0
@@ -33,7 +33,6 @@ export const useBigFileUpload = (courseId: number, id: number): [
   let chunks: ArrayBuffer[] | null = null
   let hash = ""
   let _upload: (() => void) | null = null
-  let done = false
 
   /**控制暂停和恢复 */
   let blockResolve: ((...args: any) => void) | null = null
@@ -66,7 +65,6 @@ export const useBigFileUpload = (courseId: number, id: number): [
     const chunks: ArrayBuffer[] = []
     while (nextPosition < total) {
       await goNext()
-      console.log("slice");
 
       const chunk = file.slice(nextPosition * CHUNK_SIZE, (nextPosition + 1) * CHUNK_SIZE)
       chunks.push(await read2buf(chunk))
@@ -108,8 +106,6 @@ export const useBigFileUpload = (courseId: number, id: number): [
 
     _upload = upload
     async function upload() {
-      console.log("slice total:", total);
-
       status.value = UploadMsg.Upload
 
       /**检查有没有上传过，如果已经上传过，data是当前须要上传的分片下标 */
@@ -146,6 +142,7 @@ export const useBigFileUpload = (courseId: number, id: number): [
 
       let progressArray = new Array(CONCURRENT_LIMIT).fill(0)
       while (nextPosition < len) {
+        const currIdx = nextPosition
         await nextTick()
         if (pause) {
           return
@@ -156,22 +153,22 @@ export const useBigFileUpload = (courseId: number, id: number): [
         }
         requestNum++
         apiBigFileUpload(
-          new Blob([chunks![nextPosition]]),
-          nextPosition,
+          new Blob([chunks![currIdx]]),
+          currIdx,
           len,
           CHUNK_SIZE,
           file.size,
-          courseId,
           hash,
+          courseId,
           (e) => {
             const target = e.loaded / e.total
-            let idx = nextPosition % 4
+            let idx = currIdx % 4
             progressUpload.value += (target - progressArray[idx]) / total
             progressArray[idx] = target
           }
         ).then(res => {
           if (res.error_code !== ErrorCode.Success) {
-            progressUpload.value += 1 / total
+            // progressUpload.value += 1 / total
             status.value = UploadMsg.NetError
             pauseFn()
           }
@@ -189,9 +186,11 @@ export const useBigFileUpload = (courseId: number, id: number): [
       const mergeRes = await apiBigFileMerge(file.name, hash, id)
       if (mergeRes.error_code !== ErrorCode.Success) {
         status.value = UploadMsg.NetError
+        onFinish && onFinish(false)
         return
       }
       status.value = UploadMsg.Success
+      onFinish && onFinish(true)
       progressUpload.value = 1
     }
     return upload
