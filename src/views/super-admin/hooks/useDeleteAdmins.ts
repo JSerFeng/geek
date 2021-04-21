@@ -2,7 +2,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, ref, toRaw } from 'vue'
 import { deleleAdmins, deleteAdmin } from '../../../api/index'
 import { useStore } from '../../../store/index'
-import { getIdList } from '../../../utils/shared'
+import { deleteTaskById, getIdList } from '../../../utils/shared'
 import { MutationTypes } from '../../../store/modules/super-admin/mutations'
 interface Row {
     id: number;
@@ -23,15 +23,16 @@ export function useDeleteAdmins () {
         })
           .then(async () => {
             const adminIdArr = computed(() => Store.state.superAdmin.adminIdList);
-            Store.commit({
-              type:`${MutationTypes.deleteAdmins}`,
-              payload:adminIdArr.value
-            })
+           
             const res = await deleleAdmins(adminIdArr.value);
-            if (res.data.error_code === 200) {
-              ElMessage.success("删除成功！");
+            if (res.error_code === 200) {
+              Store.commit({
+                type:`${MutationTypes.deleteAdmins}`,
+                payload:adminIdArr.value
+              })
+              ElMessage.success(res.message);
             } else {
-              ElMessage.error("删除失败！");
+              ElMessage.error(res.message);
             }
           })
           .catch(() => {
@@ -53,20 +54,21 @@ export function useDeleteAdmins () {
           confirmButtonText: "确定",
           cancelButtonText: '取消',
           center: true,
-        }).then(() => {
-            deleteAdmin(row.adminId)
-            .then(() =>{
+        }).then(async() => {
+            const result =await deleteAdmin(row.adminId)
+            console.log(result)
+            if(result.error_code === 200){
               Store.commit({
                 type:`${MutationTypes.deleteAdmin}`,
                 payload:row.adminId
               })
-            }).catch(() => {
+              ElMessage({
+                type: 'success',
+                message: '删除成功!'
+              });
+            }else{
               ElMessage.error('网络错误!')
-            })
-            ElMessage({
-              type: 'success',
-              message: '删除成功!'
-            });
+            }
           }).catch(() => {
             ElMessage({
               type: 'info',

@@ -135,7 +135,6 @@ export const adminTaskFileUpload = (taskId: number, file: Blob) => {
 export const adminDeleteTaskById = (taskId: any, adminId: string) => {
   adminId = adminId.toString()
   const id = parseInt(taskId)
-  
   return request.post('/file/delTaskFile', { id, adminId }) as Promise<Response>
 }
 
@@ -148,12 +147,18 @@ export const getMyPublishedArticle = (page?: number, rows?: number, userId?: str
 // 管理员发布文章
 export const publishArticle = (
   userId: number,
-  articleType: string,
+  articleType: "word" | 'md',
   title: string,
   courseId?: 1 | 2 | 3 | 4,
   content?: string
 ) => {
-  const payload = {userId, articleType, title, courseId, content}
+  let payload
+  if(content){
+    payload = {userId, articleType, title, courseId, content}
+  }else{
+  payload = {userId, articleType, title, courseId}
+  }
+  console.log(payload)
   return request.post('/article/addArticle',payload) as Promise<Response>
 }
 
@@ -171,7 +176,7 @@ export const getAdminInfoList = (
 ) => {
   // 等测试接口把参数传进去
   const params = { page, rows, courseName, adminName, adminId }
-  return request.get('/superAdmin/queryAdmins')
+  return request.get('/superAdmin/queryAdmins', {params}) as any as Promise<Response>
 }
 
 interface AddAdmin {
@@ -196,8 +201,18 @@ export const editAdmin = ({
   courseName,
   id
 }: AddAdmin
-) => request.post('/superAdmin/updateAdmin', { adminId, password, adminName, courseName, id }) as Promise<Response>
+) => {
+  let payload 
+  if(password){
+    payload = {adminId, id, courseName, adminName, password}
+  }else{
+  payload = {adminId, id, courseName, adminName}
+  }
+  console.log(payload)
+
+  return request.post('/superAdmin/updateAdmin', payload) as Promise<Response>
+}
 
 export const deleteAdmin = (adminId: string) => request.post('/superAdmin/delAdmin', { adminId }) as Promise<Response>
 
-export const deleleAdmins = (adminList: string[]) => request.post('/superAdmin/delAdmins', { adminList }) as Promise<Response>
+export const deleleAdmins = (adminList: string[]) => request.post('/superAdmin/delAdmins', {userIdList: adminList }) as Promise<Response>

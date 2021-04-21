@@ -57,7 +57,7 @@
           v-for="item in homeworkFileList"
         >
           <el-tag
-            @close="handleDeleteTaskFile(item.fileName)"
+            @close="handleDeleteTaskFile(item.fileName,item.id)"
             :key="item.fileName"
             closable
           >
@@ -185,7 +185,7 @@ export default defineComponent({
         });
       }
     }
-    async function handleDeleteTaskFile(fileName: string) {
+    async function handleDeleteTaskFile(fileName: string, id:number) {
       ElMessageBox.confirm("此操作将删除这个附件, 是否继续?", "", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -193,7 +193,7 @@ export default defineComponent({
       })
         .then(async () => {
           // 传入taskId， 和adminId--> 登录之后获取
-          const result = await adminDeleteTaskById(taskId, adminId);
+          const result = await adminDeleteTaskById(id, adminId);
           console.log(result)
           if (result.error_code == 200) {
             Store.commit({
@@ -287,6 +287,9 @@ export default defineComponent({
     font-size: 30px;
     font-weight: 600;
     width: 100%;
+    margin-top: 5vh;
+    color: white;
+    margin-bottom: -2vh;
     text-align: center;
   }
 

@@ -1,61 +1,55 @@
-import Admin from '../../views/admin/Admin.vue'
-import SuperAdmin from '../../views/super-admin/SuperAdmin.vue'
-import CheckHomework from '../../views/check-homework/CheckHomework.vue'
-import HomeworkDetail from '../../views/homework-detail/HomeworkDetail.vue'
-import HowmworkStatus from '../../views/homework-status/HomeworkStatus.vue'
-import StudentDetail from '../../views/student-detail/StudentDetail.vue'
-import CourseIntroduce from '../../views/course-introduce/CourseIntorduce.vue'
-import ArticleManage from '../../views/article-manage/ArticleMange.vue'
-import MyCollectAtricle from '../../components/ad-my-collect/AdMyCollect.vue'
+// import StudentDetail from '../../views/student-detail/StudentDetail.vue'
+// import CourseIntroduce from '../../views/course-introduce/CourseIntorduce.vue'
+// import ArticleManage from '../../views/article-manage/ArticleMange.vue'
+// import MyCollectAtricle from '../../components/ad-my-collect/AdMyCollect.vue'
 import { Auth } from '../user/index'
-
 export default [{
   path: '/admin',
-  component: Admin,
+  component: import('../../views/admin/Admin.vue'),
   meta: {
     auth: Auth.ADMIN
   }
 },
 {
   path: '/checkTask',
-  component: CheckHomework,
+  component: import('../../views/check-homework/CheckHomework.vue'),
   meta: {
     auth: Auth.ADMIN
   }
 }, {
   path: '/superadmin',
-  component: SuperAdmin,
+  component: import('../../views/super-admin/SuperAdmin.vue'),
   meta: {
     auth: Auth.ADMIN
   }
 }, {
   path: '/taskDetail/:id',
-  component: HomeworkDetail,
+  component: import('../../views/homework-detail/HomeworkDetail.vue'),
   meta: {
     auth: Auth.ADMIN
   }
 }, {
   path: '/taskStatus',
-  component: HowmworkStatus,
+  component: import('../../views/homework-status/HomeworkStatus.vue'),
   meta: {
     auth: Auth.ADMIN
   }
 }, {
   path: '/stuDetail',
-  component: StudentDetail,
+  component: import('../../views/student-detail/StudentDetail.vue'),
   meta: {
     auth: Auth.ADMIN
   }
 }, {
   path: '/couInduce',
-  component: CourseIntroduce
+  component: import('../../views/course-introduce/CourseIntorduce.vue')
 }, {
   path: '/articleManage',
-  component: ArticleManage,
+  component: import('../../views/article-manage/ArticleMange.vue'),
   meta: {
     auth: Auth.ADMIN
   }
 },{
   path:'/myCollect',
-  component:MyCollectAtricle
+  component:import('../../components/ad-my-collect/AdMyCollect.vue')
 }]

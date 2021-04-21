@@ -173,6 +173,7 @@ export default defineComponent({
 }
 .studnet-detail {
   .title {
+    padding-top: 20px;
     width: 80%;
     margin: -5vh auto 5vh auto;
     text-align: center;
@@ -239,7 +240,7 @@ export default defineComponent({
 }
 .student-detail-pagnination {
   display: block;
-  margin: 16vh auto;
+  margin: 13vh auto;
   text-align: center;
   width: 20%;
 }

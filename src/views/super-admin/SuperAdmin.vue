@@ -1,32 +1,32 @@
 <template>
-  <div class="super-admin">
-   <admin-header/>
-    <admin-table/>
-    <admin-pagenation/>
+  <div>
+    <div class="super-admin">
+      <admin-header />
+      <admin-table />
+      <admin-pagenation />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import AdminTable from './components/AdminTable.vue'
-import AdminHeader from './components/AdminHeader.vue'
-import AdminPagenation from './components/AdminPagenation.vue'
+import AdminTable from "./components/AdminTable.vue";
+import AdminHeader from "./components/AdminHeader.vue";
+import AdminPagenation from "./components/AdminPagenation.vue";
 export default defineComponent({
-  components:{
+  components: {
     AdminTable,
     AdminHeader,
-    AdminPagenation
-  }
-},
-);
+    AdminPagenation,
+  },
+});
 </script>
 
 <style lang="scss">
-
 .super-admin {
   background-color: rgba($color: #fff, $alpha: 1);
   width: 95%;
-  min-width: 80%;
+  height: 700px;
   border-radius: 50px;
   margin: 7vh auto;
   text-align: center;
@@ -39,9 +39,13 @@ export default defineComponent({
   }
   .pagenation-box {
     margin: 0 auto;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    top: 670px;
     width: 50%;
     text-align: center;
-    margin-top: 2vh;
+    margin-top: 6vh;
   }
 }
 </style>

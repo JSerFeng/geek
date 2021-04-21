@@ -37,11 +37,11 @@ export function useRequestAdminList () {
       });
       onMounted(async () => {
         await Store.dispatch(`${ActionTypes.addAdminListAsycn}`, {page:1});
-        console.log(Store)
-        tableData.data = Store.state.superAdmin.adminList.data.data.items;
-        tableData.total = Store.state.superAdmin.adminList.data.data.total
+        console.log(Store.state)
+        tableData.data = Store.state.superAdmin.adminList.data.items;
+        tableData.total = Store.state.superAdmin.adminList.data.total
       });
-      watch(()=>Store.state.superAdmin.adminList.data.data.items,(val)=>{
+      watch(()=>Store.state.superAdmin.adminList.data.items,(val)=>{
         tableData.data = val
       })
     return {

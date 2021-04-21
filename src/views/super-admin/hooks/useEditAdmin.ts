@@ -8,7 +8,7 @@ import { MutationTypes } from '../../../store/modules/super-admin/mutations'
 interface Row {
     id: number;
     adminId: string;
-    password: null | string;
+    password?: null | string;
     courseName: string;
     adminName: string;
   }
@@ -38,25 +38,34 @@ export function useEditAdmin () {
         dialogVisible.value = true;
       }
     async function handleConfirmEdit() {
-        const updateInfo = {
+        let updateInfo = {
           ...rowInfo,
           ...getValue(adFormRef.value.infoObj),
         };
+        if(!updateInfo.password){
+          delete updateInfo.password
+        }
+        console.log(adFormRef.value.infoObj)
         if (JSON.stringify(rowInfo) === JSON.stringify(updateInfo)) {
           ElMessage.error("请核实信息！");
         } else {
           if (useConfirm(updateInfo)) {
             const res = await editAdmin(updateInfo);
-            if (res.data.error_code === 200) {
+            console.log(res)
+            if (res.error_code === 200) {
               Store.commit({
                 type: `${MutationTypes.editAdmin}`,
                 payload: {
                   updateUser: updateInfo,
                 },
               });
+              ElMessage({
+                type:'success',
+                message:'修改信息成功！'
+              })
               dialogVisible.value = false;
             } else {
-              ElMessage.error("网络错误！");
+              ElMessage.error(res.message);
             }
           } else {
             ElMessage.error("请核实信息！");

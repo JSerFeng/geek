@@ -32,18 +32,19 @@ export const mutations: MutationTree<AdminState<Response | { data: {} }>> = {
     state.adminList = payload
   },
   [MutationTypes.addAdmin](state: any, payload:AddAdminPayload) {
-    state.adminList.data.data.items.push(payload.payload)
+    state.adminList.data.items.push(payload.payload)
   },
   [MutationTypes.editAdmin](state:any, payload:Payload<{updateUser:Admin}>){
-    state.adminList.data.data.items = updateUser<AdminList<Admin>, Admin>(state.adminList.data.data.items,payload.payload.updateUser)
+    state.adminList.data.items = updateUser<AdminList<Admin>, Admin>(state.adminList.data.items,payload.payload.updateUser)
   },
   [MutationTypes.deleteAdmin](state:any,payload:Payload<string>) {
-    state.adminList.data.data.items = deleteUser<Admin[],Admin>(state.adminList.data.data.items,payload.payload)
+    console.log(payload)
+    state.adminList.data.items = deleteUser<Admin[],Admin>(state.adminList.data.items,payload.payload)
   },
   [MutationTypes.submitAdminIdList](state:any, payload:Payload<string[]>) {
     state.adminIdList = payload.payload
   },
   [MutationTypes.deleteAdmins](state:any, payload:Payload<string[]>) {
-    state.adminList.data.data.items = filterAdminId(state.adminList.data.data.items, payload.payload)
+    state.adminList.data.items = filterAdminId(state.adminList.data.items, payload.payload)
   }
 }
