@@ -22,7 +22,7 @@
         </div>
       </div>
     </Modal>
-    <div class="flex jc ac">
+    <div class="flex jc ac" v-if="broadCasts.totalPage">
       <GButton @click="goNext(-1)" :disabled="!prevAvailable">上一页</GButton>
       <span class="curr-page">
         <span class="curr">{{ currIdx }}</span> /

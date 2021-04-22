@@ -265,8 +265,8 @@ ul {
   z-index: 100;
 
   .nav-item {
-    width: 2vw;
-    height: 2vw;
+    width: 2.5vw;
+    height: 2.5vw;
     border-radius: 50%;
     background-color: #fff;
     font-size: 90%;

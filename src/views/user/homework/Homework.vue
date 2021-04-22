@@ -38,10 +38,11 @@
                     class="p file"
                     v-for="(file, idx) in item.taskFileVOList"
                     :key="idx"
-                    @click="download(file.filePath, file.fileName)"
                   >
+                  <a :href="file.filePath" :download="file.fileName" target="_blank">
                     {{ file.fileName }}
                     <div class="el-icon-download"></div>
+                  </a>
                   </li>
                 </ul>
                 <GButton @click="open(item)">提交</GButton>

@@ -3,16 +3,11 @@
     <h4 class="title">{{ (info && info.taskName) || "" }}</h4>
     <p class="task-name">作业文件</p>
     <ul class="flex ac list">
-      <li
-        class="p file"
-        v-for="(file, idx) in (info && info.taskFileVOList) || []"
-        :key="idx"
-        @click="download(file.filePath, file.fileName)"
-      >
-        <div class="file-item">
+      <li class="p file" v-for="(file, idx) in (info && info.taskFileVOList) || []" :key="idx">
+        <a class="file-item" target="_blank" :href="file.filePath" :download="file.fileName">
           {{ file.fileName }}
           <div class="el-icon-download"></div>
-        </div>
+        </a>
       </li>
     </ul>
 
