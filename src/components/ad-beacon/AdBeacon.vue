@@ -1,5 +1,5 @@
 <template>
-  <div :style="top ? `top:${top}vh;` : 'top:5vh;'" :class="boxStyle === 'right' ? 'beacon-right' : 'beacon-left'">
+  <div :style="top ? `top:${top}vh;` : 'top:1vh;'" :class="boxStyle === 'right' ? 'beacon-right' : 'beacon-left'">
     {{ title }}
   </div>
 </template>

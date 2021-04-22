@@ -42,13 +42,7 @@
   </div>
 </template>
 <script lang="ts">
-import {
-  defineComponent,
-  onMounted,
-  ref,
-  computed,
-  watchEffect,
-} from "vue";
+import { defineComponent, onMounted, ref, computed, watchEffect } from "vue";
 import { ElRadioGroup, ElRadioButton, ElPagination } from "element-plus";
 import { getSignListList } from "../../api/index";
 import SignPerson from "../admin/components/SignPerson.vue";
@@ -105,11 +99,11 @@ export default defineComponent({
       total.value = result.data.data.total;
     }
     const {
-        frontPerson,
-        endPerson,
-        pythonPerson,
-        androidPerson,
-      } = useRequestCount();
+      frontPerson,
+      endPerson,
+      pythonPerson,
+      androidPerson,
+    } = useRequestCount();
     onMounted(async () => {
       const result = await getSignListList(currentPage.value, 10, 1);
       studentList.value = computed(() => result.data.items).value;
@@ -117,7 +111,7 @@ export default defineComponent({
       // 显示报名图表生详情的图表
       const chartDom = document.getElementById("student-detail-group");
       const myChart = echarts.init(chartDom!);
-      
+
       const option = {
         title: {
           text: "学员分布",
@@ -181,7 +175,7 @@ export default defineComponent({
   background-color: rgba($color: #fff, $alpha: 0.7);
   width: 95%;
   border-radius: 50px;
-  height: 700px;
+  height: 800px;
   margin: 10vh auto;
   box-shadow: -1px -1px 3px #ffffff, 1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
   .course-selection {
@@ -197,16 +191,16 @@ export default defineComponent({
   .student-list-warp {
     width: 75%;
     margin: 3vh auto;
-    display: flex;
-    height: 50vh;
-    flex-wrap: wrap;
+    height: 70vh;
     .item {
+      margin: 0;
       border-bottom: 1px solid #cecece;
       padding-bottom: 10px;
       width: 48%;
       height: 10vh;
+      float: left;
       display: flex;
-      .img{
+      .img {
         width: 6.5vw;
         padding: 0 !important;
       }
@@ -240,7 +234,7 @@ export default defineComponent({
 }
 .student-detail-pagnination {
   display: block;
-  margin: 13vh auto;
+  margin: 6vh auto 13vh auto;
   text-align: center;
   width: 20%;
 }
