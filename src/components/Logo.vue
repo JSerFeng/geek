@@ -15,11 +15,9 @@ const logoMap: { [k: string]: string } = {
   "前端": "#icon-js",
   "后端JAVA": "#icon-java",
   "后端PYTHON": "#icon-python",
-  "安卓": "icon-anzhuo",
-  "c++": "icon-anzhuo",
-  "php": "icon-anzhuo",
+  "安卓": "#icon-anzhuo",
 }
 </script>
-<style lang="">
+<style lang="scss" scoped>
   
 </style>

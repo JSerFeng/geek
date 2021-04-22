@@ -80,7 +80,7 @@ export const changeUserIntro = (userId: string, introduction: string) => request
 export const apiGetAnnounce = (page?: number, courseId?: number, rows?: number) => request.get("/announce/queryAnnounce", {
   params: {
     page: page || null,
-    rows: rows || ROW,
+    rows: rows || 6,
     courseId: courseId || null
   }
 }) as Promise<Response<ApiAnnounce>>
