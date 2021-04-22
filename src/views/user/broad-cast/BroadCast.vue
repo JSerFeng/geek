@@ -63,7 +63,7 @@ const courseId = ref<number | undefined>()
 const currIdx = ref(1)
 const flag = ref(Flags.Normal)
 const prevAvailable = computed(() => currIdx.value > 1)
-const nextAvailable = computed(() => currIdx.value < broadCasts.value.items.length)
+const nextAvailable = computed(() => currIdx.value < broadCasts.value.totalPage)
 
 const goNext = (to: number) => {
   currIdx.value += to
@@ -132,7 +132,7 @@ const open = (id: number) => {
     width: 100%;
     
     li {
-      padding: 5%;
+      padding: 10px;
       z-index: 1;
       .title {
         z-index: 1;

@@ -1,6 +1,6 @@
 <template>
   <div class="search flex">
-    <input class="input" :placeholder="defaultValue" />
+    <input class="input" :placeholder="defaultValue" v-model="val" />
     <div class="iconfont icon-sousuokuang p" @click="search"></div>
   </div>
 </template>

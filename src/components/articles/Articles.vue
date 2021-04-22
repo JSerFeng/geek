@@ -4,7 +4,7 @@
       <ul class="list" v-loading="status === Flags.Pending">
         <li class="flex" v-for="(item, i) in data.items" :key="item.id">
           <div class="article-avatar">
-            <ElImage class="ava" fit="cover" :src="item.image" :alt="item.adminName"/>
+            <ElImage class="ava" fit="cover" :src="item.image" :alt="item.adminName" />
           </div>
           <div class="article-info">
             <div class="name">
@@ -169,7 +169,7 @@ const findDetailArticle = (id: number) => {
 .article {
   position: relative;
 
-  ul {
+  .list {
     padding: 0;
     margin: 0;
     background-color: #fff;
