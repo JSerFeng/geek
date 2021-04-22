@@ -11,11 +11,11 @@
         <CheckMsg :flag="valueFlag" :msg="valueMsg" />
       </div>
       <div class="flex ac input-container">
-        <GInput v-model="newPassword" placeholder="新密码" class="g-input" />
+        <GInput v-model="newPassword" placeholder="新密码" class="g-input" type="password"/>
         <CheckMsg :flag="pwdFlag" :msg="pwdMsg" />
       </div>
       <div class="flex ac input-container">
-        <GInput v-model="confirmPassword" placeholder="确认新密码" class="g-input" />
+        <GInput v-model="confirmPassword" placeholder="确认新密码" class="g-input" type="password"/>
         <CheckMsg :flag="confirmFlag" :msg="confirmMsg" />
       </div>
       <GButton @click="goNext" type="broke" :disabled="!allSuccess">继续</GButton>

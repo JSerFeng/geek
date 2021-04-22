@@ -19,7 +19,7 @@ const goBack = inject<() => void>("pop")!
 const goNext = inject<() => void>("push")!
 
 const confirm = async (code: string) => {
-  const res = await findBackPassword(userId.value, code, newPassword.value)
+  const res = await findBackPassword(userId.value, newPassword.value, code)
   if (res.error_code === ErrorCode.Success) {
     goNext()
   }

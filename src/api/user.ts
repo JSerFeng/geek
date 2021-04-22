@@ -44,6 +44,10 @@ export const login = async (userId: string, password: string) => request.post("/
 
 export const apiUpdateUserInfo = () => request.get("/user/updateInfo") as Promise<Response<State['userInfo']>>
 
+export const apiChangeUserName = (userId: string, userName: string) => request.post("/user/changeUserName", {
+  userId, userName
+}) as Promise<Response>
+
 export const checkEmail = async (mail: string) => request.post("/user/checkEmail", { mail }) as any as Response
 
 export const checkUserId = async (userId: string) => request.post("/user/checkUserId", { userId }) as any as Response

@@ -124,7 +124,7 @@ const open = (id: number) => {
   overflow-y: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
   ul {

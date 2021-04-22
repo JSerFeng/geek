@@ -7,10 +7,19 @@
             <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
           </ElImage>
         </div>
-        <p style="font-weight: 100;">
+        <p class="p" style="font-weight: 100;" @click="openChangeName">
           <span class="font20">你好</span>,
-          <span class="font20">{{ userInfo.userName }}</span>
+          <span class="font20">
+            {{ userInfo.userName }}
+            <i class="font14 el-icon-edit"></i>
+          </span>
         </p>
+        <Modal ref="changeName" width="80%">
+          <div style="padding: 30px 15px;">
+            <GInput v-model="userName" placeholder="新用户名" />
+            <GButton :loading="introduceFlag === Flags.Pending" @click="changeUserName">确定</GButton>
+          </div>
+        </Modal>
         <div class="intro p" @click="open">
           {{ userInfo.introduce }}
           <i class="font14 el-icon-edit"></i>
@@ -82,6 +91,7 @@ import ArticlesVue from '../../../components/articles/Articles.vue';
 import { useNullCheck, useSameCheck } from '../../../components/login/hooks';
 import CheckMsgVue from '../../../components/login/components/CheckMsg.vue';
 import { useRouter } from 'vue-router';
+import { apiChangeUserName } from '../../../api/user';
 
 const store = useStore()
 const router = useRouter()
@@ -89,10 +99,22 @@ const userInfo = store.state.user.userInfo as unknown as User
 const recvEmail = computed(() => !!userInfo.receiveMail)
 const modalCtx = ref<ModalMethods>()
 
+const changeName = ref<ModalMethods>()
+const userName = ref("")
+const openChangeName = () => {
+  changeName.value!.open()
+}
+const changeUserName = async () => {
+  const res = await apiChangeUserName(userInfo.userId, userName.value)
+  if (res.error_code == ErrorCode.Success) {
+    changeName.value!.close()
+  }
+}
+
+
 const open = () => {
   modalCtx.value?.open()
 }
-
 const [introduceFlag, introduction] = useWithLoadingRef(userInfo.introduce)
 const changeIntroduction = async () => {
   introduceFlag.value = Flags.Pending
