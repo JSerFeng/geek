@@ -53,7 +53,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { defineProps, ref, watchEffect } from "vue";
+import { defineProps, ref, watch, watchEffect } from "vue";
 import { ElImage, ElNotification } from 'element-plus'
 import { Flags } from "../../utils/shared";
 import { apiChangeFavoriteState, apiQueryArticles, apiQueryFavorites } from "../../api/article";
@@ -80,7 +80,6 @@ const props = defineProps<{
   myFavorites?: boolean
 }>()
 
-
 const status = ref(Flags.Normal)
 const data = ref<Articles>({
   total: 0,
@@ -91,7 +90,10 @@ const data = ref<Articles>({
 })
 
 const page = ref(props.currentPage || 1)
-
+watch(props, () => {
+  /**这是为了换放向查询的时候保持重新回到第一页去 */
+  page.value = 1
+})
 /**点击收藏 */
 const markFavorite = async (idx: number, articleId: number) => {
   if (store.state.user.isLogin) {
@@ -133,6 +135,9 @@ const query = async () => {
       props.adminName || null
     )
   if (res.error_code === ErrorCode.Success) {
+    if (props.myFavorites) { /**如果是收藏的话，应该要把所有的文章收藏变成1 */
+      res.data.items.forEach(item => item.favoriteStatus = 1)
+    }
     data.value = res.data
     status.value = Flags.Success
   } else {

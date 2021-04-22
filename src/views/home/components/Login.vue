@@ -231,6 +231,7 @@ const logout = () => {
         border-radius: 50%;
         cursor: pointer;
         height: fit-content;
+        background-color: rgb(255, 205, 205);
         padding: 5px;
 
         &:hover {

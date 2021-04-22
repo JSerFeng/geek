@@ -22,7 +22,7 @@
         </div>
       </div>
     </Modal>
-    <div class="flex jc ac">
+    <div class="flex jc ac" v-if="broadCasts.totalPage">
       <GButton @click="goNext(-1)" :disabled="!prevAvailable">上一页</GButton>
       <span class="curr-page">
         <span class="curr">{{ currIdx }}</span> /
@@ -70,6 +70,7 @@ const goNext = (to: number) => {
 }
 
 const changeCourse = (id: number) => {
+  currIdx.value = 1
   courseId.value = id
 }
 
@@ -130,7 +131,7 @@ const open = (id: number) => {
     max-height: 100%;
     overflow-y: auto;
     width: 100%;
-    
+
     li {
       padding: 10px;
       z-index: 1;

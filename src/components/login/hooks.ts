@@ -1,6 +1,6 @@
 import { from, merge, Subject } from "rxjs";
 import { filter, switchMap, tap, debounceTime, skipWhile } from 'rxjs/operators'
-import { Ref, ref, onUnmounted, watchEffect } from "vue";
+import { Ref, ref, onUnmounted, watchEffect, watch } from "vue";
 import { checkEmail, checkUserId } from "../../api/user";
 import { ErrorCode } from "../../api/request";
 import { EmailRegex, NotNullRegex, UserIdLocalRegex } from "../../config/config";
@@ -96,7 +96,15 @@ export const useEmailCheck: ICheck = useCheckFactory(async (val) => {
   }
 })
 
-export const useSameCheck = (sameTo: Ref<string>) => useCheckFactory(val => {
-  const equal = val === sameTo.value
-  return [equal, equal ? "" : "密码和之前密码不一致"]
-})
+export const useSameCheck = (oldVal: Ref<string>) => (newVal: Ref<string>): [Ref<Flags>, Ref<string>] => {
+  const flag = ref(Flags.Normal)
+  const msg = ref("密码和之前密码不一致")
+  watch([oldVal, newVal], ([old, next]) => {
+    flag.value = old === next
+      ? Flags.Success
+      : Flags.Fail
+    msg.value = flag.value === Flags.Success ? "" : "密码和之前密码不一致"
+  })
+
+  return [flag, msg]
+}

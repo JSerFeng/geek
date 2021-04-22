@@ -38,7 +38,7 @@
 
       <div class="item rightBottomTop rightBottom link-to">
         <a
-          href="https://ids.cqupt.edu.cn/"
+          href="http://jwc.cqupt.edu.cn/index.php"
           target="_blank"
           class="flex jc ac"
           style="width: 100%;height: 100%;background-color: #31326f;color: #fff;"

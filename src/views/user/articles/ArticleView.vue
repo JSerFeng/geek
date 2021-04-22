@@ -6,7 +6,7 @@
         <SearchInput @search="search" />
       </div>
     </div>
-    <ul class="courses flex">
+    <ul class="courses flex jc ac">
       <li :class="{ 'p': true, 'active': selectedCourseId === null }" @click="selectCourse(null)">全部</li>
       <li
         :class="{ 'p': true, 'active': selectedCourseId === item.courseName }"

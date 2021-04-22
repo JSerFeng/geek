@@ -45,7 +45,7 @@ const whiteList = new Set([
   '/article/queryArticles',
   '/article/queryOneArticle',
   '/announce/queryAnnounce',
-  '/announce/queryOneAnnounce'
+  '/announce/queryOneAnnounce',
 ])
 
 

@@ -3,16 +3,11 @@
     <h4 class="title">{{ (info && info.taskName) || "" }}</h4>
     <p class="task-name">作业文件</p>
     <ul class="flex ac list">
-      <li
-        class="p file"
-        v-for="(file, idx) in (info && info.taskFileVOList) || []"
-        :key="idx"
-        @click="download(file.filePath, file.fileName)"
-      >
-        <div class="file-item">
+      <li class="p file" v-for="(file, idx) in (info && info.taskFileVOList) || []" :key="idx">
+        <a class="file-item" target="_blank" :href="file.filePath" :download="file.fileName">
           {{ file.fileName }}
           <div class="el-icon-download"></div>
-        </div>
+        </a>
       </li>
     </ul>
 
@@ -31,7 +26,7 @@
           <a :href="item.filePath" :download="item.fileName">{{ item.fileName }}</a>
           <!-- <span @click="download(item.filePath, item.fileName)">{{ item.fileName }}</span> -->
         </div>
-        <i class="del-btn el-icon-close" @click="deleteOneFile(info?.id)"></i>
+        <i class="del-btn el-icon-close" @click="deleteOneFile(item?.id)"></i>
       </li>
     </ul>
     <div>
@@ -152,14 +147,14 @@ const uploadBtn = useDropUpload(
     if (currFile.value.findIndex(f => f.file.name === file.name && f.file.size === file.size) !== -1) {
       return [false, "不能重复文件"]
     }
-    const isValid = file.size < 1024 * 1024 * 3
+    const isValid = file.size < 1024 * 1024 * 15
     if (isValid) {
       currFile.value.push({
         file,
         progress: 0
       })
     }
-    return [isValid, "作业不超过3M"]
+    return [isValid, "作业不超过15M"]
   }
 )
 const uploadImpl = async () => {
@@ -221,6 +216,8 @@ watchEffect(() => {
 
   .list {
     margin: 15px;
+    max-width: 100%;
+    overflow-x: auto;
     .file {
       margin: 0 15px;
       font-size: 14px;

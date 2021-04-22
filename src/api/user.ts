@@ -90,7 +90,11 @@ export const apiGetAnnounce = (page?: number, courseId?: number, rows?: number) 
   }
 }) as Promise<Response<ApiAnnounce>>
 
-export const apiGetAnnounceDetail = (id: number) => request.get(`/announce/queryOneAnnounce/${id}`) as Promise<Response<ApiAnnounceDetail>>
+export const apiGetAnnounceDetail = (id?: number) => request.get(`/announce/queryOneAnnounce`, {
+  params: {
+    id
+  }
+}) as Promise<Response<ApiAnnounceDetail>>
 
 export const apiChangePassword = (userId: string, password: string, newPassword: string, refreshToken: string) => request.post("/user/resetPassword", {
   userId, password, newPassword, refreshToken
