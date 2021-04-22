@@ -3,11 +3,11 @@
     <router-link to="/checkTask"><AdBeacon title="作业管理" /></router-link>
     <li class="title">作业提交详情</li>
     <li class="table">
-      <el-table :data="personList" style="width: 90%; margin: 0 auto">
+      <el-table :data="personList" style="width: 100%; margin: 0 auto">
         <el-table-column type="expand">
           <template #default="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="附件">
+              <el-form-item class="homework-file-warp" label="附件">
                 <span
                   class="homework-file"
                   :key="file.filePath"
@@ -57,7 +57,7 @@
           v-for="item in homeworkFileList"
         >
           <el-tag
-            @close="handleDeleteTaskFile(item.fileName,item.id)"
+            @close="handleDeleteTaskFile(item.fileName, item.id)"
             :key="item.fileName"
             closable
           >
@@ -67,7 +67,7 @@
       </ul>
     </li>
     <ul class="download-file">
-      <li  class="download-homework">作业 :</li>
+      <li class="download-homework">作业 :</li>
       <a class="download-file-start" :href="downloadFileUrl"
         >点击下载所有作业</a
       >
@@ -128,7 +128,7 @@ export default defineComponent({
     const homeworkFileList = ref<File[]>([]);
     const personList = ref<DetailInfo<Person, File>>();
     const taskId = (Route.params.id as any) as number;
-    const adminId = storage.get('adminId') as string
+    const adminId = storage.get("adminId") as string;
     const downloadFileUrl = ref<string>("");
     const { handleMarkScore } = useMarkScore();
     const { comPersonList, handlePaginationChange, total } = useHomeworkTable();
@@ -140,8 +140,11 @@ export default defineComponent({
       })
         .then(async () => {
           // 传入作业id和adminId
-          const result = await closeHomeworkSubmit({ id:taskId, adminId }) as any
-          console.log(result)
+          const result = (await closeHomeworkSubmit({
+            id: taskId,
+            adminId,
+          })) as any;
+          console.log(result);
           if (result.error_code === 200) {
             ElMessage({
               type: "success",
@@ -163,7 +166,7 @@ export default defineComponent({
     }
     async function handleUploadHomeworkFiles(e: any) {
       const result = await adminTaskFileUpload(taskId, e.target.files[0]);
-      console.log(result)
+      console.log(result);
       if (result.error_code === 200) {
         const fileName = e.target.files[0].name;
         Store.commit({
@@ -185,7 +188,7 @@ export default defineComponent({
         });
       }
     }
-    async function handleDeleteTaskFile(fileName: string, id:number) {
+    async function handleDeleteTaskFile(fileName: string, id: number) {
       ElMessageBox.confirm("此操作将删除这个附件, 是否继续?", "", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -194,7 +197,7 @@ export default defineComponent({
         .then(async () => {
           // 传入taskId， 和adminId--> 登录之后获取
           const result = await adminDeleteTaskById(id, adminId);
-          console.log(result)
+          console.log(result);
           if (result.error_code == 200) {
             Store.commit({
               type: `${MutationTypes.deleteFile}`,
@@ -220,9 +223,7 @@ export default defineComponent({
     }
     onMounted(async () => {
       const result = await getDetailHomeworkInfo(taskId, 1, 5);
-      total.value = computed(
-        () => result.data.total
-      ).value;
+      total.value = computed(() => result.data.total).value;
       personList.value = comPersonList(result);
       homeworkFileList.value = Store.state.homework.currentFiles;
       useDiagram(taskId);
@@ -246,6 +247,10 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
+.el-form-item__content {
+    display: flex;
+    color: black !important;
+  }
 @media screen and (min-width: 800px) {
   #diagram {
     text-align: center;
@@ -269,19 +274,9 @@ export default defineComponent({
   margin-top: -20px;
 }
 
-@media screen and (min-width: 800px) {
-  .homework-file {
-    width: 20vh;
-    display: inline-block;
-    font-size: 12px;
-    line-height: 1vh;
-  }
-}
+
 .homework-detail {
-  .el-form-item__content {
-    display: flex;
-    color: black !important;
-  }
+  
   position: relative;
   .title {
     font-size: 30px;
@@ -393,8 +388,11 @@ export default defineComponent({
     }
     .table {
       width: 60%;
+      background-color: white;
       border: 1px solid #cecece;
       height: 80vh;
+      border-radius: 20px;
+      overflow: hidden;
       position: relative;
       margin: 5% 0 5vh 10%;
       box-shadow: -1px -1px 3px #ffffff,
