@@ -65,7 +65,7 @@ const login = async () => {
         default:
           if (res.data.user.firstLogin) {
             /**第一次登陆新用户，跳到选择课程页面 */
-            router.push("/copinduce")
+            router.push("/couInduce")
           } else {
             router.push("/home")
           }
