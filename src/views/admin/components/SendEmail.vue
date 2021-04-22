@@ -87,7 +87,7 @@ export default defineComponent({
   setup(props, ctx) {
     const emailContent = ref<string>("");
     const title = ref<string>("");
-    const courseId = ref<1 | 2 | 3 | 4 | "">("");
+    const courseId = ref<1 | 2 | 3 | 4 | "">('');
     const total = ref<number>(0);
     const studentList = ref<Student[]>([]);
     const checkList = ref<string[]>([]);

@@ -2,16 +2,16 @@
   <div class="course-introduce">
     <div class="swiper">
       <div @click="handleItemClick(2, $event)" class="item iconfont left">
-        &#xe662;
-      </div>
-      <div @click="handleItemClick(1, $event)" class="item iconfont middle">
         &#xe639;
       </div>
+      <div @click="handleItemClick(1, $event)" class="item iconfont middle">
+        &#xe65a;
+      </div>
       <div @click="handleItemClick(3, $event)" class="item iconfont right">
-        &#xe690;
+        &#xe640;
       </div>
       <div @click="handleItemClick(4, $event)" class="item iconfont behind">
-        &#xede7;
+        &#xe690;
       </div>
     </div>
     <div class="introduce" v-if="currentCourse === 1">

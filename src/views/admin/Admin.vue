@@ -60,8 +60,8 @@
         <send-email ref="sendEmailRef" />
         <template #footer>
           <span class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="handleSendEmail">确 定</el-button>
+            <el-button class="confirm-button" @click="dialogVisible = false">取 消</el-button>
+            <el-button class="confirm-button" type="primary" @click="handleSendEmail">确 定</el-button>
           </span>
         </template>
       </el-dialog>
@@ -140,6 +140,9 @@ export default defineComponent({
   margin: 0;
 }
 .admin {
+  .confirm-button{
+    width: 5vw;
+  }
   .to-home {
     width: 180px;
     height: 180px;
