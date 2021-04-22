@@ -1,4 +1,4 @@
-<template lang="">
+<template>
   <Modal ref="modalCourse" width="80%">
     <h3 style="font-weight: 100">选择课程</h3>
     <ul style="padding: 0;margin: 0;" class="courses">
@@ -10,9 +10,7 @@
             :key="i"
             @click="store.dispatch(ActionTypes.ChooseCourse, item.courseId)"
           >
-            <svg class="icon" aria-hidden="true">
-              <use :xlink:href="logoMap[item.courseName]" />
-            </svg>
+            <LogoVue :course-name="item.courseName" />
             {{ item.courseName }}
           </li>
         </div>
@@ -24,28 +22,21 @@
             @click="store.dispatch(ActionTypes.DelCourse, item.courseId)"
           >
             <!--选择方向logo-->
-            <svg class="icon" aria-hidden="true">
-              <use :xlink:href="item && item.courseName && logoMap[item.courseName]" />
-            </svg>
+            <LogoVue :course-name="item.courseName" />
             {{ item.courseName }}
           </li>
         </div>
       </div>
     </ul>
   </Modal>
-  <el-tooltip
-    :content="userInfo.directionVOList.length > 0 ? '我选择的方向' : '选择方向'"
-    placement="top"
-  >
+  <el-tooltip :content="userInfo.directionVOList.length > 0 ? '我选择的方向' : '选择方向'" placement="top">
     <ul class="course-id" @click="open">
       <li>
         <i class="el-icon-plus"></i>
       </li>
       <li v-for="(item,i) in userInfo.directionVOList" :key="i">
         <!--选择方向logo-->
-        <svg class="icon" aria-hidden="true">
-          <use :xlink:href="logoMap[item.courseName]" />
-        </svg>
+        <LogoVue :course-name="item.courseName" />
       </li>
     </ul>
   </el-tooltip>
@@ -58,6 +49,9 @@ import { ActionTypes } from "../../../store/modules/user/actions"
 import type { User } from "../../../store/modules/user/state"
 import { logoMap } from '../../../config/config'
 import Modal from '../../../components/modal/Modal.vue'
+import LogoVue from "../../../components/Logo.vue";
+
+
 
 const store = useStore()
 const userInfo = store.state.user.userInfo as User
@@ -74,7 +68,7 @@ const open = () => {
 const memo = ref(new Set<number>())
 watchEffect(() => {
   memo.value.clear()
-  
+
   for (const course of (store.state.user.userInfo as User).directionVOList) {
     memo.value.add(course.courseId)
   }

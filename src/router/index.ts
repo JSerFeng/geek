@@ -3,6 +3,7 @@ import adminRoutes from './admin'
 import { createRouter, createWebHistory } from 'vue-router'
 import { ElNotification } from 'element-plus'
 import { storage } from '../utils/shared'
+import Home from '../views/home/Home.vue'
 
 export const enum Auth {
   NONE = /*         */ 0b00000000,
@@ -33,7 +34,7 @@ const routes = [
   {
     path: "/home",
     exact: true,
-    component: import('../views/home/Home.vue')
+    component: Home
   },
   ...userRoutes,
   ...adminRoutes,

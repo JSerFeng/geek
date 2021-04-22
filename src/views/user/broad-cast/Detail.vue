@@ -2,7 +2,7 @@
   <div class="info">
     <div class="header flex ac">
       <div class="flex user ac">
-        <img
+        <ElImage
           class="ava"
           :src="(detail && detail.image) || ''"
           :alt="(detail && detail.adminName) || ''"
@@ -32,8 +32,7 @@
 import { defineProps } from "@vue/runtime-core";
 import type { ApiAnnounceDetail } from '../../../api/user'
 import { getTime } from "../../../utils/shared";
-import { ElDivider } from 'element-plus'
-import { download } from "../../../api/file";
+import { ElDivider, ElImage } from 'element-plus'
 
 const props = defineProps<{
   detail: (ApiAnnounceDetail | undefined | null)

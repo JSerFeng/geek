@@ -18,6 +18,6 @@ const logoMap: { [k: string]: string } = {
   "安卓": "#icon-anzhuo",
 }
 </script>
-<style lang="">
+<style lang="scss" scoped>
   
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap bg-bottom" v-loading="flag === Flags.Pending">
+  <div class="wrap" v-loading="flag === Flags.Pending">
     <GSelect :items="courses" @change="changeCourse" />
     <ul>
       <li
@@ -115,16 +115,31 @@ const open = (id: number) => {
   position: relative;
   width: 100%;
   height: 100%;
-  padding: 10px;
+  padding: 10px 0;
   box-sizing: border-box;
   background-color: #fff;
   backdrop-filter: blur(20px);
   max-height: 100%;
   overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   ul {
+    max-height: 100%;
+    overflow-y: auto;
+    width: 100%;
+    
     li {
-      padding: 5px 0;
+      padding: 5%;
+      z-index: 1;
+      .title {
+        z-index: 1;
+      }
+      .small-font {
+        z-index: 1;
+      }
     }
   }
 
