@@ -86,6 +86,30 @@ ul {
   margin: 0;
   list-style: none;
 }
+::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 5px; /*高宽分别对应横竖滚动条的尺寸*/
+  height: 5px;
+}
+::-webkit-scrollbar:hover {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  width: 10px;
+
+}
+::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: #535353;
+}
+::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background: #ededed;
+}
 .bg-video {
   z-index: -1;
   position: fixed;

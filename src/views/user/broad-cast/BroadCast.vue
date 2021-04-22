@@ -70,6 +70,7 @@ const goNext = (to: number) => {
 }
 
 const changeCourse = (id: number) => {
+  currIdx.value = 1
   courseId.value = id
 }
 
@@ -130,7 +131,7 @@ const open = (id: number) => {
     max-height: 100%;
     overflow-y: auto;
     width: 100%;
-    
+
     li {
       padding: 10px;
       z-index: 1;

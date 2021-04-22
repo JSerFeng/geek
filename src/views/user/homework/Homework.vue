@@ -33,16 +33,12 @@
               </template>
               <div class="collapse">
                 <p>作业详情</p>
-                <ul class="flex ac">
-                  <li
-                    class="p file"
-                    v-for="(file, idx) in item.taskFileVOList"
-                    :key="idx"
-                  >
-                  <a :href="file.filePath" :download="file.fileName" target="_blank">
-                    {{ file.fileName }}
-                    <div class="el-icon-download"></div>
-                  </a>
+                <ul class="flex ac homework-list">
+                  <li class="p file" v-for="(file, idx) in item.taskFileVOList" :key="idx">
+                    <a :href="file.filePath" :download="file.fileName" target="_blank">
+                      {{ file.fileName }}
+                      <div class="el-icon-download"></div>
+                    </a>
                   </li>
                 </ul>
                 <GButton @click="open(item)">提交</GButton>
@@ -180,7 +176,10 @@ const open = (item: Item) => {
   .el-col {
     font-size: 16px;
   }
-
+  .homework-list {
+    max-width: 100%;
+    overflow-x: auto;
+  }
   .list {
     box-sizing: border-box;
     width: 80%;
