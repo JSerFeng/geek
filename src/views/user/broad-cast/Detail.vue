@@ -4,10 +4,10 @@
       <div class="flex user ac">
         <ElImage
           class="ava"
-          :src="(detail && detail.image) || ''"
-          :alt="(detail && detail.adminName) || ''"
+          :src="(detail && detail.adminPO.image) || ''"
+          :alt="(detail && detail.adminPO.adminName) || ''"
         />
-        <div>{{ detail && detail.adminName }}</div>
+        <div>{{ detail && detail.adminPO.adminName }}</div>
       </div>
       <p class="time">发布于{{ detail && getTime(detail.addTime) }}</p>
     </div>

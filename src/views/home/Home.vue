@@ -38,11 +38,11 @@
 
       <div class="item rightBottomTop rightBottom link-to">
         <a
-          href="http://172.22.4.2"
+          href="https://ids.cqupt.edu.cn/"
           target="_blank"
           class="flex jc ac"
           style="width: 100%;height: 100%;background-color: #31326f;color: #fff;"
-        >成员管理系统</a>
+        >教务在线</a>
       </div>
       <div class="item rightBottomMid rightBottom link-to">
         <a

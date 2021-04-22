@@ -47,11 +47,8 @@ import { ElTooltip } from 'element-plus';
 import { useStore } from "../../../store"
 import { ActionTypes } from "../../../store/modules/user/actions"
 import type { User } from "../../../store/modules/user/state"
-import { logoMap } from '../../../config/config'
 import Modal from '../../../components/modal/Modal.vue'
 import LogoVue from "../../../components/Logo.vue";
-
-
 
 const store = useStore()
 const userInfo = store.state.user.userInfo as User

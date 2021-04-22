@@ -23,12 +23,17 @@ export interface ApiAnnounceDetail {
   "courseId": number,
   "adminId": string,
   "adminName": string,
-  "image": string,
   "title": string,
   "content": string,
   "addTime": string,
   "fileName": string,
-  "filePath": string
+  "filePath": string,
+  "adminPO": {
+    adminName: string
+    courseName: string
+    id: number
+    image: string
+  }
 }
 
 export const logout = () => request.post('/user/logout', {

@@ -4,7 +4,6 @@
       <component :is="props.stack[currentPointer]" />
     </WithTransition>
   </div>
-
 </template>
 <script lang="ts" setup>
 /**

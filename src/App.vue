@@ -1,8 +1,11 @@
 <template>
   <div class="main">
     <div class="nav dark">
-      <div class="flex jc ac nav-item p shadow" @click="goBack">
+      <div class="flex jc ac nav-item p" @click="goBack">
         <i class="el-icon-back"></i>
+      </div>
+      <div class="flex jc ac nav-item p" @click="goMenu">
+        <i class="el-icon-s-home"></i>
       </div>
     </div>
     <router-view v-slot="{ Component, route }">
@@ -37,7 +40,9 @@ const router = useRouter()
 const goBack = () => {
   router.back()
 }
-
+const goMenu = () => {
+  router.push("/home")
+}
 onMounted(async () => {
   await store.dispatch(ActionTypes.UpdateUserInfo)
   store.dispatch(ActionTypes.Reset)
@@ -255,15 +260,21 @@ ul {
 }
 .nav {
   position: fixed;
-  top: 10px;
-  left: 10px;
+  top: 5px;
+  left: 5px;
+  z-index: 100;
 
   .nav-item {
-    width: 3vw;
-    height: 3vw;
+    width: 2vw;
+    height: 2vw;
     border-radius: 50%;
     background-color: #fff;
-    font-size: 100%;
+    font-size: 90%;
+    margin-bottom: 5px;
   }
+}
+pre {
+  background: #f3f3f3;
+  padding: 15px;
 }
 </style>
