@@ -45,8 +45,8 @@
         <span style="fontweight: 600; fontsize: 0.9rem; marginright: 1vw"
           >是否允许超时提交:</span
         >
-        <el-radio v-model="allowSubmitClose" label="1">允许</el-radio>
-        <el-radio v-model="allowSubmitClose" label="2">不允许</el-radio>
+        <el-radio v-model="allowSubmitClose" label="0">允许</el-radio>
+        <el-radio v-model="allowSubmitClose" label="1">不允许</el-radio>
       </li>
     </ul>
     <template #footer>

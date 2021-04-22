@@ -165,6 +165,7 @@ import {
 import AdBeacon from "../../components/ad-beacon/AdBeacon.vue";
 import AdCollect from "../../components/ad-collect/AdCollect.vue";
 import { useRouter } from "vue-router";
+import { ActionTypes } from "../../store/modules/user/actions";
 export interface Article {
   addTime: string;
   adminId: null | string;
@@ -201,6 +202,13 @@ export default defineComponent({
     const Router = useRouter();
     const fileContainer = ref<Blob>();
     const articleType = ref<"word" | "md">("word");
+
+    function reset (){
+      articleType.value = 'word'
+        content.value = ''
+        courseRadio.value = 1
+        title.value = ''
+    }
     function handlePreview(file: Blob) {
       fileContainer.value = file;
     }
@@ -263,11 +271,13 @@ export default defineComponent({
           message: "发布成功！",
         });
         publishDialogVisible.value = false;
+        reset()
       } else {
         ElMessage({
           type: "error",
           message: "网络错我！",
         });
+        reset()
       }
     }
     async function handleDeleteArticle(id: number, e: MouseEvent) {

@@ -127,6 +127,13 @@ export default defineComponent({
       studentList.value = computed(() => result.data.data.items).value;
       total.value = result.data.data.total;
     }
+    function reset (){
+      courseId.value = ''
+      checkList.value = []
+      title.value = ''
+      emailContent.value = ''
+    }
+
     async function sendEmail(dialogVisible:Ref<boolean>) {
       // 测试接口的时候传入courseId，checkList， title， emailContent、adminId
       // console.log(
@@ -155,11 +162,13 @@ export default defineComponent({
             message: result.message,
           });
           dialogVisible.value = false
+          reset()
         } else {
           ElMessage({
             type: "error",
             message: result.message,
           });
+          reset()
         }
       } else {
         ElMessage({
