@@ -16,12 +16,13 @@
             >
               <template #title>
                 <el-row class="header">
-                  <el-col :span="12">{{ item.taskName }}</el-col>
-                  <el-col :span="4">
+                  <el-col :span="8">{{ item.taskName }}</el-col>
+                  <el-col :span="8">
                     <Tag
-                      style="font-size: 12px;"
+                      style="font-size: 12px;margin-right: 5px;"
                       :type="item.isClosed ? 'error' : 'normal'"
                     >{{ item.isClosed ? '已结束' : '进行中' }}</Tag>
+                    <Tag style="font-size: 12px;" type="success" v-if="item.commitLate">可延迟提交</Tag>
                   </el-col>
                   <el-col :span="8">
                     <span class="time" style="margin-left: 5px;">
