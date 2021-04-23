@@ -49,12 +49,12 @@ export default defineComponent({
         },
         radar: {
           indicator: [
-            { name: "中位数", max: 100 },
-            { name: "平均分", max: 100 },
-            { name: "极差", max: 100 },
-            { name: "四分位差", max: 100 },
-            { name: "方差", max: 30 },
-            { name: "标准差", max: 30 },
+            { name: "中位数", max: 10 },
+            { name: "平均分", max: 10 },
+            { name: "极差", max: 10 },
+            { name: "四分位差", max: 10 },
+            { name: "方差", max: 3 },
+            { name: "标准差", max: 3 },
           ],
         },
         series: [
@@ -63,7 +63,7 @@ export default defineComponent({
             type: "radar",
             data: [
               {
-                value: [100, 100, 100, 100, 30, 30],
+                value: [10, 10, 10, 10, 3, 3],
                 name: "峰值",
               },
               {

@@ -42,7 +42,14 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref, computed, watchEffect } from "vue";
+import {
+  defineComponent,
+  onMounted,
+  ref,
+  computed,
+  watchEffect,
+  watch,
+} from "vue";
 import { ElRadioGroup, ElRadioButton, ElPagination } from "element-plus";
 import { getSignListList } from "../../api/index";
 import SignPerson from "../admin/components/SignPerson.vue";
@@ -104,15 +111,12 @@ export default defineComponent({
       pythonPerson,
       androidPerson,
     } = useRequestCount();
-    onMounted(async () => {
-      const result = await getSignListList(currentPage.value, 10, 1);
-      studentList.value = computed(() => result.data.items).value;
-      total.value = result.data.total;
+    function seetDigram () {
       // 显示报名图表生详情的图表
       const chartDom = document.getElementById("student-detail-group");
       const myChart = echarts.init(chartDom!);
-
-      const option = {
+      console.log(frontPerson, endPerson, pythonPerson, androidPerson);
+      let option = {
         title: {
           text: "学员分布",
           left: "center",
@@ -146,6 +150,16 @@ export default defineComponent({
         ],
       };
       option && myChart.setOption(option);
+    }
+    onMounted(async () => {
+      const result = await getSignListList(currentPage.value, 10, 1);
+      studentList.value = computed(() => result.data.items).value;
+      total.value = result.data.total;
+      seetDigram()
+      
+    });
+    watch([frontPerson, endPerson, pythonPerson, androidPerson], () => {
+      seetDigram()
     });
     return {
       courseId,
