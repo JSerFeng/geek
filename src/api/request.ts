@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { ElNotification } from 'element-plus'
 import { storage } from '../utils/shared'
+import { Response } from './index'
 
 type PendingQueue = ((...args: any) => void)[]
 
@@ -143,9 +144,10 @@ request.interceptors.response.use(
               message: "自动登陆成功^_^"
             })
           } catch (e) { //连refreshToken也失效了，需要重新登陆了
+            console.log(e);
             notify.close()
             ElNotification({
-              message: "需要重新登陆-_-|"
+              message: "请重新登陆"
             })
             storage.clear()
             return e
@@ -229,8 +231,8 @@ async function refreshToken() {
       headers: {
         priority: 1 //刷新token是高权限请求可以在请求拦截器中直接插队执行
       }
-    })
-    if (!res.data.data && !res.data.data.token && !res.data.data.refreshToken) {
+    }) as Response
+    if (res.error_code !== ErrorCode.Success) {
       console.log('refresh fail');
       throw {
         ...res,
@@ -239,8 +241,8 @@ async function refreshToken() {
         }
       }
     }
-    storage.set('token', res.data.data.token)
-    storage.set('refreshToken', res.data.data.refreshToken)
+    storage.set('token', res.data.token)
+    storage.set('refreshToken', res.data.refreshToken)
   } catch (error) {  //如果refreshToken也过期, 清空过期期间的请求
     pendingQueue = []
     throw {

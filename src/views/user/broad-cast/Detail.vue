@@ -20,7 +20,7 @@
           {{ detail.fileName }}
           <i class="el-icon-download"></i>
         </span>-->
-        <a class="light font16" :href="detail.filePath" :download="detail.fileName">
+        <a class="light font16" :href="detail.filePath" :download="detail.fileName" target="_blank">
           {{ detail.fileName }}
           <i class="el-icon-download"></i>
         </a>
