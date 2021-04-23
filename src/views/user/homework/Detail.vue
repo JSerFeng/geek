@@ -23,7 +23,7 @@
     <ul class="flex ac list">
       <li class="file flex ac" v-for="(item) in userRecord?.workFileVOList || []">
         <div class="file-item">
-          <a :href="item.filePath" :download="item.fileName">{{ item.fileName }}</a>
+          <a :href="item.filePath" :download="item.fileName" target="_blank">{{ item.fileName }}</a>
           <!-- <span @click="download(item.filePath, item.fileName)">{{ item.fileName }}</span> -->
         </div>
         <i class="del-btn el-icon-close" @click="deleteOneFile(item?.id)"></i>
@@ -39,7 +39,12 @@
           </div>
         </li>
       </ul>
-      <GButton type="broke" @click="uploadImpl" :disabled="!!info?.isClosed">新提交</GButton>
+      <GButton
+        type="broke"
+        @click="uploadImpl"
+        :disabled="!!info?.isClosed || isUploading"
+        :loading="isUploading"
+      >新提交</GButton>
     </div>
   </div>
 </template>
@@ -157,6 +162,8 @@ const uploadBtn = useDropUpload(
     return [isValid, "作业不超过15M"]
   }
 )
+
+const isUploading = ref(false)
 const uploadImpl = async () => {
   if (!currFile.value.length) {
     ElNotification({
@@ -170,6 +177,7 @@ const uploadImpl = async () => {
     })
     return
   }
+  isUploading.value = true
   let res: Response | null = null
   if (!userRecord.value) {
     res = await apiUploadHomeworkRecord(props.info.id, props.courseId, props.userId)
@@ -192,9 +200,10 @@ const uploadImpl = async () => {
 
   try {
     await Promise.all(uploadRequests)
-    query()
-  } catch (res) {
+    await query()
+  } finally {
     /**不用做处理，提示报错在request.ts中 */
+    isUploading.value = false
   }
 }
 

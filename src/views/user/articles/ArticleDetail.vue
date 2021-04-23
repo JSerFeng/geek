@@ -40,11 +40,12 @@ import { apiChangeFavoriteState, apiQueryDetail } from "../../../api/article";
 import type { ArticleDetail } from '../../../api/article'
 import { ErrorCode } from "../../../api/request";
 import { GButton } from '../../../components/geek'
-import { backToTop, getTime } from '../../../utils/shared';
+import { backToTop, getTime, throttle } from '../../../utils/shared';
 import { apiChangeLikeStatus } from '../../../api/article';
 import { useStore } from '../../../store';
 import { render } from './render'
 import { ElImage, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+
 
 const store = useStore()
 const route = useRoute()
@@ -73,19 +74,19 @@ const content = computed(() => detail.value.articleType === "word"
   )
 )
 
-const markLike = async () => {
+const markLike = throttle(async (e: Event) => {
   const res = await apiChangeLikeStatus(store.state.user.userInfo.userId!, parseInt(id as string))
   if (res.error_code === ErrorCode.Success) {
     detail.value.likeCount += (detail.value.likeStatus ^= 1) ? 1 : -1
   }
-}
+})
 
-const markFavorite = async () => {
+const markFavorite = throttle(async (e: Event) => {
   const res = await apiChangeFavoriteState(store.state.user.userInfo.userId!, parseInt(id as string))
   if (res.error_code === ErrorCode.Success) {
     detail.value.favoriteStatus ^= 1
   }
-}
+})
 
 const side$ = ref<HTMLDivElement>()
 const onMousemove = (e: Event) => {

@@ -483,12 +483,13 @@ export interface Article {
   title: string;
 }
 
-export function deleteArticleById (id:number, articleList:Article[]){
-  articleList.forEach((item, index)=>{
-    if(item.id === id){
+export function deleteArticleById(id: number, articleList: Article[]) {
+  articleList.forEach((item, index) => {
+    if (item.id === id) {
       articleList.splice(index, 1)
     }
-  })}
+  })
+}
 export const checkIfLogin = (cb: (isLogin: boolean) => void) => {
   const store = useStore()
   cb(store.state.user.isLogin)
@@ -563,4 +564,19 @@ export const backToTop = () => {
 
 export const getStudentScore = () => {
 
+}
+
+export const throttle = <T>(fn: (...args: T[]) => void, throttleTime = 300) => {
+  let start = 0
+  return (...args: T[]) => {
+    const now = performance.now()
+    if (now - start < throttleTime) {
+      ElNotification({
+        message: "弟弟，操作过快"
+      })
+    } else {
+      start = now
+      fn(...args)
+    }
+  }
 }
