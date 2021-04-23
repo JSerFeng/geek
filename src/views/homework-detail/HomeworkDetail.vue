@@ -1,6 +1,6 @@
 <template>
   <ul class="homework-detail">
-    <router-link to="/checkTask"><AdBeacon title="作业管理" :top="0" /></router-link>
+    <router-link to="/checkTask"><AdBeacon title="作业管理" :top="-4.5" /></router-link>
     <li class="title">作业提交详情</li>
     <li class="table">
       <el-table :data="personList" style="width: 100%; margin: 0 auto">

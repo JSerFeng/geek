@@ -249,6 +249,7 @@ export default defineComponent({
 <style lang="scss">
 
 .check-homework {
+  
   @media screen and (min-width: 800px) {
     .course-warp {
       line-height: 3rem;

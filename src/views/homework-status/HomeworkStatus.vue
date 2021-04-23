@@ -56,6 +56,7 @@ export default defineComponent({
 .homework-status {
   .title{
     width: 50%;
+    color: white;
     text-align: center;
     margin: 5vh auto 0 auto;
   }
@@ -66,6 +67,7 @@ export default defineComponent({
       margin: 10vw auto;
       background-color: #EEF1EF;
       margin-top: 60px;
+      border-radius: 20px;
     }
    .el-tabs__item{
       height: 150px;

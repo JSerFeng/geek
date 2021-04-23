@@ -111,7 +111,8 @@ export default defineComponent({
 .virtual-list {
   text-align: center;
   .container::-webkit-scrollbar {
-    width: 0;
+    width: 0px;
+    height: 0px;
   }
   .options {
     display: flex;
