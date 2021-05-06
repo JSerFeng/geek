@@ -1,4 +1,4 @@
-import { ElMessage } from "_element-plus@1.0.2-beta.40@element-plus"
+import { ElMessage } from "_element-plus@1.0.2-beta.41@element-plus"
 
 type UseCheck = () => {
     useWordCheck: (title: string, content: string) => boolean

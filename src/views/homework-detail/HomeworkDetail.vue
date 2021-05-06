@@ -40,6 +40,7 @@
         class="pagination-style"
         layout="prev, pager, next"
         :total="total"
+        page-size="5"
       >
       </el-pagination>
     </li>
@@ -76,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, computed, toRaw } from "vue";
+import { defineComponent, ref, onMounted, computed, Ref, toRaw } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "../../store/index";
 import useMarkScore from "./hooks/useMarkScore";
@@ -126,12 +127,13 @@ export default defineComponent({
     const Route = useRoute();
     const Store = useStore();
     const homeworkFileList = ref<File[]>([]);
-    const personList = ref<DetailInfo<Person, File>>();
+    const personList = ref() as Ref<DetailInfo<Person, File>>;
     const taskId = (Route.params.id as any) as number;
     const adminId = storage.get("adminId") as string;
     const downloadFileUrl = ref<string>("");
+    const total = ref<number>(2);
     const { handleMarkScore } = useMarkScore();
-    const { comPersonList, handlePaginationChange, total } = useHomeworkTable();
+    const { comPersonList, handlePaginationChange } = useHomeworkTable(personList);
     function handleCloseHomework() {
       ElMessageBox.confirm("此操作将关闭此作业的提交通道, 是否继续?", "", {
         confirmButtonText: "确定",
@@ -231,6 +233,7 @@ export default defineComponent({
       const download = await downloadAllStudentsFiles(taskId);
       /*TODO*/
       downloadFileUrl.value = download.data;
+      console.log(total)
     });
     return {
       homeworkFileList,

@@ -8,7 +8,8 @@
 </template>
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
-import { ElNotification } from '_element-plus@1.0.2-beta.40@element-plus'
+import { ElNotification } from '_element-plus@1.0.2-beta.41@element-plus'
+// import { ElNotification } from '_element-plus@1.0.2-beta.40@element-plus'
 import { useStore } from '../../../store'
 const router = useRouter()
 const store = useStore()

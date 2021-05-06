@@ -1,4 +1,4 @@
-import { ElMessage } from "_element-plus@1.0.2-beta.40@element-plus";
+import { ElMessage } from "_element-plus@1.0.2-beta.41@element-plus"
 
 type UsePbulishTask = (taskName:string, closeTime:Date) => boolean
 
@@ -8,7 +8,6 @@ const usePbulishTask:UsePbulishTask = (taskName:string, closeTiem:Date)=>{
             type:'error',
             message:'请检查信息是否填写完整！'
         })
-        console.log('hello')
         return false
     }else{
         if(closeTiem.getTime() < Date.now()){

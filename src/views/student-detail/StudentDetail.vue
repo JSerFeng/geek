@@ -25,7 +25,7 @@
           <ul class="header">
             <li class="name">{{ item.userName }}</li>
             <li>{{ item.userId }}</li>
-            <li>{{ item.major }}</li>
+            <li id="student-detail-id">{{ item.major }}</li>
           </ul>
           <div class="footer">{{ item.mail }}</div>
         </div>
@@ -111,7 +111,7 @@ export default defineComponent({
       pythonPerson,
       androidPerson,
     } = useRequestCount();
-    function seetDigram () {
+    function seetDigram() {
       // 显示报名图表生详情的图表
       const chartDom = document.getElementById("student-detail-group");
       const myChart = echarts.init(chartDom!);
@@ -155,11 +155,10 @@ export default defineComponent({
       const result = await getSignListList(currentPage.value, 10, 1);
       studentList.value = computed(() => result.data.items).value;
       total.value = result.data.total;
-      seetDigram()
-      
+      seetDigram();
     });
     watch([frontPerson, endPerson, pythonPerson, androidPerson], () => {
-      seetDigram()
+      seetDigram();
     });
     return {
       courseId,
@@ -172,6 +171,13 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
+#student-detail-id {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
 #student-detail-group {
   width: 700px;
   height: 600px;
