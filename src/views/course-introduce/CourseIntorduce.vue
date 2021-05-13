@@ -138,7 +138,6 @@ export default defineComponent({
         "data"
       )})`;
       // swiper!.style.backgroundImage = color.value
-      console.log(color);
       currentCourse.value = index;
 
       const removeClassList: string[] = [
