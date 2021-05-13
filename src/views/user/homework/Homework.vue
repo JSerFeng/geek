@@ -15,7 +15,8 @@
               :class="{ done: item.isClosed }"
             >
               <template #title>
-                <el-row class="header">
+                <div>
+                  <el-row class="header">
                   <el-col :span="8">{{ item.taskName }}</el-col>
                   <el-col :span="8">
                     <Tag
@@ -26,11 +27,12 @@
                   </el-col>
                   <el-col :span="8">
                     <span class="time" style="margin-left: 5px;">
-                      {{ getTime(item.addTime) }}发布,
-                      截至时间{{ item.closeTime }}
+                      <div>{{ getTime(item.addTime) }}发布</div>
+                      <div>截至时间{{ item.closeTime }}</div>
                     </span>
                   </el-col>
                 </el-row>
+                </div>
               </template>
               <div class="collapse">
                 <p>作业详情</p>
@@ -65,23 +67,22 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, watchEffect } from "vue";
+import { ref, watchEffect } from "vue";
 import { GTabs, GButton } from "../../../components/geek";
 import { useStore } from "../../../store";
-import type { ApiHomeworkRecord } from "../../../api/homework"
 import { apiQueryHomework } from "../../../api/homework"
 import { ErrorCode } from "../../../api/request";
 import { Flags, getTime } from "../../../utils/shared";
-import { download } from '../../../api/file'
 import Tag from "./Tag.vue";
 import Modal from '../../../components/modal/Modal.vue'
-import type { ModalMethods } from '../../../components/modal/Modal.vue'
 import { ElNotification, ElRow, ElCol, ElCollapse, ElCollapseItem } from "element-plus";
 import DetailVue from "./Detail.vue";
 import LogoVue from "../../../components/Logo.vue";
 import Empty from '../../../components/Empty.vue'
 import Fatal from '../../../components/Fatal.vue'
 
+import type { ApiHomeworkRecord } from "../../../api/homework"
+import type { ModalMethods } from '../../../components/modal/Modal.vue'
 
 interface Item {
   id: number;
@@ -185,8 +186,14 @@ const open = (item: Item) => {
     box-sizing: border-box;
     width: 80%;
     margin: 5% auto;
-    padding: 20px 0;
+    min-height: 100%;
     border-radius: 20px;
+    @media screen and (max-width: 768px) {
+      width: 100%;
+      margin: 0 auto;
+      border-radius: 0;
+    }
+    padding: 20px 0;
     background-color: #fff;
 
     .item {

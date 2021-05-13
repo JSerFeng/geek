@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "12600727",
+      "name": "html",
+      "font_class": "html",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
+      "icon_id": "16392051",
+      "name": "产品",
+      "font_class": "biaoqiankuozhan_chanpin-192",
+      "unicode": "eb3a",
+      "unicode_decimal": 60218
+    },
+    {
+      "icon_id": "19483346",
+      "name": "UI",
+      "font_class": "iconhuizong_huaban1fuben14",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
       "icon_id": "431572",
       "name": "android",
       "font_class": "android",

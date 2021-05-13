@@ -122,7 +122,6 @@ request.interceptors.response.use(
         cancelQueue.delete(res.config)
       }
 
-
       if (res.data.error_code === ErrorCode.Token_Expire_Code) {
         /**
          *  token过期有两种情况
@@ -141,14 +140,14 @@ request.interceptors.response.use(
             ElNotification({
               message: "自动登陆成功^_^"
             })
-            notify.close()
           } catch (e) { //连refreshToken也失效了，需要重新登陆了
-            console.log(e);
             ElNotification({
               message: "请重新登陆"
             })
             storage.clear()
             return e
+          } finally {
+            notify.close()
           }
         } else {
           await block()
@@ -215,6 +214,7 @@ request.interceptors.response.use(
       case ErrorCode.HasBeenUsed:
       case ErrorCode.Reject:
       case ErrorCode.Abort:
+      case ErrorCode.RefreshToken_Expire_Code:
       case ErrorCode.Success: {
         return res.data
       }
