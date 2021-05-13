@@ -52,7 +52,7 @@ export const getPersonCount = async (courseId?: number) => {
 export const getSignListList = (
   page?: number,
   rows?: number,
-  courseId?: 1 | 2 | 3 | 4
+  courseId?: 1 | 2 | 3 | 4 | 5 | 6
 ) => {
   const params = { page, rows, courseId }
   console.log(params)
@@ -149,7 +149,7 @@ export const publishArticle = (
   userId: number,
   articleType: "word" | 'md',
   title: string,
-  courseId?: 1 | 2 | 3 | 4,
+  courseId?: 1 | 2 | 3 | 4 | 5 | 6,
   content?: string
 ) => {
   let payload

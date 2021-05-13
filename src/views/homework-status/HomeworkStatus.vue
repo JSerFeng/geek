@@ -17,6 +17,12 @@
       <el-tab-pane class="item" label="移动" name="fourth">
         <AndroidCom />
       </el-tab-pane>
+      <el-tab-pane class="item" label="设计" name="fiveth">
+        <design-com/>
+      </el-tab-pane>
+      <el-tab-pane class="item" label="产品" name="sixth">
+        <operation-com/>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -30,8 +36,10 @@ import FrontEndCom from "./components/FrontEndCom.vue";
 import EndCom from "./components/EndCom.vue";
 import PythonCom from "./components/PythonCom.vue";
 import AndroidCom from "./components/AndroidCom.vue";
+import DesignCom from "./components/DesignCom.vue";
+import OperationCom from "./components/OperationCom.vue";
 
-type ActiveName = "first" | "second" | "third" | "fourth";
+type ActiveName = "first" | "second" | "third" | "fourth" | "fiveth" | "sixth";
 
 export default defineComponent({
   components: {
@@ -41,6 +49,8 @@ export default defineComponent({
     ElTabs,
     FrontEndCom,
     AndroidCom,
+    DesignCom,
+    OperationCom,
     EndCom,
     PythonCom,
   },

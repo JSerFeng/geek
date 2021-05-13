@@ -39,6 +39,8 @@
           <el-radio v-model="courseRadio" label="2">后端</el-radio>
           <el-radio v-model="courseRadio" label="3">Python</el-radio>
           <el-radio v-model="courseRadio" label="4">移动</el-radio>
+          <el-radio v-model="courseRadio" label="5">设计</el-radio>
+          <el-radio v-model="courseRadio" label="6">产品</el-radio>
         </li>
         <li class="name">
           <span style="fontweight: 600; fontsize: 1rem; marginright: 6.5vw"

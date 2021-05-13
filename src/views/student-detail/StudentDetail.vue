@@ -17,6 +17,12 @@
       <el-radio-button @click="handleTabsClick" class="item" label="4"
         >移动</el-radio-button
       >
+      <el-radio-button @click="handleTabsClick" class="item" label="5"
+        >设计</el-radio-button
+      >
+      <el-radio-button @click="handleTabsClick" class="item" label="6"
+        >产品</el-radio-button
+      >
     </el-radio-group>
     <ul class="student-list-warp">
       <li class="item" :key="item.userId" v-for="item in studentList">
@@ -79,7 +85,7 @@ export default defineComponent({
     AdBeacon,
   },
   setup() {
-    const courseId = ref<1 | 2 | 3 | 4>(1);
+    const courseId = ref<1 | 2 | 3 | 4 | 5 | 6>(1);
     const studentList = ref<Student[]>([]);
     const total = ref<number>();
     const currentPage = ref<number>(1);
@@ -204,7 +210,7 @@ export default defineComponent({
     display: block;
     width: 86vw;
     .item {
-      width: 20%;
+      width: 14%;
       text-align: center;
     }
   }

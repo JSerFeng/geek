@@ -1,16 +1,58 @@
 <template>
   <div class="course-introduce">
-    <div class="swiper">
-      <div @click="handleItemClick(2, $event)" class="item iconfont left">
+    <div
+      class="swiper"
+      ref="swiper"
+      :style="{
+        backgroundImage: color,
+      }"
+    >
+      <div
+        data="#027592"
+        style="color: #027592"
+        @click="handleItemClick(2, $event)"
+        class="item iconfont left"
+      >
         &#xe639;
       </div>
-      <div @click="handleItemClick(1, $event)" class="item iconfont middle">
+      <div
+        data="#E95521"
+        style="color: #e95521"
+        @click="handleItemClick(1, $event)"
+        class="item iconfont middle"
+      >
         &#xe65a;
       </div>
-      <div @click="handleItemClick(3, $event)" class="item iconfont right">
+      <div
+        data="#7BC258"
+        style="color: #7bc258"
+        @click="handleItemClick(3, $event)"
+        class="item iconfont right"
+      >
         &#xe640;
       </div>
-      <div @click="handleItemClick(4, $event)" class="item iconfont behind">
+      <div
+        data="#FEDA49"
+        @click="handleItemClick(4, $event)"
+        class="item iconfont behind-left"
+        style="color: #feda49"
+      >
+        &#xe690;
+      </div>
+      <div
+        data="pink"
+        style="color: pink"
+        @click="handleItemClick(5, $event)"
+        class="item iconfont behind"
+      >
+        &#xe690;
+      </div>
+      <div
+        style="color: #adb8d0"
+        data="#ADB8D0"
+        @click="handleItemClick(6, $event)"
+        class="item iconfont behind-right"
+      >
         &#xe690;
       </div>
     </div>
@@ -42,20 +84,34 @@
         Python可以应用于众多领域，如：数据分析、组件集成、网络服务、图像处理、数值计算和科学计算等众多领域。目前业内几乎所有大中型互联网企业都在使用Python，如：Youtube、Dropbox、BT、Quora（中国知乎）、豆瓣、知乎、Google、Yahoo!、Facebook、NASA、百度、腾讯、汽车之家、美团等。
       </div>
     </div>
+    <div class="introduce" v-if="currentCourse === 5">
+      <div class="title">设计</div>
+      <div class="content">
+        Python崇尚优美、清晰、简单，是一个优秀并广泛使用的语言。
+        Python可以应用于众多领域，如：数据分析、组件集成、网络服务、图像处理、数值计算和科学计算等众多领域。目前业内几乎所有大中型互联网企业都在使用Python，如：Youtube、Dropbox、BT、Quora（中国知乎）、豆瓣、知乎、Google、Yahoo!、Facebook、NASA、百度、腾讯、汽车之家、美团等。
+      </div>
+    </div>
+    <div class="introduce" v-if="currentCourse === 6">
+      <div class="title">产品</div>
+      <div class="content">
+        Python崇尚优美、清晰、简单，是一个优秀并广泛使用的语言。
+        Python可以应用于众多领域，如：数据分析、组件集成、网络服务、图像处理、数值计算和科学计算等众多领域。目前业内几乎所有大中型互联网企业都在使用Python，如：Youtube、Dropbox、BT、Quora（中国知乎）、豆瓣、知乎、Google、Yahoo!、Facebook、NASA、百度、腾讯、汽车之家、美团等。
+      </div>
+    </div>
     <div @click="handleConfirm" class="confirm">选好了</div>
-    <router-link to='home'><div class="wait">再看看</div></router-link>
+    <router-link to="home"><div class="wait">再看看</div></router-link>
   </div>
 </template>
 <script lang="ts">
-import { customRef, defineComponent, ref } from "vue";
+import { computed, customRef, defineComponent, onMounted, ref } from "vue";
 import { storage } from "../../utils/shared";
-import { chooseCourse } from '../../api/user'
-import { useRouter } from 'vue-router'
+import { chooseCourse } from "../../api/user";
+import { useRouter } from "vue-router";
 export default defineComponent({
   setup() {
-    const Router = useRouter()
+    const Router = useRouter();
     const currentCourse = ref<number>(1);
-    const userId = storage.get('userId')
+    const userId = storage.get("userId");
     function judgeClassList(classList: string[], className: string): boolean {
       let flag = false;
       classList.forEach((name) => {
@@ -65,55 +121,63 @@ export default defineComponent({
       });
       return flag;
     }
-    async function handleConfirm (){
-       const result = await chooseCourse(userId, currentCourse.value)
-       if(result.error_code === 200){
-         Router.replace('/home')
-       }
+
+    async function handleConfirm() {
+      const result = await chooseCourse(userId, currentCourse.value);
+      if (result.error_code === 200) {
+        Router.replace("/home");
       }
+    }
+
+    /*具体操作每个方向的图标*/
+    const swiper = ref<null | HTMLMediaElement>(null);
+    const color = ref<string | null>('radial-gradient(#cecece, #e95521)');
     function handleItemClick(index: number, e: any) {
+      color.value = `radial-gradient(#cecece, ${e.target.getAttribute("data")})`
+      // swiper!.style.backgroundImage = color.value
+      console.log(color)
       currentCourse.value = index;
-      const items = document.querySelectorAll(
-        ".course-introduce .swiper .item"
-      );
-     
-      const removeClassList: string[] = ["left", "right", "middle", "behind"];
-      const left = e.target.previousElementSibling || items[items.length - 1] as HTMLDivElement
-      const right = e.target.nextElementSibling || items[0] as HTMLDivElement
-      const behind =
-        right.nextElementSibling ||
-        items[0] ||
-        left.previousElementSibling ||
-        items[items.length - 1] as HTMLDivElement
+
+      const removeClassList: string[] = [
+        "left",
+        "right",
+        "middle",
+        "behind",
+        "behind-right",
+        "behind-left",
+      ];
+
+      /*得到要操作的对象*/
+      const target = e.target as HTMLDivElement;
+      const toggle = document.querySelector(
+        ".course-introduce .middle"
+      ) as HTMLDivElement;
+      const classList = e.target.classList.value.split(" ");
+
+      /*操作样式*/
       removeClassList.forEach((name: string) => {
         if (judgeClassList(e.target.classList, name)) {
-          e.target.classList.remove(name);
+          e.target!.classList.remove(name);
         }
       });
-      e.target.classList.add("middle");
+      target.classList.add("middle");
       removeClassList.forEach((name: string) => {
-        if (judgeClassList(left.classList, name)) {
-          left.classList.remove(name);
+        //@ts-ignore
+        if (judgeClassList(toggle.classList, name)) {
+          toggle.classList.remove(name);
         }
       });
-      left.classList.add("left");
-      removeClassList.forEach((name: string) => {
-        if (judgeClassList(right.classList, name)) {
-          right.classList.remove(name);
-        }
+      classList.forEach((className: string) => {
+        toggle.classList.add(className);
       });
-      right.classList.add("right");
-      removeClassList.forEach((name: string) => {
-        if (judgeClassList(behind.classList, name)) {
-          behind.classList.remove(name);
-        }
-      });
-      behind.classList.add("behind");
     }
+
     return {
       handleItemClick,
       currentCourse,
-      handleConfirm
+      handleConfirm,
+      swiper,
+      color,
     };
   },
 });
@@ -122,11 +186,16 @@ export default defineComponent({
 .course-introduce {
   position: relative;
   .swiper {
-    background-image: radial-gradient(#cecece, black);
+    // background-image: radial-gradient(#cecece, #e95521);
     display: flex;
     justify-content: center;
     .item {
-      font-size: 20rem;
+      @media screen and (min-width: 800px) {
+        font-size: 20rem;
+      }
+      @media screen and (max-width: 799px) {
+        font-size: 40vw;
+      }
       position: absolute;
       transition: all 0.5s;
       &:hover {
@@ -135,23 +204,65 @@ export default defineComponent({
       }
     }
     .left {
-      left: 10vw;
+      @media screen and (max-width: 799px) {
+        left: -6vw;
+        top: 17vh;
+      }
+      @media screen and (min-width: 800px) {
+        left: 10vw;
+      }
       transform: scale(0.6);
-      filter: blur(10px);
     }
     .right {
-      left: 70vw;
+      @media screen and (max-width: 799px) {
+        left: 65vw;
+        top: 17vh;
+      }
+      @media screen and (min-width: 800px) {
+        left: 70vw;
+      }
       transform: scale(0.6);
-      filter: blur(10px);
     }
     .middle {
+      @media screen and (max-width: 799px) {
+        top: 17vh;
+      }
+      @media screen and (min-width: 800px) {
+        left: 50vw;
+      }
       left: 50%;
       transform: translateX(-50%) translateY(100px);
       z-index: 111;
     }
     .behind {
+      @media screen and (max-width: 799px) {
+        top: 17vh;
+      }
+      @media screen and (min-width: 800px) {
+        left: 50vw;
+      }
       left: 50%;
       transform: translateX(-50%) scale(0.2) translateY(-600px);
+    }
+    .behind-left {
+      @media screen and (max-width: 799px) {
+        top: 17vh;
+      }
+      @media screen and (min-width: 800px) {
+        left: 37vw;
+      }
+      left: 40%;
+      transform: translateX(-50%) scale(0.4) translateY(-190px);
+    }
+    .behind-right {
+      @media screen and (max-width: 799px) {
+        top: 17vh;
+      }
+      @media screen and (min-width: 800px) {
+        left: 64vw;
+      }
+      left: 60%;
+      transform: translateX(-50%) scale(0.4) translateY(-190px);
     }
     width: 100vw;
     height: 100vh;
@@ -162,55 +273,94 @@ export default defineComponent({
     height: 15vh;
     position: absolute;
     color: #cecece;
-    top: 70vh;
     left: 50%;
     transform: translateX(-50%);
     z-index: 999;
-    display: flex;
+    @media screen and (min-width: 800px) {
+      top: 70vh;
+      display: flex;
+    }
+    @media screen and (max-width: 799px) {
+      top: 55vh;
+      display: block;
+    }
     .title {
       text-align: center;
       line-height: 100px;
-      font-size: 40px;
+      @media screen and (min-width: 800px) {
+        font-size: 40px;
+      }
+      @media screen and (max-width: 799px) {
+        font-size: 20px;
+      }
       width: 300px;
-      color: #EEF1EF;
+      color: #eef1ef;
       margin-right: 20px;
     }
     .content {
-      margin-top: 10px;
-      line-height: 30px;
-    color: #CECECE;
-    font-size: 20px;
+      color: #cecece;
+      @media screen and (min-width: 800px) {
+        font-size: 20px;
+        margin-top: 10px;
+        line-height: 30px;
+      }
+      @media screen and (max-width: 799px) {
+        font-size: 12px;
+        margin-top: -30px;
+      }
     }
   }
   .confirm {
-    width: 10vw;
+    @media screen and (min-width: 800px) {
+      width: 10vw;
+      top: 90vh;
+      left: 35%;
+      border-radius: 40px;
+      line-height: 8vh;
+    }
+    @media screen and (max-width: 799px) {
+      width: 20vw;
+      top: 80vh;
+      left: 25%;
+      font-size: 12px;
+      border-radius: 5vw;
+      line-height: 5vh;
+    }
     text-align: center;
-    line-height: 8vh;
+
     position: absolute;
-    top: 90vh;
-    left: 35%;
     cursor: pointer;
-    background-color: #8F8F8F;
-    border-radius: 40px;
+    background-color: white;
     box-shadow: 0 0 10px white;
-    &:hover{
-    box-shadow: 0 0 40px white;
+    &:hover {
+      box-shadow: 0 0 40px white;
     }
   }
   .wait {
-    width: 10vw;
+    @media screen and (min-width: 800px) {
+      width: 10vw;
+      top: 90vh;
+      left: 57%;
+      border-radius: 40px;
+      line-height: 8vh;
+    }
+    @media screen and (max-width: 799px) {
+      width: 20vw;
+      top: 80vh;
+      left: 55%;
+      font-size: 12px;
+      border-radius: 5vw;
+      line-height: 5vh;
+    }
     color: black;
     text-align: center;
-    line-height: 8vh;
+
     position: absolute;
-    top: 90vh;
-    left: 57%;
     cursor: pointer;
-    background-color: #8F8F8F;
-    border-radius: 40px;
+    background-color: white;
     box-shadow: 0 0 10px white;
-    &:hover{
-    box-shadow: 0 0 40px white;
+    &:hover {
+      box-shadow: 0 0 40px white;
     }
   }
 }

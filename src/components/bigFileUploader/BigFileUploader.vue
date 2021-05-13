@@ -36,7 +36,6 @@ import { computed, defineEmit, defineProps } from "@vue/runtime-core";
 import { useBigFileUpload } from "../../utils/bigFile";
 import { useDropUpload, showFileSize } from "../../utils/shared";
 import { GButton } from "../geek"
-import { ElNotification } from '_element-plus@1.0.2-beta.40@element-plus';
 const props = defineProps<{
   courseId?: number | null,
   id: number

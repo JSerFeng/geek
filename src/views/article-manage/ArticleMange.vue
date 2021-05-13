@@ -197,7 +197,7 @@ export default defineComponent({
     const publishDialogVisible = ref<boolean>(false);
     const title = ref<string>("");
     const content = ref<string>("");
-    const courseRadio = ref<1 | 2 | 3 | 4>(1);
+    const courseRadio = ref<1 | 2 | 3 | 4 | 5 | 6>(1);
     const articleId = ref<number>();
     const Router = useRouter();
     const fileContainer = ref<Blob>();
@@ -324,6 +324,14 @@ export default defineComponent({
       {
         value: 4,
         label: "Python",
+      },
+      {
+        value: 5,
+        label: "设计",
+      },
+      {
+        value: 6,
+        label: "产品",
       },
     ]);
     onMounted(async () => {

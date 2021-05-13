@@ -69,8 +69,8 @@ import { ElCheckboxGroup, ElMessage } from "element-plus";
 import useSendCheck from "../hooks/useCheckSend";
 import { storage } from "../../../utils/shared";
 interface option {
-  value: "1" | "2" | "3" | "4";
-  label: "前端" | "后端" | "移动" | "Python";
+  value: "1" | "2" | "3" | "4" | "5" | '6';
+  label: "前端" | "后端" | "移动" | "Python" | '产品' | '设计';
 }
 interface Student {
   grade: null | string;
@@ -92,7 +92,6 @@ export default defineComponent({
     const studentList = ref<Student[]>([]);
     const checkList = ref<string[]>([]);
     const adminId:string = storage.get('adminId')
-    console.log(adminId)
     const options = reactive<option[]>([
       {
         value: "1",
@@ -109,6 +108,14 @@ export default defineComponent({
       {
         value: "4",
         label: "Python",
+      },
+      {
+        value: "5",
+        label: "设计",
+      },
+      {
+        value: "6",
+        label: "产品",
       },
     ]);
     ctx.expose({

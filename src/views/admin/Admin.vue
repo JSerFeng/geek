@@ -44,6 +44,22 @@
           ><span> {{ androidPerson }} </span>
         </div>
       </li>
+      <li class="design">
+        <img src="../../assets/imgs/design.jpg" alt="" />
+        <h4>设计</h4>
+        <div class="sign-person-count">
+          <span class="title">报名人数&nbsp;</span
+          ><span> {{ designPerson }} </span>
+        </div>
+      </li>
+      <li class="operation">
+        <img src="../../assets/imgs/yunying.jpg" alt="" />
+        <h4>产品</h4>
+        <div class="sign-person-count">
+          <span class="title">报名人数&nbsp;</span
+          ><span> {{ operationPerson }} </span>
+        </div>
+      </li>
     </ul>
     <div @click="handleClose" class="send-email">
       发送邮件 <i class="el-icon-s-promotion"></i>
@@ -97,6 +113,8 @@ export default defineComponent({
       pythonPerson,
       androidPerson,
       signPersonList,
+      operationPerson,
+      designPerson
     } = useRequestCount();
     const { dialogVisible, handleClose, root } = useDialog();
     const avatar = storage.get('image')
@@ -120,6 +138,8 @@ export default defineComponent({
       sendEmailRef,
       handleSendEmail,
       adminName,
+      operationPerson,
+      designPerson
     };
   },
   components: {
@@ -199,7 +219,7 @@ export default defineComponent({
     .font,
     .end,
     .python,
-    .android {
+    .android, .design , .operation {
       background-color: #eef1ef;
       box-shadow: -1px -1px 3px #ffffff,
         1.5px 1.5px 3px rgba(174, 174, 192, 0.4);
@@ -208,7 +228,7 @@ export default defineComponent({
       transition: all 0.5s;
       width: 10vw;
       margin-top: 10vh;
-      margin-left: 7vw;
+      margin-left: 2.1vw;
       border-radius: 75px;
       &:hover {
         transform: scale(1.1);
@@ -263,7 +283,7 @@ export default defineComponent({
   .send-email-dialog {
     border-radius: 20px;
   }
-  @each $i in font, end, python, android {
+  @each $i in font, end, python, android, design, operation {
     @if $i == font {
       .#{$i} {
         animation: scale 1s 0s backwards;
@@ -282,6 +302,16 @@ export default defineComponent({
     @if $i == android {
       .#{$i} {
         animation: scale 1s 0.9s backwards;
+      }
+    }
+    @if $i == design {
+      .#{$i} {
+        animation: scale 1s 1.2s backwards;
+      }
+    }
+    @if $i == operation {
+      .#{$i} {
+        animation: scale 1s 1.5s backwards;
       }
     }
   }
