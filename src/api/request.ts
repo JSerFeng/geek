@@ -16,9 +16,9 @@ export enum ErrorCode {
   Reject = 400,
   HasBeenUsed = 410,
   Error = 420,
-  RefreshToken_Expire_Code = 432,
   No_Token = 425,
   Token_Expire_Code = 430,
+  RefreshToken_Expire_Code = 432,
   UserIdOrPasswordWrong = 435,
   Connect_Fail = 500,
   Abort = 510,
@@ -137,15 +137,13 @@ request.interceptors.response.use(
             message: "亲很久没有登陆了，尝试自动登录中..."
           })
           try {
-            console.log('refresh tk');
             await refreshToken()
-            notify.close()
             ElNotification({
               message: "自动登陆成功^_^"
             })
+            notify.close()
           } catch (e) { //连refreshToken也失效了，需要重新登陆了
             console.log(e);
-            notify.close()
             ElNotification({
               message: "请重新登陆"
             })
@@ -154,12 +152,20 @@ request.interceptors.response.use(
           }
         } else {
           await block()
-          console.log('re send after get new tk');
         }
-        res.config.headers.priority = 1 //以高优先级立即重新去请求结果
+        res.config.headers.priority = 1 //以高优先级立即重新请求结果
         //返回新的请求
         const newRes = await request.request(res.config)
-        return newRes
+        /**
+         * 因为这里的结果已经经过一次相应拦截器了:
+         * res = {data: {...}, code: 200, msg: '...'}
+         * 
+         * 而这一步后又会经过一次拦截器变成这样
+         * res = res.data
+         * 
+         * 因此这里再包装一层
+         */
+        return { data: newRes }
       }
       return res
     } finally {

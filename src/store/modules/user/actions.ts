@@ -49,8 +49,9 @@ export const actions: ActionTree<State, RootState> = {
     if (!token) {
       return ErrorCode.No_Token
     }
-    const res = await apiUpdateUserInfo()
 
+    const res = await apiUpdateUserInfo()
+    
     if (res.error_code === ErrorCode.Success) {
       commit<UpdateInfo>({
         type: MutationTypes.UpdateUserInfo,
