@@ -1,9 +1,9 @@
 <template>
   <div class="main">
     <div class="nav dark">
-      <div class="flex jc ac nav-item p" @click="goBack">
+      <!-- <div class="flex jc ac nav-item p" @click="goBack">
         <i class="el-icon-back"></i>
-      </div>
+      </div> -->
       <div class="flex jc ac nav-item p" @click="goMenu">
         <i class="el-icon-s-home"></i>
       </div>
