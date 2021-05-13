@@ -1,5 +1,5 @@
 <template>
-  <div class="home_menu">
+  <div class="home_menu flex jc ac">
     <div class="menu">
       <div class="item leftTop">
         <WeatherVue />
@@ -36,7 +36,7 @@
         <HomeworkMenuVue />
       </div>
 
-      <div class="item rightBottomTop rightBottom link-to">
+      <div class="item jwzx rightBottomTop rightBottom link-to">
         <a
           href="http://jwc.cqupt.edu.cn/index.php"
           target="_blank"
@@ -44,7 +44,7 @@
           style="width: 100%;height: 100%;background-color: #31326f;color: #fff;"
         >教务在线</a>
       </div>
-      <div class="item rightBottomMid rightBottom link-to">
+      <div class="item jgsys rightBottomMid rightBottom link-to">
         <a
           href="http://172.22.4.2"
           target="_blank"
@@ -61,19 +61,25 @@ import BroadCastVue from '../user/broad-cast/BroadCast.vue';
 import ArticleMenuVue from './components/ArticleMenu.vue';
 import HomeworkMenuVue from './components/HomeworkMenu.vue'
 import WeatherVue from './components/Weather.vue'
+
 </script>
 
 <style lang="scss" scoped>
 .home_menu {
   overflow: hidden;
+  box-sizing: border-box;
+  @media screen and (max-width: 768px) {
+    overflow: auto;
+    height: 150%;
+  }
   width: 100%;
   height: 100%;
 
   .menu {
     display: grid;
     width: 90%;
-    height: 80%;
-    margin: 5% auto;
+    height: 90%;
+
     grid-template-columns: 1fr 2fr 1.2fr 1fr;
     grid-template-rows: 4fr 1fr 1fr 1fr 1fr;
     grid-template-areas:
@@ -83,20 +89,23 @@ import WeatherVue from './components/Weather.vue'
       "leftBottomBottom midBottomLeft midBottomRight ."
       ". midBottomLeft . .";
     @media screen and (max-width: 768px) {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 2fr 1.5fr 1.5fr 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-rows: 2fr 2fr 1fr 1fr 1fr;
       grid-template-areas:
-        "midTop midTop"
-        "leftTop rightTop"
-        "midBottomLeft midBottomRight"
-        "leftBottomTop  rightBottomTop"
-        "leftBottomMid  rightBottomMid"
-        "leftBottomBottom  rightBottomBottom";
+        "midTop midTop midTop midTop"
+        "midBottomLeft midBottomLeft midBottomLeft midBottomLeft"
+        "rightTop rightTop midBottomRight midBottomRight"
+        "rightBottomTop rightBottomTop rightBottomTop rightBottomTop"
+        "leftBottomTop rightBottomMid leftBottomMid  leftBottomBottom"
+        "leftTop leftTop leftTop leftTop";
     }
     place-items: center;
     place-content: center;
     grid-auto-flow: column;
     grid-gap: 5px;
+    @media screen and (max-width: 768px) {
+      grid-gap: 0;
+    }
 
     .zhihu,
     .juejin,
@@ -120,6 +129,13 @@ import WeatherVue from './components/Weather.vue'
     .juejin {
       color: rgb(57, 162, 253);
       background-color: #fff;
+    }
+    .jwzx,
+    .jgsys {
+      a {
+        padding: 15px;
+        box-sizing: border-box;
+      }
     }
     .github {
       font-size: 40px;
@@ -159,8 +175,8 @@ import WeatherVue from './components/Weather.vue'
       width: 80%;
       justify-self: left;
     }
-    .item:nth-child(1),
-    .item:nth-child(3) {
+    .leftTop,
+    .rightTop {
       @media screen and (max-width: 768px) {
         height: 100%;
       }
@@ -173,6 +189,7 @@ import WeatherVue from './components/Weather.vue'
     }
     .midTop {
       grid-area: midTop;
+      min-height: 25vh;
     }
     .rightTop {
       grid-area: rightTop;

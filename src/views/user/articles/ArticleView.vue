@@ -9,13 +9,14 @@
     <ul class="courses flex jc ac">
       <li :class="{ 'p': true, 'active': selectedCourseId === null }" @click="selectCourse(null)">全部</li>
       <li
-        :class="{ 'p': true, 'active': selectedCourseId === item.courseName }"
+        :class="['p', { active: selectedCourseId === item.courseName }]"
         v-for="(item) in store.state.user.allCourses"
         @click="selectCourse(item.courseName)"
         :key="item.id"
       >
-        <Logo :course-name="item.courseName" />
-        {{ item.courseName }}
+        <div style="text-align: center;" :title="item.courseName">
+          <Logo :course-name="item.courseName" />
+        </div>
       </li>
     </ul>
     <div class="article">
@@ -66,9 +67,11 @@ const selectCourse = (id: string | null) => {
   padding: 0;
   margin: 0;
   background-color: #fff;
+  overflow: auto;
+  height: 50px;
 
   li {
-    padding: 10px 20px;
+    padding: 5%;
     font-size: 14px;
     border-bottom: 5px solid #fff;
 

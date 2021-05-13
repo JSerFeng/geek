@@ -13,11 +13,8 @@
       </li>
     </ul>
     <Modal width="80%" ref="detailModal">
-      <div class="info">
-        <div v-if="flag === Flags.Pending">
-          <GLoadingIcon />
-        </div>
-        <div v-else>
+      <div class="info" v-loading="flag === Flags.Pending">
+        <div v-if="flag === Flags.Success">
           <DetailVue :detail="detail" />
         </div>
       </div>

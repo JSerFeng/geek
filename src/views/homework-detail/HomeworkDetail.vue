@@ -1,6 +1,8 @@
 <template>
   <ul class="homework-detail">
-    <router-link to="/checkTask"><AdBeacon title="作业管理" :top="-4.5" /></router-link>
+    <router-link to="/checkTask">
+      <AdBeacon title="作业管理" :top="-4.5" />
+    </router-link>
     <li class="title">作业提交详情</li>
     <li class="table">
       <el-table :data="personList" style="width: 100%; margin: 0 auto">
@@ -13,25 +15,22 @@
                   :key="file.filePath"
                   v-for="file in props.row.workFileVOList"
                 >
-                  <a style="color: #24acf2" :href="file.filePath">{{
-                    file.fileName
-                  }}</a>
+                  <a style="color: #24acf2" :href="file.filePath">
+                    {{
+                      file.fileName
+                    }}
+                  </a>
                 </span>
               </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="姓名" prop="userName"> </el-table-column>
-        <el-table-column label="学号" prop="userId"> </el-table-column>
-        <el-table-column label="分数" prop="score"> </el-table-column>
+        <el-table-column label="姓名" prop="userName"></el-table-column>
+        <el-table-column label="学号" prop="userId"></el-table-column>
+        <el-table-column label="分数" prop="score"></el-table-column>
         <el-table-column label="操作" prop="desc">
           <template #default="props">
-            <ElButton
-              size="mini"
-              round
-              @click="handleMarkScore(props.row.id, props.row)"
-              >打分</ElButton
-            >
+            <ElButton size="mini" round @click="handleMarkScore(props.row.id, props.row)">打分</ElButton>
           </template>
         </el-table-column>
       </el-table>
@@ -41,8 +40,7 @@
         layout="prev, pager, next"
         :total="total"
         page-size="5"
-      >
-      </el-pagination>
+      ></el-pagination>
     </li>
     <li id="diagram"></li>
     <div @click="handleCloseHomework" class="close-homework">关闭</div>
@@ -52,11 +50,7 @@
     <li>
       <ul class="files">
         <li class="file-title">任务附件 :</li>
-        <li
-          class="file-name"
-          :key="item.fileName"
-          v-for="item in homeworkFileList"
-        >
+        <li class="file-name" :key="item.fileName" v-for="item in homeworkFileList">
           <el-tag
             @close="handleDeleteTaskFile(item.fileName, item.id)"
             :key="item.fileName"
@@ -69,9 +63,7 @@
     </li>
     <ul class="download-file">
       <li class="download-homework">作业 :</li>
-      <a class="download-file-start" :href="downloadFileUrl"
-        >点击下载所有作业</a
-      >
+      <a class="download-file-start" :href="downloadFileUrl">点击下载所有作业</a>
     </ul>
   </ul>
 </template>
@@ -251,9 +243,9 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .el-form-item__content {
-    display: flex;
-    color: black !important;
-  }
+  display: flex;
+  color: black !important;
+}
 @media screen and (min-width: 800px) {
   #diagram {
     text-align: center;
@@ -277,9 +269,7 @@ export default defineComponent({
   margin-top: -20px;
 }
 
-
 .homework-detail {
-  
   position: relative;
   .title {
     font-size: 30px;

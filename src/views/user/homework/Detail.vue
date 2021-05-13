@@ -1,15 +1,17 @@
 <template>
   <div class="detail" v-loading="!info || !courseId || !userId || flag === Flags.Pending">
     <h4 class="title">{{ (info && info.taskName) || "" }}</h4>
-    <p class="task-name">作业文件</p>
-    <ul class="flex ac list">
-      <li class="p file" v-for="(file, idx) in (info && info.taskFileVOList) || []" :key="idx">
-        <a class="file-item" target="_blank" :href="file.filePath" :download="file.fileName">
-          {{ file.fileName }}
-          <div class="el-icon-download"></div>
-        </a>
-      </li>
-    </ul>
+    <template v-if="info && info.taskFileVOList.length">
+      <p class="task-name">作业文件</p>
+      <ul class="flex ac list">
+        <li class="p file" v-for="(file, idx) in (info && info.taskFileVOList) || []" :key="idx">
+          <a class="file-item" target="_blank" :href="file.filePath" :download="file.fileName">
+            {{ file.fileName }}
+            <div class="el-icon-download"></div>
+          </a>
+        </li>
+      </ul>
+    </template>
 
     <p class="task-name">
       提交记录
@@ -24,7 +26,6 @@
       <li class="file flex ac" v-for="(item) in userRecord?.workFileVOList || []">
         <div class="file-item">
           <a :href="item.filePath" :download="item.fileName" target="_blank">{{ item.fileName }}</a>
-          <!-- <span @click="download(item.filePath, item.fileName)">{{ item.fileName }}</span> -->
         </div>
         <i class="del-btn el-icon-close" @click="deleteOneFile(item?.id)"></i>
       </li>
@@ -32,8 +33,12 @@
     <div>
       <div ref="uploadBtn" class="drop-file p">选择文件</div>
       <ul class="file-desc">
-        <li v-for="(file) in currFile">
+        <li v-for="(file, i) in currFile">
           {{ file.file.name }} {{ showFileSize(file.file.size) }}
+          <i
+            class="el-icon-close"
+            @click="cencelPendingFile(i)"
+          ></i>
           <div class="progress-wrap">
             <div class="progress-bar" :style="{ 'width': file.progress * 100 + '%' }"></div>
           </div>
@@ -178,27 +183,27 @@ const uploadImpl = async () => {
     return
   }
   isUploading.value = true
-  let res: Response | null = null
-  if (!userRecord.value) {
-    res = await apiUploadHomeworkRecord(props.info.id, props.courseId, props.userId)
-    if (res.error_code !== ErrorCode.Success) {
-      return
-    }
-  }
-  const uploadRequests = currFile.value.map(item => apiUploadHomework(
-    (res && res.data.toString()) || userRecord.value!.id,
-    item.file,
-    e => {
-      item.progress = e.loaded / e.total
-    }
-  ).then(res => {
-    if (res.error_code !== ErrorCode.Success) {
-      throw res
-    }
-    return res
-  }))
-
   try {
+    let res: Response | null = null
+    if (!userRecord.value) {
+      res = await apiUploadHomeworkRecord(props.info.id, props.courseId, props.userId)
+      if (res.error_code !== ErrorCode.Success) {
+        return
+      }
+    }
+    const uploadRequests = currFile.value.map(item => apiUploadHomework(
+      (res && res.data.toString()) || userRecord.value!.id,
+      item.file,
+      e => {
+        item.progress = e.loaded / e.total
+      }
+    ).then(res => {
+      if (res.error_code !== ErrorCode.Success) {
+        throw res
+      }
+      return res
+    }))
+
     await Promise.all(uploadRequests)
     await query()
   } finally {
@@ -207,10 +212,15 @@ const uploadImpl = async () => {
   }
 }
 
+const cencelPendingFile = (idx: number) => {
+  currFile.value.splice(idx, 1)
+}
+
 watchEffect(() => {
   query()
 })
 </script>
+
 <style lang="scss" scoped>
 .detail {
   .title {

@@ -288,8 +288,8 @@ ul {
   z-index: 100;
 
   .nav-item {
-    width: 2.5vw;
-    height: 2.5vw;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background-color: #fff;
     font-size: 90%;
@@ -297,7 +297,9 @@ ul {
   }
 }
 pre {
-  background: #f3f3f3;
+  background-color: rgb(29, 29, 29);
+  color: #fff;
   padding: 15px;
+  overflow: auto;
 }
 </style>

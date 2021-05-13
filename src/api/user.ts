@@ -2,7 +2,6 @@ import { storage } from "../utils/shared";
 import request from "./request";
 import { Response } from './index'
 import { Course, State } from "../store/modules/user/state";
-import { ROW } from "../config/config";
 
 export interface ApiAnnounce {
   "total": number,
