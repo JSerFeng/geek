@@ -96,7 +96,6 @@ ul {
 }
 ::-webkit-scrollbar-thumb:hover {
   width: 10px;
-
 }
 ::-webkit-scrollbar-thumb {
   /*滚动条里面小方块*/

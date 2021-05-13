@@ -42,6 +42,7 @@ export const enum MutationTypes {
 
 function updateUserInfo(state: State, info: State["userInfo"]) {
   storage.store(info)
+  
   state.isLogin = true
   for (const k in info) {
     /**@ts-ignore */
