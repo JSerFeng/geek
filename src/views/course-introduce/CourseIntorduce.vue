@@ -45,7 +45,7 @@
         @click="handleItemClick(5, $event)"
         class="item iconfont behind"
       >
-        &#xe690;
+        &#xe60c;
       </div>
       <div
         style="color: #adb8d0"
@@ -53,7 +53,7 @@
         @click="handleItemClick(6, $event)"
         class="item iconfont behind-right"
       >
-        &#xe690;
+        &#xeb3a;
       </div>
     </div>
     <div class="introduce" v-if="currentCourse === 1">
@@ -87,15 +87,16 @@
     <div class="introduce" v-if="currentCourse === 5">
       <div class="title">设计</div>
       <div class="content">
-        Python崇尚优美、清晰、简单，是一个优秀并广泛使用的语言。
-        Python可以应用于众多领域，如：数据分析、组件集成、网络服务、图像处理、数值计算和科学计算等众多领域。目前业内几乎所有大中型互联网企业都在使用Python，如：Youtube、Dropbox、BT、Quora（中国知乎）、豆瓣、知乎、Google、Yahoo!、Facebook、NASA、百度、腾讯、汽车之家、美团等。
+        主要负责极客&勤奋峰所有产品的视觉风格和界面设计; 各活动专题和海报设计:
+        参与设计体验、流程的制定和规范;
+        关注和提升产品易用性与开发团队紧密配合协助达成开发
+        产品目标;分享设计经验、实施培养方案，推动提高设计 的团队能力。
       </div>
     </div>
     <div class="introduce" v-if="currentCourse === 6">
-      <div class="title">产品</div>
+      <div class="title">运营</div>
       <div class="content">
-        Python崇尚优美、清晰、简单，是一个优秀并广泛使用的语言。
-        Python可以应用于众多领域，如：数据分析、组件集成、网络服务、图像处理、数值计算和科学计算等众多领域。目前业内几乎所有大中型互联网企业都在使用Python，如：Youtube、Dropbox、BT、Quora（中国知乎）、豆瓣、知乎、Google、Yahoo!、Facebook、NASA、百度、腾讯、汽车之家、美团等。
+        运营就是对运营过程的计划、组织、实施和控制，是与产品生产和服务创造密切相关的各项管理工作的总称。从另一个角度来讲，运营管理也可以指为对生产和提供公司主要的产品和服务的系统进行设计、运行、评价和改进的管理工作。
       </div>
     </div>
     <div @click="handleConfirm" class="confirm">选好了</div>
@@ -131,11 +132,13 @@ export default defineComponent({
 
     /*具体操作每个方向的图标*/
     const swiper = ref<null | HTMLMediaElement>(null);
-    const color = ref<string | null>('radial-gradient(#cecece, #e95521)');
+    const color = ref<string | null>("radial-gradient(#cecece, #e95521)");
     function handleItemClick(index: number, e: any) {
-      color.value = `radial-gradient(#cecece, ${e.target.getAttribute("data")})`
+      color.value = `radial-gradient(#cecece, ${e.target.getAttribute(
+        "data"
+      )})`;
       // swiper!.style.backgroundImage = color.value
-      console.log(color)
+      console.log(color);
       currentCourse.value = index;
 
       const removeClassList: string[] = [
@@ -272,7 +275,7 @@ export default defineComponent({
     width: 70vw;
     height: 15vh;
     position: absolute;
-    color: #cecece;
+    color: black;
     left: 50%;
     transform: translateX(-50%);
     z-index: 999;
@@ -289,16 +292,16 @@ export default defineComponent({
       line-height: 100px;
       @media screen and (min-width: 800px) {
         font-size: 40px;
+        margin-right: 20px;
+        width: 300px;
       }
       @media screen and (max-width: 799px) {
         font-size: 20px;
       }
-      width: 300px;
-      color: #eef1ef;
-      margin-right: 20px;
+      color: black;
     }
     .content {
-      color: #cecece;
+      color: black;
       @media screen and (min-width: 800px) {
         font-size: 20px;
         margin-top: 10px;
