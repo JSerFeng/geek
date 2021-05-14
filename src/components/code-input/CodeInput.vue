@@ -10,7 +10,6 @@
 </template>
 <script lang="ts" setup>
 import { defineProps, ref, computed, onMounted, defineEmit } from 'vue'
-import { repeatMap } from '../../utils/shared'
 
 const props = defineProps<{
   modelValue?: string,
@@ -58,7 +57,8 @@ const val = ref("")
   width: fit-content;
   .item {
     display: block;
-    width: 50px;
+    max-width: 50px;
+    width: 16%;
     height: 50px;
     margin: 5px;
     font-size: 46px;

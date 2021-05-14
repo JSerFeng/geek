@@ -3,9 +3,9 @@ import { apiBigFileCheck, apiBigFileMerge, apiBigFileUpload } from '../api/file'
 import { ErrorCode, providePort } from '../api/request'
 import { CHUNK_SIZE } from '../config/config'
 import { isUndef, nextTick } from './shared'
-import FileWorker from './worker2hash?worker'
+// import FileWorker from './worker2hash?worker'
 
-const worker = new FileWorker()
+// const worker = new FileWorker()
 
 const FRAME_TIME = 12 /**一帧16毫秒，12毫秒是算切片的最大耗时，留4毫秒让js去跑其它的逻辑 */
 const CONCURRENT_LIMIT = 4 /**并发请求数 */
@@ -48,17 +48,17 @@ export const useBigFileUpload = (id: number, courseId?: number, onFinish?: (resu
 
   const calcHash = (chunkList: ArrayBuffer[]) => new Promise(resolve => {
     const total = chunkList.length
-    worker.postMessage(chunkList, [...chunkList])
-    worker.onmessage = e => {
-      const data = e.data as number | [string, ArrayBuffer[]]
-      if (typeof data === "object") {
-        progressPrepare.value = 1
-        chunks = data[1]
-        resolve(data[0])
-      } else {
-        progressPrepare.value += 1 / total / 2
-      }
-    }
+    // worker.postMessage(chunkList, [...chunkList])
+    // worker.onmessage = e => {
+    //   const data = e.data as number | [string, ArrayBuffer[]]
+    //   if (typeof data === "object") {
+    //     progressPrepare.value = 1
+    //     chunks = data[1]
+    //     resolve(data[0])
+    //   } else {
+    //     progressPrepare.value += 1 / total / 2
+    //   }
+    // }
   }) as Promise<string>
 
   const getFileSlice = async (file: File, total: number) => {
@@ -78,13 +78,14 @@ export const useBigFileUpload = (id: number, courseId?: number, onFinish?: (resu
 
   const pauseFn = () => {
     pause = true
-    worker.postMessage(true) /*通知hash暂停*/
+    // worker.postMessage(true) /*通知hash暂停*/
     providePort.postMessage(true) /**通知ajax调度器（api/request.ts）取消上传请求 */
   }
 
+
   const resumeFn = () => {
     pause = false
-    worker.postMessage(false) /**通知worker恢复算hash */
+    // worker.postMessage(false) /**通知worker恢复算hash */
     providePort.postMessage(false) /**通知ajax调度器（api/request.ts）恢复接收上传切片 */
     blockResolve && blockResolve() /**取消计算切片的阻塞 */
     _upload && _upload() /**重新进行网络部分上传 */

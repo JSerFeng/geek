@@ -46,7 +46,24 @@
     <div v-else class="ready-login">
       <h3>
         <span class="geek">Geek</span>
-        <span class="love-icon">&#x2764;</span>
+        <span class="love-icon">
+          <svg
+            t="1620970104321"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="6360"
+            width="200"
+            height="200"
+          >
+            <path
+              d="M696.6 204.34c-66.02 0-143.23 74.85-184.6 123.06-41.36-48.22-118.57-123.06-184.59-123.06-116.87 0-184.6 91.16-184.6 207.18 0 128.52 123.07 264.57 369.2 408.15 246.13-143.58 369.2-276.9 369.2-399.96-0.01-116.03-67.74-215.37-184.61-215.37z"
+              fill="#ffffff"
+              p-id="6361"
+            />
+          </svg>
+        </span>
         <span class="qff">勤奋蜂</span>
       </h3>
       <RouterLink to="/login">
