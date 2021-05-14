@@ -10,29 +10,31 @@
         <p class="p" style="font-weight: 100;" @click="openChangeName">
           <span class="font20">你好</span>,
           <span class="font20">
-            {{ userInfo.userName || userInfo.adminName}}
+            {{ userInfo.userName || userInfo.adminName }}
             <i class="font14 el-icon-edit"></i>
           </span>
         </p>
-        <Modal ref="changeName" width="80%">
-          <div style="padding: 30px 15px;">
-            <GInput v-model="userName" placeholder="新用户名" />
-            <GButton :loading="introduceFlag === Flags.Pending" @click="changeUserName">确定</GButton>
+        <template v-if="userInfo.userId">
+          <Modal ref="changeName" width="80%">
+            <div style="padding: 30px 15px;">
+              <GInput v-model="userName" placeholder="新用户名" />
+              <GButton :loading="introduceFlag === Flags.Pending" @click="changeUserName">确定</GButton>
+            </div>
+          </Modal>
+          <div class="intro p" @click="open">
+            {{ userInfo.introduce }}
+            <i class="font14 el-icon-edit"></i>
           </div>
-        </Modal>
-        <div class="intro p" @click="open">
-          {{ userInfo.introduce }}
-          <i class="font14 el-icon-edit"></i>
-        </div>
-        <div class="flex jc">
-          <ChooseCourse />
-        </div>
-        <Modal ref="modalCtx" width="70%">
-          <div style="padding: 30px 15px;">
-            <GInput v-model="introduction" placeholder="简介" />
-            <GButton :loading="introduceFlag === Flags.Pending" @click="changeIntroduction">确定</GButton>
+          <div class="flex jc">
+            <ChooseCourse />
           </div>
-        </Modal>
+          <Modal ref="modalCtx" width="70%">
+            <div style="padding: 30px 15px;">
+              <GInput v-model="introduction" placeholder="简介" />
+              <GButton :loading="introduceFlag === Flags.Pending" @click="changeIntroduction">确定</GButton>
+            </div>
+          </Modal>
+        </template>
       </div>
       <div>
         <ul>
