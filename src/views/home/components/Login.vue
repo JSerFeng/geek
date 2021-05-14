@@ -3,9 +3,7 @@
     <div v-if="store.state.user.isLogin" class="userInfo">
       <div class="bg"></div>
       <div class="info-bar">
-        <div class="login-ava">
-          <ElImage class="avatar" :src="userInfo.image" :alt="userInfo.userName" fit="cover" />
-        </div>
+        <ElImage class="avatar" :src="userInfo.image" :alt="userInfo.userName" fit="cover" />
         <div class="intro">
           <h3 class="username">
             <router-link class="username" to="/userinfo">{{ name }}</router-link>
@@ -242,7 +240,10 @@ const logout = () => {
         background-color: rgb(236, 236, 236);
         border: 3px solid rgb(255, 255, 255);
         display: block;
-        width: 100%;
+        width: 20vw;
+        height: 20vw;
+        max-width: 200px;
+        max-height: 200px;
         // height: 150px;
 
         img {
