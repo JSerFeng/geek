@@ -27,7 +27,11 @@ export const useCalcTime = () => {
  * @param sendText 按钮上面的文字，以此改变显示时间
  * @param sendDisable 控制是否可以点击的ref
  */
-const createCounting = (ms: number, restTime: number) => timer(0, ms).pipe(takeUntil(timer(restTime)))
+const createCounting = (ms: number, restTime: number) => timer(0, ms).pipe(
+  takeUntil(
+    timer(restTime)
+  )
+)
 
 export const useCountingSend = (sendRequest: () => any, sendText: Ref<string>, sendDisable: Ref<boolean>) => {
   const sendBtn$ = new Subject()
