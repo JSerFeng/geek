@@ -9,11 +9,13 @@
       <CodeInput v-model="authCode" />
     </div>
     <slot name="btn">
-      <GButton 
-      class="confirm-btn" :disabled="!canGo"
-      type="broke" @click="confirm" :loading="loading">
-        确定
-      </GButton>
+      <GButton
+        class="confirm-btn"
+        :disabled="!canGo"
+        type="broke"
+        @click="confirm"
+        :loading="loading"
+      >确定</GButton>
     </slot>
   </div>
 </template>
@@ -22,7 +24,7 @@ import { ref, defineProps, computed } from 'vue';
 import { ElNotification } from 'element-plus'
 import { useCountingSend } from './hooks';
 import CodeInput from '../code-input/CodeInput.vue'
-import {GButton} from "../geek"
+import { GButton } from "../geek"
 
 const props = defineProps<{
   address: string,
