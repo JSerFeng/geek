@@ -112,6 +112,7 @@ export const actions: ActionTree<State, RootState> = {
     }
     const addCourse = state.allCourses.find(item => item.courseId === courseId)
     commit({ type: MutationTypes.ChooseCourse, payload: addCourse })
+    return res
   },
   async [ActionTypes.DelCourse]({ state, commit }, courseId: number) {
     if (!state.userInfo.userId) return
