@@ -22,7 +22,7 @@ export enum UploadMsg {
 }
 
 
-export const useBigFileUpload = (id: number, courseId?: number, onFinish?: (result: boolean) =>void): [
+export const useBigFileUpload = (id: number, courseId?: number, onFinish?: (result: boolean) => void): [
   Ref<string>, Ref<number>, Ref<number>, (file: File) => Promise<() => void>, () => void, () => void
 ] => {
   let nextPosition = 0
@@ -101,7 +101,8 @@ export const useBigFileUpload = (id: number, courseId?: number, onFinish?: (resu
     nextPosition = 0
     chunks = await getFileSlice(file, total)
 
-    hash = await calcHash(chunks)
+    // hash = await calcHash(chunks)
+    hash = file.name + chunks.length
     status.value = UploadMsg.Ready
 
     _upload = upload

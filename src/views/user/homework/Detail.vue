@@ -1,16 +1,23 @@
 <template>
   <div class="detail" v-loading="!info || !courseId || !userId || flag === Flags.Pending">
     <h4 class="title">{{ (info && info.taskName) || "" }}</h4>
-    <template v-if="info && info.taskFileVOList.length">
-      <p class="task-name">作业文件</p>
-      <ul class="flex ac list">
-        <li class="p file" v-for="(file, idx) in (info && info.taskFileVOList) || []" :key="idx">
-          <a class="file-item" target="_blank" :href="file.filePath" :download="file.fileName">
-            {{ file.fileName }}
-            <div class="el-icon-download"></div>
-          </a>
-        </li>
-      </ul>
+    <template v-if="info">
+      <div class="light small-font">
+        <div>{{ getTime(info.addTime) }}发布</div>
+        <div>截至时间{{ info.closeTime }}</div>
+      </div>
+
+      <template v-if="info.taskFileVOList.length">
+        <p class="task-name">作业文件</p>
+        <ul class="flex ac list">
+          <li class="p file" v-for="(file, idx) in (info && info.taskFileVOList) || []" :key="idx">
+            <a class="file-item" target="_blank" :href="file.filePath" :download="file.fileName">
+              {{ file.fileName }}
+              <div class="el-icon-download"></div>
+            </a>
+          </li>
+        </ul>
+      </template>
     </template>
 
     <p class="task-name">
@@ -55,12 +62,12 @@
 </template>
 <script lang="ts" setup>
 import { defineProps, ref, watchEffect } from "vue";
-import { apiDelHomeworkFile, apiUploadHomework, download } from "../../../api/file";
+import { apiDelHomeworkFile, apiUploadHomework } from "../../../api/file";
 import { apiDeleteRecord, apiUploadHomeworkRecord } from "../../../api/homework"
 import { apiQueryOneWork } from "../../../api/homework";
 import { ErrorCode } from "../../../api/request";
 import { ElMessageBox, ElNotification } from "element-plus"
-import { Flags, showFileSize, useDropUpload } from "../../../utils/shared";
+import { Flags, showFileSize, useDropUpload, getTime } from "../../../utils/shared";
 import { GButton } from '../../../components/geek'
 import type { Response } from '../../../api'
 

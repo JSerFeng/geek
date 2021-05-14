@@ -15,23 +15,16 @@
               :class="{ done: item.isClosed }"
             >
               <template #title>
+                <div class="task-name">{{ item.taskName }}</div>
                 <div>
-                  <el-row class="header">
-                  <el-col :span="8">{{ item.taskName }}</el-col>
-                  <el-col :span="8">
-                    <Tag
-                      style="font-size: 12px;margin-right: 5px;"
-                      :type="item.isClosed ? 'error' : 'normal'"
-                    >{{ item.isClosed ? '已结束' : '进行中' }}</Tag>
-                    <Tag style="font-size: 12px;" type="success" v-if="item.commitLate">可延迟提交</Tag>
-                  </el-col>
-                  <el-col :span="8">
-                    <span class="time" style="margin-left: 5px;">
-                      <div>{{ getTime(item.addTime) }}发布</div>
-                      <div>截至时间{{ item.closeTime }}</div>
-                    </span>
-                  </el-col>
-                </el-row>
+                  <Tag
+                    style="font-size: 12px;margin-right: 5px;"
+                    :type="item.isClosed ? 'error' : 'normal'"
+                  >{{ item.isClosed ? '已结束' : '进行中' }}</Tag>
+                  <Tag style="font-size: 12px;" type="success" v-if="item.commitLate">可延迟提交</Tag>
+                </div>
+                <div class="time" style="margin-left: 5px;">
+                  <div>{{ getTime(item.addTime) }}</div>
                 </div>
               </template>
               <div class="collapse">
@@ -44,6 +37,7 @@
                     </a>
                   </li>
                 </ul>
+                <br>
                 <GButton @click="open(item)">提交</GButton>
               </div>
             </el-collapse-item>
@@ -200,10 +194,8 @@ const open = (item: Item) => {
       padding: 5px;
       position: relative;
 
-      .header {
-        width: 100%;
-        padding: 0 5px;
-        box-sizing: border-box;
+      .task-name {
+        min-width: 100px;
       }
 
       &.done {
