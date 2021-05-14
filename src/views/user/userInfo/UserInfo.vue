@@ -10,7 +10,7 @@
         <p class="p" style="font-weight: 100;" @click="openChangeName">
           <span class="font20">你好</span>,
           <span class="font20">
-            {{ userInfo.userName }}
+            {{ userInfo.userName || userInfo.adminName}}
             <i class="font14 el-icon-edit"></i>
           </span>
         </p>

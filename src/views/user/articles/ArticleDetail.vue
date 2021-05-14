@@ -7,7 +7,7 @@
           <el-breadcrumb-item>{{ getTime(detail.addTime) }}</el-breadcrumb-item>
         </el-breadcrumb>
       </span>
-      <h1>{{ detail.title }}</h1>
+      <h1 class="title">{{ detail.title }}</h1>
     </div>
     <div class="content" v-html="content"></div>
     <div class="side" ref="side$">
@@ -131,10 +131,12 @@ onUnmounted(() => {
     top: 50%;
     transform: translateY(-50%);
   }
-  h1 {
+  .title {
+    position: relative;
     padding: 10px 0;
     margin: 0;
     color: #1f2667;
+    z-index: 999;
   }
   &:after {
     content: "";

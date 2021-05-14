@@ -1,5 +1,5 @@
 import { ActionTree } from "vuex";
-import { State, User } from "./state";
+import { Admin, State, User } from "./state";
 import { RootState } from '../../index'
 import { Response } from "../../../api";
 import {
@@ -135,9 +135,9 @@ export const actions: ActionTree<State, RootState> = {
     return false
   },
   async [ActionTypes.ChangeAvatar]({ state, commit }, file: File) {
-    const userInfo = state.userInfo as User
+    const userInfo = state.userInfo as (User | Admin)
 
-    const res = await apiUploadAvatar(userInfo.userId, file)
+    const res = await apiUploadAvatar(userInfo.userId || (userInfo as Admin).adminId, file)
     if (res.error_code === ErrorCode.Success) {
       commit({
         type: MutationTypes.ChangeAvatar,

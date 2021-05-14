@@ -15,7 +15,7 @@
         :key="item.id"
       >
         <div style="text-align: center;" :title="item.courseName">
-          <Logo :course-name="item.courseName" />
+          <Logo class="logo" :course-name="item.courseName" />
         </div>
       </li>
     </ul>
@@ -71,9 +71,13 @@ const selectCourse = (id: string | null) => {
   height: 50px;
 
   li {
-    padding: 5%;
+    padding: 2%;
     font-size: 14px;
     border-bottom: 5px solid #fff;
+
+    .logo {
+      font-size: 30px;
+    }
 
     &:hover {
       background-color: rgb(234, 240, 255);

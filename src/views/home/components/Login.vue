@@ -3,7 +3,7 @@
     <div v-if="store.state.user.isLogin" class="userInfo">
       <div class="bg"></div>
       <div class="info-bar">
-        <ElImage class="avatar" :src="userInfo.image" :alt="userInfo.userName" fit="cover" />
+        <ElImage @click="toUserHome" class="avatar" :src="userInfo.image" :alt="userInfo.userName" fit="cover" />
         <div class="intro">
           <h3 class="username">
             <router-link class="username" to="/userinfo">{{ name }}</router-link>
@@ -72,7 +72,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import type { Response } from '../../../api'
 import { useStore } from '../../../store'
 import type { User, Admin, SuperAdmin } from '../../../store/modules/user/state'
@@ -85,6 +85,12 @@ import { ErrorCode } from '../../../api/request';
 import ChooseCourse from '../components/ChooseCourse.vue'
 
 const store = useStore()
+const router = useRouter()
+
+const toUserHome = () => {
+  router.push("/userinfo")
+}
+
 const userInfo = store.state.user.userInfo as User
 const name = computed(() => {
   let type: string | null
@@ -235,6 +241,7 @@ const logout = () => {
       }
       .avatar {
         top: 0;
+        cursor: pointer;
         flex-shrink: 0;
         border-radius: 50%;
         background-color: rgb(236, 236, 236);
