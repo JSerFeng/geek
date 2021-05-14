@@ -108,9 +108,12 @@ import { computed, customRef, defineComponent, onMounted, ref } from "vue";
 import { storage } from "../../utils/shared";
 import { chooseCourse } from "../../api/user";
 import { useRouter } from "vue-router";
+import { useStore } from "../../store";
+import { ActionTypes } from "../../store/modules/user/actions";
 export default defineComponent({
   setup() {
     const Router = useRouter();
+    const store = useStore();
     const currentCourse = ref<number>(1);
     const userId = storage.get("userId");
     function judgeClassList(classList: string[], className: string): boolean {
@@ -124,7 +127,7 @@ export default defineComponent({
     }
 
     async function handleConfirm() {
-      const result = await chooseCourse(userId, currentCourse.value);
+      const result = await store.dispatch(ActionTypes.ChooseCourse,  currentCourse.value)
       if (result.error_code === 200) {
         Router.replace("/home");
       }

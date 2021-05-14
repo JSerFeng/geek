@@ -14,7 +14,7 @@
 </template>
 <script lang="ts" setup>
 import { inject } from 'vue';
-import { useRouter } from '_vue-router@4.0.6@vue-router';
+import { useRouter } from 'vue-router';
 const router = useRouter()
 
 const close = inject<() => any>("close")!

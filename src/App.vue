@@ -33,7 +33,7 @@ import { useStore } from './store'
 import { ActionTypes } from './store/modules/user/actions'
 import WithTransition from './components/withTransition/WithTransition.vue'
 import { onMounted } from 'vue';
-import { useRouter } from '_vue-router@4.0.6@vue-router';
+import { useRouter } from 'vue-router';
 
 const store = useStore()
 const router = useRouter()
