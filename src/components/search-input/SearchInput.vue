@@ -42,8 +42,11 @@ const search = () => {
 
   .icon-sousuokuang {
     position: absolute;
-    right: 4%;
-    transform: translate(100%, -50%);
+    right: 5%;
+    @media screen and (max-width: 768px) {
+      right: 9%;
+    }
+    transform: translate(0, -50%);
     top: 50%;
     color: #fff;
   }
