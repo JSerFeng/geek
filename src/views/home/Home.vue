@@ -55,7 +55,7 @@
     </div>
   </div>
 </template>
-<script lang="ts" setup="">
+<script lang="ts" setup>
 import Login from './components/Login.vue'
 import BroadCastVue from '../user/broad-cast/BroadCast.vue';
 import ArticleMenuVue from './components/ArticleMenu.vue';

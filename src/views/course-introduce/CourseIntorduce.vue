@@ -1,66 +1,50 @@
 <template>
   <div class="course-introduce">
-    <div
-      class="swiper"
-      ref="swiper"
-      :style="{
-        backgroundImage: color,
-      }"
-    >
+    <div class="swiper" ref="swiper" :style="{
+      backgroundImage: color,
+    }">
       <div
         data="#027592"
         style="color: #027592"
         @click="handleItemClick(2, $event)"
         class="item iconfont left"
-      >
-        &#xe639;
-      </div>
+      >&#xe639;</div>
       <div
         data="#E95521"
         style="color: #e95521"
         @click="handleItemClick(1, $event)"
         class="item iconfont middle"
-      >
-        &#xe65a;
-      </div>
+      >&#xe65a;</div>
       <div
         data="#7BC258"
         style="color: #7bc258"
-        @click="handleItemClick(3, $event)"
+        @click="handleItemClick(4, $event)"
         class="item iconfont right"
-      >
-        &#xe640;
-      </div>
+      >&#xe640;</div>
       <div
         data="#FEDA49"
-        @click="handleItemClick(4, $event)"
+        @click="handleItemClick(3, $event)"
         class="item iconfont behind-left"
         style="color: #feda49"
-      >
-        &#xe690;
-      </div>
+      >&#xe690;</div>
       <div
         data="pink"
         style="color: pink"
         @click="handleItemClick(5, $event)"
         class="item iconfont behind"
-      >
-        &#xe60c;
-      </div>
+      >&#xe60c;</div>
       <div
         style="color: #adb8d0"
         data="#ADB8D0"
         @click="handleItemClick(6, $event)"
         class="item iconfont behind-right"
-      >
-        &#xeb3a;
-      </div>
+      >&#xeb3a;</div>
     </div>
     <div class="introduce" v-if="currentCourse === 1">
       <div class="title">前 端</div>
-      <div class="content">
-        前端即网站前台部分，运行在PC端，移动端等浏览器上展现给用户浏览的网页。随着互联网技术的发展，HTML5，CSS3，前端框架的应用，跨平台响应式网页设计能够适应各种屏幕分辨率，完美的动效设计，给用户带来极高的用户体验。
-      </div>
+      <div
+        class="content"
+      >前端即网站前台部分，运行在PC端，移动端等浏览器上展现给用户浏览的网页。随着互联网技术的发展，HTML5，CSS3，前端框架的应用，跨平台响应式网页设计能够适应各种屏幕分辨率，完美的动效设计，给用户带来极高的用户体验。</div>
     </div>
     <div class="introduce" v-if="currentCourse === 2">
       <div class="title">后 端</div>
@@ -71,17 +55,17 @@
       </div>
     </div>
     <div class="introduce" v-if="currentCourse === 3">
-      <div class="title">Android</div>
-      <div class="content">
-        android开发是指android平台上应用的制作，Android早期由“Android之父”之称的Andy
-        Rubin创办，Google于2005年并购了成立仅22个月的高科技企业Android，展开了短信、手机检索、定位等业务，基于Linux的通用平台进入了开发。
-      </div>
-    </div>
-    <div class="introduce" v-if="currentCourse === 4">
       <div class="title">Python</div>
       <div class="content">
         Python崇尚优美、清晰、简单，是一个优秀并广泛使用的语言。
         Python可以应用于众多领域，如：数据分析、组件集成、网络服务、图像处理、数值计算和科学计算等众多领域。目前业内几乎所有大中型互联网企业都在使用Python，如：Youtube、Dropbox、BT、Quora（中国知乎）、豆瓣、知乎、Google、Yahoo!、Facebook、NASA、百度、腾讯、汽车之家、美团等。
+      </div>
+    </div>
+    <div class="introduce" v-if="currentCourse === 4">
+      <div class="title">Android</div>
+      <div class="content">
+        android开发是指android平台上应用的制作，Android早期由“Android之父”之称的Andy
+        Rubin创办，Google于2005年并购了成立仅22个月的高科技企业Android，展开了短信、手机检索、定位等业务，基于Linux的通用平台进入了开发。
       </div>
     </div>
     <div class="introduce" v-if="currentCourse === 5">
@@ -95,12 +79,14 @@
     </div>
     <div class="introduce" v-if="currentCourse === 6">
       <div class="title">运营</div>
-      <div class="content">
-        运营就是对运营过程的计划、组织、实施和控制，是与产品生产和服务创造密切相关的各项管理工作的总称。从另一个角度来讲，运营管理也可以指为对生产和提供公司主要的产品和服务的系统进行设计、运行、评价和改进的管理工作。
-      </div>
+      <div
+        class="content"
+      >运营就是对运营过程的计划、组织、实施和控制，是与产品生产和服务创造密切相关的各项管理工作的总称。从另一个角度来讲，运营管理也可以指为对生产和提供公司主要的产品和服务的系统进行设计、运行、评价和改进的管理工作。</div>
     </div>
     <div @click="handleConfirm" class="confirm">选好了</div>
-    <router-link to="home"><div class="wait">再看看</div></router-link>
+    <router-link to="home">
+      <div class="wait">再看看</div>
+    </router-link>
   </div>
 </template>
 <script lang="ts">
@@ -127,7 +113,7 @@ export default defineComponent({
     }
 
     async function handleConfirm() {
-      const result = await store.dispatch(ActionTypes.ChooseCourse,  currentCourse.value)
+      const result = await store.dispatch(ActionTypes.ChooseCourse, currentCourse.value)
       if (result.error_code === 200) {
         Router.replace("/home");
       }

@@ -1,5 +1,6 @@
 <template>
   <div class="wrap" v-loading="flag === Flags.Pending">
+    <span style="color: rgb(19, 0, 124);">公告</span>
     <GSelect :items="courses" @change="changeCourse" />
     <ul>
       <li

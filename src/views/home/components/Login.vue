@@ -3,7 +3,7 @@
     <div v-if="store.state.user.isLogin" class="userInfo">
       <div class="bg"></div>
       <div class="info-bar">
-        <div>
+        <div class="login-ava">
           <ElImage class="avatar" :src="userInfo.image" :alt="userInfo.userName" fit="cover" />
         </div>
         <div class="intro">
@@ -168,6 +168,11 @@ const logout = () => {
       background-color: #fff;
       z-index: 1;
 
+      .login-ava {
+        width: 100%;
+        max-width: 150px;
+      }
+
       &:before {
         position: absolute;
         height: 100%;
@@ -198,7 +203,7 @@ const logout = () => {
 
       .intro {
         padding: 15px;
-        width: 100%;
+        width: 50%;
 
         .username {
           color: rgb(97, 97, 97);
@@ -237,8 +242,8 @@ const logout = () => {
         background-color: rgb(236, 236, 236);
         border: 3px solid rgb(255, 255, 255);
         display: block;
-        width: 150px;
-        height: 150px;
+        width: 100%;
+        // height: 150px;
 
         img {
           width: 100%;

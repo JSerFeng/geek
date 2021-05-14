@@ -38,6 +38,7 @@ const inputHandler = () => {
 }
 const placeholderHandler = () => {
   placeholder.value?.classList.add("focus")
+  input.value?.focus()
 }
 onMounted(() => {
   input.value?.value && placeholderHandler()

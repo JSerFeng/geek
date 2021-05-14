@@ -21,7 +21,7 @@
       <div
         @click="markFavorite"
         class="item favorite flex jc ac"
-        :class="{ 'active': detail.favoriteStatus }"
+        :class="{ active: detail.favoriteStatus }"
       >
         <i class="iconfont icon-shoucang"></i>
       </div>
@@ -166,8 +166,13 @@ onUnmounted(() => {
   position: relative;
   border-radius: 20px;
   width: 70%;
+  @media screen and (max-width: 768px) {
+    width: 90%;
+    transform: translate(0, -50px);
+  }
   padding: 15px;
   box-sizing: border-box;
+  overflow: auto;
   transform: translate(10%, -50px);
   .content,
   footer {
@@ -182,6 +187,11 @@ onUnmounted(() => {
   top: 50%;
   transform: translate(100%, 0);
   padding: 5px;
+
+  @media screen and (max-width: 768px) {
+    top: 1%;
+    transform: translate(100%, 0) scale(.8);
+  }
 
   .item {
     --scale: 1;

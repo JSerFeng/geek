@@ -1,5 +1,5 @@
 <template>
-  <div class="view-main flex jb">
+  <div class="view-main wrap">
     <div class="user-left shade">
       <div>
         <div ref="avatarArea">
@@ -164,8 +164,19 @@ const avatarArea = useImgUpload()
 
 </script>
 <style lang="scss" scoped>
+.wrap {
+  display: flex;
+  justify-content: space-between;
+
+  @media screen and (max-width: 768px) {
+    display: block;
+  }
+}
 .user-left {
   width: 20%;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
   padding: 15px;
   box-sizing: border-box;
   background-color: #fff;
@@ -202,6 +213,10 @@ const avatarArea = useImgUpload()
 }
 .user-right {
   width: 77%;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    margin-top: 10px;
+  }
   background-color: #fff;
 
   .header {
